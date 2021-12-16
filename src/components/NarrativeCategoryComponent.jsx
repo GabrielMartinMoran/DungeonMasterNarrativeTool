@@ -1,20 +1,27 @@
+import '../styles/NarrativeCategoryComponent.css';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/ParagraphElement.css';
-import '../styles/NarrativeCategoryComponent.css';
-import { Element } from '../models/element';
+import { BaseElement } from '../models/base-element';
+import { CreateElementButton } from './CreateElementButton';
+import { ElementsFactory } from '../utils/elements-factory';
+import { ElementListItem } from './ElementListItem';
 
-export function NarrativeCategoryComponent({ appContext, narrativeCategory, narrativeContext, onCategoryChange, moveCategoryUp, moveCategoryDown }) {
+export function NarrativeCategoryComponent({ appContext, narrativeContext, narrativeCategory, onCategoryChange, moveCategoryUp, moveCategoryDown }) {
 
     const [elementsState, setElementsState] = useState(narrativeCategory.elements);
 
-    const addElement = () => {
+    const rerender = () => {
+        setElementsState([...narrativeCategory.elements]);
+        setTimeout(() => setElementsState(narrativeCategory.elements), 0);
+    }
+
+    const onCreateElement = (type) => {
         const name = window.prompt('Ingresa el nombre del nuevo elemento');
         if (!name) return;
-        const newElement = new Element(name);
+        const newElement = ElementsFactory.createElement(name, type);
         narrativeCategory.addElement(newElement);
         appContext.saveDB();
-        setElementsState([...narrativeCategory.elements]);
+        rerender();
     }
 
     const deleteElement = (element) => {
@@ -22,19 +29,27 @@ export function NarrativeCategoryComponent({ appContext, narrativeCategory, narr
         if (!shouldDelete) return;
         narrativeCategory.removeElement(element.id);
         appContext.saveDB();
-        setElementsState([...narrativeCategory.elements]);
+        rerender();
     }
 
     const moveElementUp = (element) => {
         narrativeCategory.moveElementUp(element.id);
         appContext.saveDB();
-        setElementsState([...narrativeCategory.elements]);
+        rerender();
     }
 
     const moveElementDown = (element) => {
         narrativeCategory.moveElementDown(element.id);
         appContext.saveDB();
-        setElementsState([...narrativeCategory.elements]);
+        rerender();
+    }
+
+    const renameElement = (element) => {
+        const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
+        if (!name) return;
+        element.name = name;
+        appContext.saveDB();
+        onCategoryChange();
     }
 
     const deleteCategory = () => {
@@ -57,10 +72,7 @@ export function NarrativeCategoryComponent({ appContext, narrativeCategory, narr
         <div className='flex'>
             <h3 className='flex2'>{narrativeCategory.name}</h3>
             <div className='textRight narrativeCategoryTitleButtons'>
-                <button onClick={addElement}>
-                    <span role='img' aria-label='plus'>➕</span>
-                    Crear elemento
-                </button>
+                <CreateElementButton onClick={onCreateElement} />
                 <button onClick={renameCategory}>
                     <span role='img' aria-label='tag'>🏷️</span>
                     Renombrar
@@ -77,27 +89,17 @@ export function NarrativeCategoryComponent({ appContext, narrativeCategory, narr
                 </button>
             </div>
         </div>
-
-        <ul>
-            {elementsState.map(element =>
-                <li key={`${narrativeContext.id}/${element.id}`}>
-                    <div className='flex'>
-                        <Link to={`/narrative-context/${narrativeContext.id}/${narrativeCategory.id}/${element.id}`}
-                            className='flex2'>{element.name}</Link>
-                        <div className='textRight'>
-                            <button onClick={() => moveElementUp(element)}>
-                                <span role='img' aria-label='up'>⬆️ Subir</span>
-                            </button>
-                            <button onClick={() => moveElementDown(element)}>
-                                <span role='img' aria-label='down'>⬇️ Bajar</span>
-                            </button>
-                            <button onClick={() => deleteElement(element)}>
-                                <span role='img' aria-label='delete'>🗑️ Eliminar</span>
-                            </button>
-                        </div>
-                    </div>
-                </li>)
+        <div className="narrativeCategoryElements">
+            {
+                elementsState.map(element =>
+                    <ElementListItem key={element.id} appContext={appContext}
+                        narrativeContextId={narrativeContext.id}
+                        narrativeCategoryId={narrativeCategory.id} element={element}
+                        onMoveElementUp={moveElementUp} onMoveElementDown={moveElementDown}
+                        onDeleteElement={deleteElement} onRenameElement={renameElement}
+                        onChildUpdate={rerender} />
+                )
             }
-        </ul>
+        </div>
     </div>;
 }

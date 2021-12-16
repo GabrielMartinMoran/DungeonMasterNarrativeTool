@@ -5,8 +5,8 @@ import { ArrayUtils } from '../utils/array-utils';
 export class NarrativeContext {
 
     static TYPES = [
-        'world',
-        'campaign'
+        {type: 'world', name: 'Mundo'},
+        {type: 'campaign', name: 'Campaña'}
     ];
 
     id = null;
@@ -15,7 +15,7 @@ export class NarrativeContext {
     categories = null;
 
     constructor(type, name) {
-        if (!NarrativeContext.TYPES.find(x => x === type)) throw Error('Invalid type');
+        if (!NarrativeContext.TYPES.find(x => x.type === type)) throw Error('Invalid type');
         this.id = IdGenerator.generateId();
         this.type = type;
         this.name = name;

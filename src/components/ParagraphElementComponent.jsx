@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { DBRepository } from '../repositories/db-repository';
 import { RichTextEditor } from './RichTextEditor';
-import '../styles/ParagraphElement.css';
+import '../styles/ParagraphElementComponent.css';
 
-export function ParagraphElement({ appContext, element, parentExposedFuntions }) {
+export function ParagraphElementComponent({ appContext, element, parentExposedFuntions }) {
 
     const [editMode, setEditMode] = useState(false);
     let currentEditorValue = null;

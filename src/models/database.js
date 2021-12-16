@@ -26,12 +26,11 @@ export class Database {
         const narrativeContext = this.getNarrativeContext(narrativeContextId);
         let narrativeContextsList = null;
         if (narrativeContext.type === 'world') {
-            narrativeContextsList = this.getDB().worlds;
+            narrativeContextsList = this.worlds;
         } else {
-            narrativeContextsList = this.getDB().campaigns;
+            narrativeContextsList = this.campaigns;
         }
         narrativeContextsList.splice(narrativeContextsList.indexOf(narrativeContext), 1);
-        this.save();
     }
 
     addWorld(world) {

@@ -13,7 +13,7 @@ import { ViewElement } from './components/views/ViewElement';
 import './styles.css';
 import { Navbar } from './components/Navbar';
 import './styles/App.css';
-import { DataCorruptionPreventer } from './components/services/data-corruption-preventer';
+import { DataCorruptionPreventer } from './services/data-corruption-preventer';
 
 export function App() {
 

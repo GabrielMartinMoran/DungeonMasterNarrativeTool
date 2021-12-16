@@ -1,6 +1,7 @@
 import { IdGenerator } from '../utils/id-generator';
-import { Element } from './element';
 import { ArrayUtils } from '../utils/array-utils';
+import { ElementsFactory } from '../utils/elements-factory';
+import { BaseElement } from './base-element';
 
 export class NarrativeCategory {
     id = null;
@@ -15,6 +16,17 @@ export class NarrativeCategory {
 
     getElement(elementId) {
         return this.elements.find(x => x.id === elementId);
+    }
+
+    findElementAnywhere(elementId) {
+        for (const element of this.elements) {
+            if (element.id === elementId) return element;
+            if (element.findInChild) {
+                const found = element.findInChild(elementId);
+                if (found) return found;
+            }
+        }
+        return null;
     }
 
     addElement(element) {
@@ -41,15 +53,17 @@ export class NarrativeCategory {
     }    
 
     getPrevElement(elementId) {
-        const index = this.elements.indexOf(this.elements.find(x => x.id === elementId));
+        const viewableElements = this.elements.filter(x => x.type !== BaseElement.TYPES.CONTAINER);
+        const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
         if (index === 0) return null;
-        return this.elements[index - 1];
+        return viewableElements[index - 1];
     }
 
     getNextElement(elementId) {
-        const index = this.elements.indexOf(this.elements.find(x => x.id === elementId));
-        if (index === (this.elements.length - 1)) return null;
-        return this.elements[index + 1];
+        const viewableElements = this.elements.filter(x => x.type !== BaseElement.TYPES.CONTAINER);
+        const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
+        if (index === (viewableElements.length - 1)) return null;
+        return viewableElements[index + 1];
     }
 
     toJson() {
@@ -65,7 +79,7 @@ export class NarrativeCategory {
             data['name']
         );
         instance.id = data['id'];
-        instance.elements = data['elements'].map(x => Element.fromJson(x));
+        instance.elements = data['elements'].map(x => ElementsFactory.mapElementFromJson(x));
         return instance;
     }
 }

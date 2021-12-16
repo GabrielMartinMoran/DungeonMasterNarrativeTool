@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ParagraphElement } from '../ParagraphElement';
+import { ParagraphElementComponent } from '../ParagraphElementComponent';
 import '../../styles/ViewElement.css';
 
 export function ViewElement({ appContext }) {
@@ -27,7 +27,7 @@ export function ViewElement({ appContext }) {
             }
         }
         const obtainedElement = appContext.getDB().getNarrativeContext(narrativeContextId)
-            .getNarrativeCategory(narrativeCategoryId).getElement(elementId);
+            .getNarrativeCategory(narrativeCategoryId).findElementAnywhere(elementId);
         setElement(obtainedElement);
 
         setNavigationButtons();
@@ -87,7 +87,7 @@ export function ViewElement({ appContext }) {
                         </button>
                     </div>
                 </div>
-                <ParagraphElement key={element.id}
+                <ParagraphElementComponent key={element.id}
                     appContext={appContext} element={element} onDelete={deleteElement} parentExposedFuntions={childFuntions}
                 />
             </> : <></>

@@ -1,31 +1,31 @@
 import { IdGenerator } from '../utils/id-generator';
 
-export class Element {
+export class BaseElement {
 
     id = null;
     name = null;
-    body = null;
+    type = null;
 
-    constructor(name, body = null) {
+    static TYPES = {
+        PARAGRAPH: 'paragraph',
+        CONTAINER: 'container'
+    };    
+
+    constructor(name, type) {
         this.id = IdGenerator.generateId();
         this.name = name;
-        this.body = body;
+        this.type = type;
     }
 
     toJson() {
         return {
             id: this.id,
             name: this.name,
-            body: this.body
+            type: this.type
         }
     }
 
     static fromJson(data) {
-        const instance = new Element(
-            data['name'],
-            data['body']
-        );
-        instance.id = data['id'];
-        return instance;
+        throw Error('This method should not be used!');
     }
 }

@@ -1,4 +1,4 @@
-import { DBRepository } from "../../repositories/db-repository";
+import { DBRepository } from '../repositories/db-repository';
 
 export class DataCorruptionPreventer {
 
