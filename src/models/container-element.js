@@ -10,6 +10,10 @@ export class ContainerElement extends BaseElement {
         this.elements = elements;
     }
 
+    getElement(elementId) {
+        return this.elements.find(x => x.id === elementId);
+    }
+
     addElement(element) {
         this.elements.push(element);
     }

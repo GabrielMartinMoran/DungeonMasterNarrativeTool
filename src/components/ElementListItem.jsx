@@ -22,6 +22,7 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
         const icons = {};
         icons[BaseElement.TYPES.PARAGRAPH] = '📜';
         icons[BaseElement.TYPES.CONTAINER] = '📂';
+        icons[BaseElement.TYPES.SHOP] = '🪙';
         return icons[element.type];
     }
 

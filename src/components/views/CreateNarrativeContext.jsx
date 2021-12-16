@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NarrativeContext } from '../../models/narrative-context';
 
@@ -7,6 +7,10 @@ export function CreateNarrativeContext({ appContext }) {
 
     const [name, setName] = useState();
     const [type, setType] = useState(NarrativeContext.TYPES[0].type);
+
+    useEffect(() => {
+        appContext.setNarrativeContextById(null);
+    }, [appContext])
 
 
     const create = () => {

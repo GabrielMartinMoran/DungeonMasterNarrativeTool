@@ -8,7 +8,8 @@ export class BaseElement {
 
     static TYPES = {
         PARAGRAPH: 'paragraph',
-        CONTAINER: 'container'
+        CONTAINER: 'container',
+        SHOP: 'shop'
     };    
 
     constructor(name, type) {

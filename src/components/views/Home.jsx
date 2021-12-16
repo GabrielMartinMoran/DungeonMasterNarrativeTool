@@ -10,6 +10,7 @@ export function Home({ appContext }) {
     const [worlds, setWorlds] = useState([]);
 
     useEffect(() => {
+        appContext.setNarrativeContextById(null);
         appContext.setBackButtonUrl(null);
         appContext.setForwardButtonUrl(null);
         const repo = appContext.getRepository(DBRepository);

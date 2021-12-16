@@ -19,6 +19,8 @@ export class AppContext {
 
     setForwardButtonUrl(url) {}
 
+    setNarrativeContextById(narrativeContextId) {}
+
     getDB() {
         return this.getRepository(DBRepository).getDB();
     }

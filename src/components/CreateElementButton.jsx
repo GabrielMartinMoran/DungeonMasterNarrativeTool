@@ -30,6 +30,10 @@ export function CreateElementButton({ onClick = (type) => { } }) {
                 <span role='img' aria-label='open-folder'>📂</span>
                 Contenedor
             </button>
+            <button onClick={() => onDropdownElementClick(BaseElement.TYPES.SHOP)}>
+                <span role='img' aria-label='coin'>🪙</span>
+                Tienda
+            </button>
         </div>
     </div>;
 }

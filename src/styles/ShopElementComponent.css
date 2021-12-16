@@ -1,0 +1,22 @@
+.shopTable {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.shopTable th {
+    text-align: center;
+    background-color: #F2F0E3;
+}
+
+.shopTable .oddRow {
+    background-color: #F2F0E3;
+}
+
+.shopTable .evenRow {
+    background-color: #C6D094;
+}
+
+.shopTable td {
+    text-align: center;
+}

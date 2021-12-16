@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ParagraphElementComponent } from '../ParagraphElementComponent';
 import '../../styles/ViewElement.css';
+import { ShopElementComponent } from '../ShopElementComponent';
 
 export function ViewElement({ appContext }) {
     const navigate = useNavigate();
@@ -26,6 +27,8 @@ export function ViewElement({ appContext }) {
                 appContext.setForwardButtonUrl(null);
             }
         }
+        appContext.setNarrativeContextById(narrativeContextId);
+
         const obtainedElement = appContext.getDB().getNarrativeContext(narrativeContextId)
             .getNarrativeCategory(narrativeCategoryId).findElementAnywhere(elementId);
         setElement(obtainedElement);
@@ -61,7 +64,7 @@ export function ViewElement({ appContext }) {
         const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element.name}`);
         if (!shouldDelete) return;
         const narrativeCategory = appContext.getDB().getNarrativeContext(narrativeContextId)
-        .getNarrativeCategory(narrativeCategoryId);
+            .getNarrativeCategory(narrativeCategoryId);
         narrativeCategory.removeElement(element.id);
         appContext.saveDB();
         navigate(`/narrative-context/${narrativeContextId}`);
@@ -73,23 +76,35 @@ export function ViewElement({ appContext }) {
                 <div className='flex viewElementTitleBar'>
                     <h2 className='flex2'>{element.name}</h2>
                     <div className='flex1 textRight viewElementTitleButtons'>
-                        <button onClick={editName} title='Editar nombre'>
+                        <button onClick={editName}>
                             <span role='img' aria-label='tag'>🏷️</span>
+                            Editar nombre
                         </button>
-                        <button onClick={editBody} title='Editar contenido'>
+                        <button onClick={editBody}>
                             <span role='img' aria-label='edit'>📝</span>
+                            Editar
                         </button>
-                        <button onClick={copyRelativeLink} title='Copiar enlace'>
+                        <button onClick={copyRelativeLink}>
                             <span role='img' aria-label='link'>🔗</span>
+                            Copiar enlace
                         </button>
-                        <button onClick={deleteElement} title='Eliminar'>
+                        <button onClick={deleteElement}>
                             <span role='img' aria-label='delete'>🗑️</span>
+                            Eliminar
                         </button>
                     </div>
                 </div>
-                <ParagraphElementComponent key={element.id}
-                    appContext={appContext} element={element} onDelete={deleteElement} parentExposedFuntions={childFuntions}
-                />
+                {
+                    {
+                        'paragraph': <ParagraphElementComponent key={element.id}
+                            appContext={appContext} element={element} onDelete={deleteElement} parentExposedFuntions={childFuntions}
+                        />,
+                        'shop': <ShopElementComponent key={element.id}
+                            appContext={appContext} element={element} onDelete={deleteElement} parentExposedFuntions={childFuntions}
+                        />,
+                    }[element.type]
+                }
+
             </> : <></>
         }
 

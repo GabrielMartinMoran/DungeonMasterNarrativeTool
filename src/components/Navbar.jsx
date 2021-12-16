@@ -6,9 +6,19 @@ export function Navbar({ appContext }) {
 
     const [backButtonUrl, setBackButtonUrl] = useState('/');
     const [forwardButtonUrl, setForwardButtonUrl] = useState('/');
+    const [narrativeContext, setNarrativeContext] = useState(null);
+
+    const setNarrativeContextById = (narrativeContextId) => {
+        let obtainedNarrativeContext = null;
+        if (narrativeContextId) {
+            obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+        }
+        setNarrativeContext(obtainedNarrativeContext);
+    }
 
     appContext.setBackButtonUrl = setBackButtonUrl;
     appContext.setForwardButtonUrl = setForwardButtonUrl;
+    appContext.setNarrativeContextById = setNarrativeContextById;
 
     return <div className='Navbar'>
         <div className='navbarContent'>
@@ -16,6 +26,13 @@ export function Navbar({ appContext }) {
                 <Link to={`/`}>
                     <span role='img' aria-label='dice'>🎲</span> Inicio
                 </Link>
+            </div>
+            <div className='textCenter'>
+                {
+                    narrativeContext ?
+                        <Link to={`/narrative-context/${narrativeContext.id}`}>{narrativeContext.name}</Link> :
+                        <></>
+                }
             </div>
             <div className='flex2 textRight'>
                 {

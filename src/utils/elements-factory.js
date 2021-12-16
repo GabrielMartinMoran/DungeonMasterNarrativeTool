@@ -1,10 +1,12 @@
 import { ParagraphElement } from '../models/paragraph-element';
 import { ContainerElement } from '../models/container-element';
+import { ShopElement } from '../models/shop-element';
 
 export class ElementsFactory {
     static _ELEMENT_TYPES_MAPPING = {
         'paragraph': ParagraphElement,
-        'container': ContainerElement
+        'container': ContainerElement,
+        'shop': ShopElement
     };
 
     static mapElementFromJson(data) {

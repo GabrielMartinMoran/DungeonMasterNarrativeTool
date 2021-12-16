@@ -11,6 +11,7 @@ export function ViewNarrativeContext({ appContext }) {
     const [narrativeContextCategories, setNarrativeContextCategories] = useState([]);
 
     useEffect(() => {
+        appContext.setNarrativeContextById(narrativeContextId);
         const obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
         setNarrativeContext(obtainedNarrativeContext);
         setNarrativeContextCategories(obtainedNarrativeContext.categories);
