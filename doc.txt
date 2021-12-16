@@ -1,0 +1,11 @@
+Estructura:
+
+Usuario:
+ -> Campañas
+ -> Mundos
+
+Elements:
+ -> Paragraph element
+ -> Map element
+ -> PC element  }--> Entity element
+ -> NPC element }
