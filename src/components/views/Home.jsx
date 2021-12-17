@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DBRepository } from '../../repositories/db-repository';
 import { Link, useNavigate } from 'react-router-dom';
 import '../../styles/Home.css';
+import { EXTERNAL_TOOLS } from '../../data/external-tools';
 
 export function Home({ appContext }) {
     const navigate = useNavigate();
@@ -44,6 +45,12 @@ export function Home({ appContext }) {
         <ul>
             {worlds.map(x => <li key={x.id}>
                 <Link to={`/narrative-context/${x.id}`}>{x.name}</Link>
+            </li>)}
+        </ul>
+        <h2><span role='img' aria-label='tools'>⚒️</span> Herramientas</h2>
+        <ul>
+            {EXTERNAL_TOOLS.map(x => <li key={x.name}>
+                <a href={x.url}>{x.name}</a>
             </li>)}
         </ul>
     </div>;

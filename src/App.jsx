@@ -27,7 +27,6 @@ export function App() {
             <Navbar appContext={appContext} />
             <div className='RouterContainer'>
                 <Routes>
-                    <Route path='/element' element={'Article'} />
                     <Route path='/create-narrative-context' element={<CreateNarrativeContext appContext={appContext} />} />
                     <Route path='/narrative-context/:narrativeContextId/:narrativeCategoryId/:elementId' element={<ViewElement appContext={appContext} />} />
                     <Route path='/narrative-context/:narrativeContextId' element={<ViewNarrativeContext appContext={appContext} />} />
