@@ -1,4 +1,5 @@
 import { Database } from "../models/database";
+import { DBSyncRepository } from './db-sync-repository';
 
 export class DBRepository {
 
@@ -6,31 +7,56 @@ export class DBRepository {
     static _db = null;
     static _afterSaveHooks = [];
     static _preventSave = false;
-    static _onDirtyDBCallback = () => {};
+    static _onDirtyDBCallback = () => { };
+    static _dbSyncRepository = new DBSyncRepository();
+    static _onCloudDBDownloadedHooks = [];
 
     constructor() {
-        DBRepository._loadOrCreateDB();
+        DBRepository._loadOrCreateLocalDB();
     }
 
-    static _loadOrCreateDB() {
+    async tryGetCloudDB() {
+        await DBRepository._tryDownloadCloudDB();
+    }
+
+    static _loadOrCreateLocalDB() {
         if (DBRepository._db) return;
         const loadedDB = localStorage.getItem(DBRepository._DB_KEY);
         if (!loadedDB) {
             DBRepository._db = new Database();
-            DBRepository._save();
+            DBRepository._save(false);
         } else {
             DBRepository._db = Database.fromJson(JSON.parse(loadedDB));
         }
     }
 
-    static _save() {
+    static async _tryDownloadCloudDB() {
+        console.log('Downloading remote DB');
+        const downloadedDB = await DBRepository._dbSyncRepository.pullDB();
+        if (downloadedDB) {
+            DBRepository._db = downloadedDB;
+            DBRepository._save(false);
+            for (const hook of DBRepository._onCloudDBDownloadedHooks) {
+                hook();
+            }
+        }
+    }
+
+    registerOnCloudDBDownloadedHook(hook) {
+        DBRepository._onCloudDBDownloadedHooks.push(hook);
+    }
+
+    static _save(saveInCloud = true) {
         if (DBRepository._preventSave) {
             DBRepository._onDirtyDBCallback();
             return;
         }
 
         localStorage.setItem(DBRepository._DB_KEY, JSON.stringify(DBRepository._db.toJson()));
-        DBRepository._callAfterSaveHooks();
+        if (saveInCloud) {
+            DBRepository._callAfterSaveHooks();
+            DBRepository._dbSyncRepository.pushDB(DBRepository._db.toJson());
+        }
     }
 
     registerAfterSaveHook(hook) {
@@ -53,10 +79,6 @@ export class DBRepository {
 
     save() {
         DBRepository._save();
-    }
-
-    getDB() {
-        return DBRepository._db;
     }
 
 }

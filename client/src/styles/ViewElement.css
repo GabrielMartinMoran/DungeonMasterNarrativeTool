@@ -1,3 +1,7 @@
+.ViewElement {
+    padding-top: 0.5rem;
+}
+
 .viewElementTitleButtons {
     position: relative;
     bottom: -0.5rem;

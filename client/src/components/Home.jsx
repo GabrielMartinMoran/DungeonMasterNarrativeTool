@@ -1,8 +1,7 @@
+import '../styles/Home.css';
 import React, { useEffect, useState } from 'react';
-import { DBRepository } from '../../repositories/db-repository';
 import { Link, useNavigate } from 'react-router-dom';
-import '../../styles/Home.css';
-import { EXTERNAL_TOOLS } from '../../data/external-tools';
+import { EXTERNAL_TOOLS } from '../data/external-tools';
 
 export function Home({ appContext }) {
     const navigate = useNavigate();
@@ -14,8 +13,7 @@ export function Home({ appContext }) {
         appContext.setNarrativeContextById(null);
         appContext.setBackButtonUrl(null);
         appContext.setForwardButtonUrl(null);
-        const repo = appContext.getRepository(DBRepository);
-        const db = repo.getDB();
+        const db = appContext.getDB();
         setCampaigns(db.campaigns);
         setWorlds(db.worlds);
     }, [appContext]);

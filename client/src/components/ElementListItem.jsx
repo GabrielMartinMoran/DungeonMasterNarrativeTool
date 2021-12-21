@@ -85,16 +85,19 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
                 }
                 <button onClick={() => onRenameElement(element)}>
                     <span role='img' aria-label='tag'>🏷️</span>
-                    Renombrar
+                    <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={() => onMoveElementUp(element)}>
-                    <span role='img' aria-label='up'>⬆️ Subir</span>
+                    <span role='img' aria-label='up'>⬆️</span>
+                    <span className='tooltip'>Subir</span>
                 </button>
                 <button onClick={() => onMoveElementDown(element)}>
-                    <span role='img' aria-label='down'>⬇️ Bajar</span>
+                    <span role='img' aria-label='down'>⬇️</span>
+                    <span className='tooltip'>Bajar</span>
                 </button>
                 <button onClick={() => onDeleteElement(element)}>
-                    <span role='img' aria-label='delete'>🗑️ Eliminar</span>
+                    <span role='img' aria-label='delete'>🗑️</span>
+                    <span className='tooltip'>Eliminar</span>
                 </button>
             </div>
         </div>

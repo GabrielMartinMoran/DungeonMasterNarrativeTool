@@ -1,8 +1,8 @@
+import '../styles/ViewNarrativeContext.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import '../../styles/ViewNarrativeContext.css';
-import { NarrativeCategory } from '../../models/narrative-category';
-import { NarrativeCategoryComponent } from '../NarrativeCategoryComponent';
+import { NarrativeCategory } from '../models/narrative-category';
+import { NarrativeCategoryComponent } from './NarrativeCategoryComponent';
 
 export function ViewNarrativeContext({ appContext }) {
     const navigate = useNavigate();
@@ -71,16 +71,18 @@ export function ViewNarrativeContext({ appContext }) {
                     <span role='img' aria-label='world'>🌎</span> :
                     <span role='img' aria-label='books'>📚</span>
             } {narrativeContext?.name}</h1>
-            <div className='flex1 textRight narrativeContextTitleButtons'>
+            <div className='textRight narrativeContextTitleButtons'>
                 <button onClick={addNarrativeCategory}>
-                    <span role='img' aria-label='plus'>➕</span> Crear categoría
+                    <span role='img' aria-label='plus'>➕</span>
+                    <span className='tooltip'>Crear categoría</span>
                 </button>
                 <button onClick={renameMarrativeContext}>
                     <span role='img' aria-label='tag'>🏷️</span>
-                    Renombrar
+                    <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={deleteNarrativeContext}>
-                    <span role='img' aria-label='delete'>🗑️</span> Eliminar
+                    <span role='img' aria-label='delete'>🗑️</span>
+                    <span className='tooltip'>Eliminar</span>
                 </button>
             </div>
         </div>

@@ -22,10 +22,10 @@ export class AppContext {
     setNarrativeContextById(narrativeContextId) {}
 
     getDB() {
-        return this.getRepository(DBRepository).getDB();
+        return DBRepository._db;
     }
 
     saveDB() {
-        this.getRepository(DBRepository).save();
+        DBRepository._save();
     }
 }

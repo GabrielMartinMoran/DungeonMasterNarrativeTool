@@ -1,5 +1,5 @@
 import '../styles/CreateElementButton.css';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { BaseElement } from '../models/base-element';
 
 export function CreateElementButton({ onClick = (type) => { } }) {
@@ -19,7 +19,7 @@ export function CreateElementButton({ onClick = (type) => { } }) {
     return <div className="CreateElementButton">
         <button onClick={showDropdown}>
             <span role='img' aria-label='plus'>➕</span>
-            Crear elemento
+            <span className='tooltip'>Crear elemento</span>
         </button>
         <div ref={dropdownBody} className='dropdownBody'>
             <button onClick={() => onDropdownElementClick(BaseElement.TYPES.PARAGRAPH)}>

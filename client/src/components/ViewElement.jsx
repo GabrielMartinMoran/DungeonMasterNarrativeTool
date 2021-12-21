@@ -1,8 +1,8 @@
+import '../styles/ViewElement.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ParagraphElementComponent } from '../ParagraphElementComponent';
-import '../../styles/ViewElement.css';
-import { ShopElementComponent } from '../ShopElementComponent';
+import { ParagraphElementComponent } from './ParagraphElementComponent';
+import { ShopElementComponent } from './ShopElementComponent';
 
 export function ViewElement({ appContext }) {
     const navigate = useNavigate();
@@ -75,22 +75,22 @@ export function ViewElement({ appContext }) {
             element ? <>
                 <div className='flex viewElementTitleBar'>
                     <h2 className='flex2'>{element.name}</h2>
-                    <div className='flex1 textRight viewElementTitleButtons'>
+                    <div className='textRight viewElementTitleButtons'>
                         <button onClick={editName}>
                             <span role='img' aria-label='tag'>🏷️</span>
-                            Editar nombre
+                            <span className='tooltip'>Editar nombre</span>
                         </button>
                         <button onClick={editBody}>
                             <span role='img' aria-label='edit'>📝</span>
-                            Editar
+                            <span className='tooltip'>Editar</span>
                         </button>
                         <button onClick={copyRelativeLink}>
                             <span role='img' aria-label='link'>🔗</span>
-                            Copiar enlace
+                            <span className='tooltip'>Copiar enlace</span>
                         </button>
                         <button onClick={deleteElement}>
                             <span role='img' aria-label='delete'>🗑️</span>
-                            Eliminar
+                            <span className='tooltip'>Eliminar</span>
                         </button>
                     </div>
                 </div>

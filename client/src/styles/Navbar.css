@@ -34,9 +34,23 @@
 
 .roundIconButton {
     border-radius: 50%;
-    -moz-border-radius:50%;
-    -webkit-border-radius:50%;
-    height:50px;
-    width: 100px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    padding-bottom: 0px;
+    padding-top: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
     border: 1px solid white;
+}
+
+.roundIconButtonActive {
+    border: 1px solid white;
+}
+
+.roundIconButtonActive:hover {
+    border: 1px solid #c9ad6a;
+}
+
+.roundIconButtonInactive {
+    border: 1px solid rgb(63, 63, 63);
 }

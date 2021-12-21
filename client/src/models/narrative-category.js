@@ -50,17 +50,30 @@ export class NarrativeCategory {
         const newIndex = oldIndex + 1;
         if (newIndex === this.elements.length) return;
         ArrayUtils.moveElementInArray(this.elements, oldIndex, newIndex);
-    }    
+    }   
+    
+    // Returns a plain list of viewable elements obtained through iteraring al childs
+    _getPlainViewableElements() {
+        let plainElements = [];
+        for (const element of this.elements) {
+            if (element.type === BaseElement.TYPES.CONTAINER) {
+                plainElements = plainElements.concat(element.getPlainViewableElements());
+            } else {
+                plainElements.push(element);
+            }
+        }
+        return plainElements;
+    }
 
     getPrevElement(elementId) {
-        const viewableElements = this.elements.filter(x => x.type !== BaseElement.TYPES.CONTAINER);
+        const viewableElements = this._getPlainViewableElements();
         const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
         if (index === 0) return null;
         return viewableElements[index - 1];
     }
 
     getNextElement(elementId) {
-        const viewableElements = this.elements.filter(x => x.type !== BaseElement.TYPES.CONTAINER);
+        const viewableElements = this._getPlainViewableElements();
         const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
         if (index === (viewableElements.length - 1)) return null;
         return viewableElements[index + 1];

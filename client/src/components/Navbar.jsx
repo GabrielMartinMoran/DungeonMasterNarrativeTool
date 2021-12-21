@@ -1,6 +1,6 @@
+import '../styles/Navbar.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
 
 export function Navbar({ appContext }) {
 
@@ -35,23 +35,30 @@ export function Navbar({ appContext }) {
                 }
             </div>
             <div className='flex2 textRight'>
-                {
-                    backButtonUrl ? <Link to={backButtonUrl}>
-                        <span className='roundIconButton' role='img' aria-label='backArrow'>⬅</span>
-                    </Link> :
-                        <span className='roundIconButton' role='img' aria-label='backArrow' className='inactiveLink'>
-                            ⬅
-                        </span>
-                }
+                <span className={`roundIconButton ${backButtonUrl ? 'roundIconButtonActive' : 'roundIconButtonInactive'
+                    }`}>
+                    {
+
+                        backButtonUrl ? <Link to={backButtonUrl}>
+                            <span role='img' aria-label='backArrow'>⬅</span>
+                        </Link> :
+                            <span role='img' aria-label='backArrow' className='inactiveLink'>
+                                ⬅
+                            </span>
+                    }
+                </span>
                 <span> </span>
-                {
-                    forwardButtonUrl ? <Link to={forwardButtonUrl}>
-                        <span className='roundIconButton' role='img' aria-label='forwardArrow'>➡</span>
-                    </Link> :
-                        <span className='roundIconButton' role='img' aria-label='forwardArrow' className='inactiveLink'>
-                            ➡
-                        </span>
-                }
+                <span className={`roundIconButton ${forwardButtonUrl ? 'roundIconButtonActive' : 'roundIconButtonInactive'
+                    }`}>
+                    {
+                        forwardButtonUrl ? <Link to={forwardButtonUrl}>
+                            <span role='img' aria-label='forwardArrow'>➡</span>
+                        </Link> :
+                            <span role='img' aria-label='forwardArrow' className='inactiveLink'>
+                                ➡
+                            </span>
+                    }
+                </span>
             </div>
         </div>
     </div>;

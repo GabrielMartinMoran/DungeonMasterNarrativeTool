@@ -75,17 +75,19 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
                 <CreateElementButton onClick={onCreateElement} />
                 <button onClick={renameCategory}>
                     <span role='img' aria-label='tag'>🏷️</span>
-                    Renombrar
+                    <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={() => moveCategoryUp(narrativeCategory)}>
-                    <span role='img' aria-label='up'>⬆️ Subir</span>
+                    <span role='img' aria-label='up'>⬆️</span>
+                    <span className='tooltip'>Subir</span>
                 </button>
                 <button onClick={() => moveCategoryDown(narrativeCategory)}>
-                    <span role='img' aria-label='down'>⬇️ Bajar</span>
+                    <span role='img' aria-label='down'>⬇️</span>
+                    <span className='tooltip'>Bajar</span>
                 </button>
                 <button onClick={deleteCategory}>
                     <span role='img' aria-label='delete'>🗑️</span>
-                    Eliminar categoría
+                    <span className='tooltip'>Eliminar categoría</span>
                 </button>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NarrativeContext } from '../../models/narrative-context';
+import { NarrativeContext } from '../models/narrative-context';
 
 export function CreateNarrativeContext({ appContext }) {
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ export function CreateNarrativeContext({ appContext }) {
     }
 
     return <div>
-        <h1>Crear contexto</h1>
+        <h1>Crear contexto narrativo</h1>
         <input type='text' placeholder='Nombre' onChange={(event) => setName(event.target.value)} />
         <select onChange={(event) => setType(event.target.value)}>
             {NarrativeContext.TYPES.map(x => <option key={x.type} value={x.type}>{x.name}</option>)}

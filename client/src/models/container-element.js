@@ -48,6 +48,19 @@ export class ContainerElement extends BaseElement {
         return null;
     }
 
+    // Returns a plain list of viewable elements obtained through iteraring al childs
+    getPlainViewableElements() {
+        let plainElements = [];
+        for (const element of this.elements) {
+            if (element.type === BaseElement.TYPES.CONTAINER) {
+                plainElements = plainElements.concat(element.getPlainViewableElements());
+            } else {
+                plainElements.push(element);
+            }
+        }
+        return plainElements;
+    }
+
     toJson() {
         const json = super.toJson();
         json['elements'] = this.elements.map(x => x.toJson());

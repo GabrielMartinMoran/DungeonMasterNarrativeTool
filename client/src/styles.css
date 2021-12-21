@@ -45,3 +45,21 @@ button {
 .textCenter {
     text-align: center;
 }
+
+.tooltip {
+    visibility: hidden;
+    position: fixed;
+    z-index: 1;
+    background-color: black;
+    color: white;
+    padding: 0.25rem;
+    border-radius: 5px;
+    margin-top: -29px;
+    transform: translateX(-60%);
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+button:hover .tooltip {
+    visibility: visible;
+}
