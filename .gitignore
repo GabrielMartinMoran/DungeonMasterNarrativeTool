@@ -244,3 +244,7 @@ cython_debug/
 
 .idea
 coverage.xml
+
+
+# Custom
+./client/build

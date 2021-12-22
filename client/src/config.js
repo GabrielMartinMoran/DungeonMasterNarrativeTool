@@ -1,1 +1,1 @@
-export const WEB_API_URL = `http://localhost:5000/api`;
+export const WEB_API_URL = window.location.origin.indexOf('localhost') !== -1 ? 'http://localhost:5000/api': 'https://narrativetools.herokuapp.com/api';

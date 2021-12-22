@@ -1,7 +1,6 @@
 import '../styles/LoginView.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AuthRepository } from '../repositories/auth-repository';
-import { useNavigate } from '../../node_modules/react-router/index';
 
 export function LoginView({ appContext }) {
     const [username, setUsername] = useState(null);
@@ -19,8 +18,7 @@ export function LoginView({ appContext }) {
             });
         } catch {
             alert('Usuario o contreseña inválidos!');
-        }
-        
+        }        
     }
 
     return <form className="LoginView" onSubmit={e => e.preventDefault()}>
