@@ -5,7 +5,7 @@ class ConfigProvider:
     # DATABASE
     DB_URL = os.environ.get('DB_URL', 'localhost')
     DB_PORT = os.environ.get('DB_PORT', 27017)
-    DB_NAME = 'dm_tool'
+    DB_NAME = 'DMNarrativeTools'
 
     APP_INFO_COLLECTION = 'app'
     LAST_MIGRATION_APP_INFO_KEY = 'lastMigration'
