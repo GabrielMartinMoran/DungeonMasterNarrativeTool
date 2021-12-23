@@ -1,1 +1,1 @@
-web: gunicorn -w 4 api.src.app:app
+web: cd api && gunicorn -w 4 api.src.app:app
