@@ -25,18 +25,18 @@ export function Navbar({ appContext }) {
     return <div className='Navbar'>
         <div className='navbarContent'>
             <div className='flex1'>
-                <Link to={`/`}>
+                <Link to={`/`} id='homeTitleLink'>
                     <FontAwesomeIcon icon={faDiceD20} /> Inicio
                 </Link>
             </div>
             <div className='textCenter'>
                 {
                     narrativeContext ?
-                        <Link to={`/narrative-context/${narrativeContext.id}`}>{narrativeContext.name}</Link> :
+                        <Link to={`/narrative-context/${narrativeContext.id}`} id='narrativeContextTitleLink'>{narrativeContext.name}</Link> :
                         <></>
                 }
             </div>
-            <div className='flex2 textRight'>
+            <div className='flex2 textRight' id='nabvarNavigationIcons'>
                 <span className={`iconButton ${backButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'
                     }`}>
                     {

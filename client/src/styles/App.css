@@ -13,14 +13,6 @@
     font-size: 3rem;
 }
 
-/*.App h1+p::first-letter {
-    float: left;
-    font-family: Solberry;
-    font-size: 10rem;
-    color: #222;
-    line-height: .795em
-}*/
-
 .App h2 {
     font-size: 2rem;
 }
@@ -41,6 +33,31 @@
     font-family: ScalySansSmallCaps;
     font-size: .423cm;
     font-weight: 900
+}
+
+@media (max-width: 400px) {
+    .App h1 {
+        font-size: 2rem;
+        margin-top: 0.75rem;
+    }
+    
+    .App h2 {
+        font-size: 1.5rem;
+        margin-top: 0.5rem;
+    }
+    
+    .App h3 {
+        font-size: 1.2rem;
+        margin-top: 2.3rem;
+    }
+    
+    .App h4 {
+        font-size: .423cm
+    }
+    
+    .App h5 {
+        font-size: .3cm;
+    }
 }
 
 .App blockquote {
@@ -118,4 +135,14 @@
     border: 0px;
     border-top: 1px solid #c9ad6a;
     margin: 1rem 1rem 1rem 1rem;
+}
+
+.App a {
+    text-decoration: none;
+    color: black;
+}
+
+.App a:hover {
+    text-decoration: none;
+    color: blue;
 }

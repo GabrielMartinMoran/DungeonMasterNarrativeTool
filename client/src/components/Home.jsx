@@ -2,6 +2,7 @@ import '../styles/Home.css';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EXTERNAL_TOOLS } from '../data/external-tools';
+import { CreateNarrativeContextIcon } from './icons/CreateNarrativeContextIcon';
 
 export function Home({ appContext }) {
     const navigate = useNavigate();
@@ -24,10 +25,10 @@ export function Home({ appContext }) {
 
     return <div>
         <div className='flex'>
-            <h1 className='flex1'>Home</h1>
+            <h1 className='flex1'>Narrative Tools</h1>
             <div className='textRight homeTitleButtons'>
                 <button onClick={createElementDB}>
-                    <span role='img' aria-label='book'>📖</span> Crear contexto narrativo
+                    <CreateNarrativeContextIcon /> Crear contexto narrativo
                 </button>
             </div>
         </div>

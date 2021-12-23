@@ -57,7 +57,7 @@ export function RichTextEditor({ onChange, initialValue }) {
     }
 
     return <div className="EditorContainer">
-        <SunEditor lang='es' defaultValue={initialValue} height='100%'
+        <SunEditor lang='es' defaultValue={initialValue} height='40vh'
             onChange={onEditorChange} onInput={handleInput} 
             getSunEditorInstance={getSunEditorInstance} setOptions={editorOptions} />
     </div >;

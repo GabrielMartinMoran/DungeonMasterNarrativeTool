@@ -43,5 +43,26 @@
 
 .iconButtonActive:hover {}
 
-.iconButtonInactive {
+.iconButtonInactive {}
+
+#nabvarNavigationIcons {
+    margin-top: 0.1rem;
+}
+
+@media (max-width: 400px) {
+    .navbarContent {
+        margin-top: 0.6rem;
+    }
+
+    #homeTitleLink {
+        font-size: 1rem;
+    }
+
+    #narrativeContextTitleLink {
+        font-size: 1rem;
+    }
+
+    #nabvarNavigationIcons {
+        margin-top: -0.3rem;
+    }
 }
