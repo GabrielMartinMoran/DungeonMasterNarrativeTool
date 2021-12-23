@@ -87,7 +87,7 @@ def static_file(path):
 @app.route('/<path:path>')
 def serve(path):
     path_dir = os.path.abspath(ConfigProvider.CLIENT_APP_FOLDER)  # path react build
-    if path != "" and os.path.exists(os.path.join(path_dir, path)):
+    if path != '' and os.path.exists(os.path.join(path_dir, path)):
         return send_from_directory(os.path.join(path_dir), path, max_age=-1)
     else:
         return send_from_directory(os.path.join(path_dir), 'index.html', max_age=-1)

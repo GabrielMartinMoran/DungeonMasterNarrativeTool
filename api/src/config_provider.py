@@ -15,4 +15,4 @@ class ConfigProvider:
     USE_RELOADER = os.environ.get('USE_RELOADER', 'False').lower() == 'true'
     APP_PORT = os.environ.get('PORT', 5000)
     JWT_SECRET = os.environ.get('JWT_SECRET', 'jwt_insecure_secret')
-    CLIENT_APP_FOLDER = '../web'
+    CLIENT_APP_FOLDER = 'web'
