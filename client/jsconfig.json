@@ -1,6 +1,10 @@
 {
     "compilerOptions": {
-        "target": "ES6"
+        "target": "ES6",
+        "baseUrl": "./src",
+        "checkJs": true,
+        "jsx": "react",
+        "moduleResolution": "node"
     },
     "exclude": [
         "node_modules",

@@ -5,6 +5,10 @@ import { BaseElement } from '../models/base-element';
 import { CreateElementButton } from './CreateElementButton';
 import { ElementsFactory } from '../utils/elements-factory';
 import { ElementListItem } from './ElementListItem';
+import { RenameIcon } from './icons/RenameIcon';
+import { MoveUpIcon } from './icons/MoveUpIcon';
+import { MoveDownIcon } from './icons/MoveDownIcon';
+import { DeleteIcon } from './icons/DeleteIcon';
 
 export function NarrativeCategoryComponent({ appContext, narrativeContext, narrativeCategory, onCategoryChange, moveCategoryUp, moveCategoryDown }) {
 
@@ -74,19 +78,19 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
             <div className='textRight narrativeCategoryTitleButtons'>
                 <CreateElementButton onClick={onCreateElement} />
                 <button onClick={renameCategory}>
-                    <span role='img' aria-label='tag'>🏷️</span>
+                    <RenameIcon />
                     <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={() => moveCategoryUp(narrativeCategory)}>
-                    <span role='img' aria-label='up'>⬆️</span>
+                    <MoveUpIcon />
                     <span className='tooltip'>Subir</span>
                 </button>
                 <button onClick={() => moveCategoryDown(narrativeCategory)}>
-                    <span role='img' aria-label='down'>⬇️</span>
+                    <MoveDownIcon />
                     <span className='tooltip'>Bajar</span>
                 </button>
                 <button onClick={deleteCategory}>
-                    <span role='img' aria-label='delete'>🗑️</span>
+                    <DeleteIcon />
                     <span className='tooltip'>Eliminar categoría</span>
                 </button>
             </div>

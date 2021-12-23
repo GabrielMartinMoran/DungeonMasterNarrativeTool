@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { NarrativeCategory } from '../models/narrative-category';
 import { NarrativeCategoryComponent } from './NarrativeCategoryComponent';
+import { CreateIcon } from './icons/CreateIcon';
+import { RenameIcon } from './icons/RenameIcon';
+import { DeleteIcon } from './icons/DeleteIcon';
 
 export function ViewNarrativeContext({ appContext }) {
     const navigate = useNavigate();
@@ -73,15 +76,15 @@ export function ViewNarrativeContext({ appContext }) {
             } {narrativeContext?.name}</h1>
             <div className='textRight narrativeContextTitleButtons'>
                 <button onClick={addNarrativeCategory}>
-                    <span role='img' aria-label='plus'>➕</span>
+                    <CreateIcon />
                     <span className='tooltip'>Crear categoría</span>
                 </button>
                 <button onClick={renameMarrativeContext}>
-                    <span role='img' aria-label='tag'>🏷️</span>
+                    <RenameIcon />
                     <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={deleteNarrativeContext}>
-                    <span role='img' aria-label='delete'>🗑️</span>
+                    <DeleteIcon />
                     <span className='tooltip'>Eliminar</span>
                 </button>
             </div>

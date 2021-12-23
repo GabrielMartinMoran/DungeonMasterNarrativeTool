@@ -1,6 +1,8 @@
 import '../styles/Navbar.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft, faAngleRight, faDiceD20 } from '@fortawesome/free-solid-svg-icons';
 
 export function Navbar({ appContext }) {
 
@@ -24,7 +26,7 @@ export function Navbar({ appContext }) {
         <div className='navbarContent'>
             <div className='flex1'>
                 <Link to={`/`}>
-                    <span role='img' aria-label='dice'>🎲</span> Inicio
+                    <FontAwesomeIcon icon={faDiceD20} /> Inicio
                 </Link>
             </div>
             <div className='textCenter'>
@@ -35,28 +37,24 @@ export function Navbar({ appContext }) {
                 }
             </div>
             <div className='flex2 textRight'>
-                <span className={`roundIconButton ${backButtonUrl ? 'roundIconButtonActive' : 'roundIconButtonInactive'
+                <span className={`iconButton ${backButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'
                     }`}>
                     {
 
                         backButtonUrl ? <Link to={backButtonUrl}>
-                            <span role='img' aria-label='backArrow'>⬅</span>
+                            <FontAwesomeIcon icon={faAngleLeft} />
                         </Link> :
-                            <span role='img' aria-label='backArrow' className='inactiveLink'>
-                                ⬅
-                            </span>
+                            <FontAwesomeIcon icon={faAngleLeft} className='inactiveLink' />
                     }
                 </span>
                 <span> </span>
-                <span className={`roundIconButton ${forwardButtonUrl ? 'roundIconButtonActive' : 'roundIconButtonInactive'
+                <span className={`iconButton ${forwardButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'
                     }`}>
                     {
                         forwardButtonUrl ? <Link to={forwardButtonUrl}>
-                            <span role='img' aria-label='forwardArrow'>➡</span>
+                            <FontAwesomeIcon icon={faAngleRight} />
                         </Link> :
-                            <span role='img' aria-label='forwardArrow' className='inactiveLink'>
-                                ➡
-                            </span>
+                            <FontAwesomeIcon icon={faAngleRight} className='inactiveLink' />
                     }
                 </span>
             </div>

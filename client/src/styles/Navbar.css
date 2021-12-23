@@ -32,25 +32,16 @@
     font-size: 1.5rem;
 }
 
-.roundIconButton {
-    border-radius: 50%;
-    -moz-border-radius: 50%;
-    -webkit-border-radius: 50%;
+.iconButton {
     padding-bottom: 0px;
     padding-top: 5px;
     padding-left: 3px;
     padding-right: 3px;
-    border: 1px solid white;
 }
 
-.roundIconButtonActive {
-    border: 1px solid white;
-}
+.iconButtonActive {}
 
-.roundIconButtonActive:hover {
-    border: 1px solid #c9ad6a;
-}
+.iconButtonActive:hover {}
 
-.roundIconButtonInactive {
-    border: 1px solid rgb(63, 63, 63);
+.iconButtonInactive {
 }

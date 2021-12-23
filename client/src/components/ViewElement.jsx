@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ParagraphElementComponent } from './ParagraphElementComponent';
 import { ShopElementComponent } from './ShopElementComponent';
+import { RenameIcon } from './icons/RenameIcon';
+import { EditIcon } from './icons/EditIcon';
+import { CopyLinkIcon } from './icons/CopyLinkIcon';
+import { DeleteIcon } from './icons/DeleteIcon';
 
 export function ViewElement({ appContext }) {
     const navigate = useNavigate();
@@ -77,19 +81,19 @@ export function ViewElement({ appContext }) {
                     <h2 className='flex2'>{element.name}</h2>
                     <div className='textRight viewElementTitleButtons'>
                         <button onClick={editName}>
-                            <span role='img' aria-label='tag'>🏷️</span>
-                            <span className='tooltip'>Editar nombre</span>
+                            <RenameIcon />
+                            <span className='tooltip'>Renombrar</span>
                         </button>
                         <button onClick={editBody}>
-                            <span role='img' aria-label='edit'>📝</span>
+                            <EditIcon />
                             <span className='tooltip'>Editar</span>
                         </button>
                         <button onClick={copyRelativeLink}>
-                            <span role='img' aria-label='link'>🔗</span>
+                            <CopyLinkIcon />
                             <span className='tooltip'>Copiar enlace</span>
                         </button>
                         <button onClick={deleteElement}>
-                            <span role='img' aria-label='delete'>🗑️</span>
+                            <DeleteIcon />
                             <span className='tooltip'>Eliminar</span>
                         </button>
                     </div>

@@ -1,6 +1,10 @@
 import '../styles/CreateElementButton.css';
 import React, { useRef } from 'react';
 import { BaseElement } from '../models/base-element';
+import { CreateIcon } from './icons/CreateIcon';
+import { ScrollIcon } from './icons/ScrollIcon';
+import { FolderIcon } from './icons/FolderIcon';
+import { ShopIcon } from './icons/ShopIcon';
 
 export function CreateElementButton({ onClick = (type) => { } }) {
 
@@ -18,21 +22,18 @@ export function CreateElementButton({ onClick = (type) => { } }) {
 
     return <div className="CreateElementButton">
         <button onClick={showDropdown}>
-            <span role='img' aria-label='plus'>➕</span>
+            <CreateIcon />
             <span className='tooltip'>Crear elemento</span>
         </button>
         <div ref={dropdownBody} className='dropdownBody'>
             <button onClick={() => onDropdownElementClick(BaseElement.TYPES.PARAGRAPH)}>
-                <span role='img' aria-label='text'>📜</span>
-                Texto
+                <ScrollIcon /> Texto
             </button>
             <button onClick={() => onDropdownElementClick(BaseElement.TYPES.CONTAINER)}>
-                <span role='img' aria-label='open-folder'>📂</span>
-                Contenedor
+                <FolderIcon /> Contenedor
             </button>
             <button onClick={() => onDropdownElementClick(BaseElement.TYPES.SHOP)}>
-                <span role='img' aria-label='coin'>🪙</span>
-                Tienda
+                <ShopIcon /> Tienda
             </button>
         </div>
     </div>;

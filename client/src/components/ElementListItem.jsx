@@ -4,6 +4,13 @@ import { BaseElement } from '../models/base-element';
 import { Link } from 'react-router-dom';
 import { ElementsFactory } from '../utils/elements-factory';
 import { CreateElementButton } from './CreateElementButton';
+import { RenameIcon } from './icons/RenameIcon';
+import { MoveUpIcon } from './icons/MoveUpIcon';
+import { MoveDownIcon } from './icons/MoveDownIcon';
+import { DeleteIcon } from './icons/DeleteIcon';
+import { ScrollIcon } from './icons/ScrollIcon';
+import { FolderIcon } from './icons/FolderIcon';
+import { ShopIcon } from './icons/ShopIcon';
 
 export function ElementListItem({ appContext, narrativeContextId, narrativeCategoryId, element,
     onMoveElementUp = (element) => { }, onMoveElementDown = (element) => { },
@@ -20,9 +27,9 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
 
     const getIcon = () => {
         const icons = {};
-        icons[BaseElement.TYPES.PARAGRAPH] = '📜';
-        icons[BaseElement.TYPES.CONTAINER] = '📂';
-        icons[BaseElement.TYPES.SHOP] = '🪙';
+        icons[BaseElement.TYPES.PARAGRAPH] = <ScrollIcon />;
+        icons[BaseElement.TYPES.CONTAINER] = <FolderIcon />;
+        icons[BaseElement.TYPES.SHOP] = <ShopIcon />;
         return icons[element.type];
     }
 
@@ -66,7 +73,7 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
 
     return <div className="ElementListItem">
         <div className='flex'>
-            <div className='flex2'><span role='img' aria-label='icon'>{getIcon()}</span>
+            <div className='flex2'><span role='img' aria-label='icon'>{getIcon()} </span>
                 {
                     shouldDisplayLink() ?
                         <Link to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}>
@@ -84,19 +91,19 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
                         <CreateElementButton onClick={createChildElement} /> : <></>
                 }
                 <button onClick={() => onRenameElement(element)}>
-                    <span role='img' aria-label='tag'>🏷️</span>
+                    <RenameIcon />
                     <span className='tooltip'>Renombrar</span>
                 </button>
                 <button onClick={() => onMoveElementUp(element)}>
-                    <span role='img' aria-label='up'>⬆️</span>
+                    <MoveUpIcon />
                     <span className='tooltip'>Subir</span>
                 </button>
                 <button onClick={() => onMoveElementDown(element)}>
-                    <span role='img' aria-label='down'>⬇️</span>
+                    <MoveDownIcon />
                     <span className='tooltip'>Bajar</span>
                 </button>
                 <button onClick={() => onDeleteElement(element)}>
-                    <span role='img' aria-label='delete'>🗑️</span>
+                    <DeleteIcon />
                     <span className='tooltip'>Eliminar</span>
                 </button>
             </div>
