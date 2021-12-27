@@ -1,6 +1,8 @@
 import '../styles/Navbar.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { SessionMenuButton } from './SessionMenuButton';
+import { AuthRepository } from '../repositories/auth-repository';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faDiceD20 } from '@fortawesome/free-solid-svg-icons';
 
@@ -57,6 +59,9 @@ export function Navbar({ appContext }) {
                             <FontAwesomeIcon icon={faAngleRight} className='inactiveLink' />
                     }
                 </span>
+                {
+                    appContext.getRepository(AuthRepository).isAuthenticated() ? <SessionMenuButton appContext={appContext}/> : <></>
+                }                
             </div>
         </div>
     </div>;

@@ -1,5 +1,4 @@
 #!/bin/sh
-cp /data/app/*.apk /sdcard/prova1
 
 echo "Compiling React app"
 npm run build
