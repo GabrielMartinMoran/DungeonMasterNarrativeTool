@@ -16,6 +16,7 @@
 
 .Navbar a:hover {
     color: #c9ad6a;
+    text-decoration: none;
 }
 
 .navbarContent {

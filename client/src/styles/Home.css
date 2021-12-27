@@ -1,4 +1,22 @@
+.homeTitleSection {
+    display: flex;
+}
+
 .homeTitleButtons {
     position: relative;
     bottom: -1rem;
+    text-align: right;
+}
+
+@media (max-width: 400px) {
+    .homeTitleSection {
+        display: block;
+        margin-bottom: 2rem;
+    }
+
+    .homeTitleButtons {
+        position: relative;
+        bottom: -1rem;
+        text-align: left;
+    }
 }

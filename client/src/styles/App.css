@@ -138,11 +138,11 @@
 }
 
 .App a {
-    text-decoration: none;
+    text-decoration: underline gray;
     color: black;
 }
 
 .App a:hover {
-    text-decoration: none;
+    text-decoration: underline;
     color: blue;
 }

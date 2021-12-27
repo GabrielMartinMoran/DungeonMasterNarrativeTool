@@ -1,7 +1,7 @@
 import React from 'react';
-import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBook } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function CreateNarrativeContextIcon() {
-    return <FontAwesomeIcon icon={faFolderPlus} color={'#fa9600'} />
+    return <FontAwesomeIcon icon={faBook} color={'#72b52f'} />
 }

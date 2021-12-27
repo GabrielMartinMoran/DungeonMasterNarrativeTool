@@ -67,20 +67,6 @@ def save_user_database():
     return jsonify({})
 
 
-"""
-@app.route('/', methods=[http_methods.GET])
-@compress.compressed()
-def root():
-    return send_from_directory(ConfigProvider.CLIENT_APP_FOLDER, 'index.html', max_age=-1)
-
-
-@app.route('/<path:path>', methods=[http_methods.GET])
-@compress.compressed()
-def static_file(path):
-    return send_from_directory(ConfigProvider.CLIENT_APP_FOLDER, path, max_age=-1)
-"""
-
-
 @app.route('/', defaults={
     'path': ''
 })

@@ -6,6 +6,8 @@ import { NarrativeCategoryComponent } from './NarrativeCategoryComponent';
 import { CreateIcon } from './icons/CreateIcon';
 import { RenameIcon } from './icons/RenameIcon';
 import { DeleteIcon } from './icons/DeleteIcon';
+import { ExportNarrativeContextIcon } from './icons/ExportNarrativeContextIcon';
+import { NarrativeContext } from '../models/narrative-context';
 
 export function ViewNarrativeContext({ appContext }) {
     const navigate = useNavigate();
@@ -48,7 +50,11 @@ export function ViewNarrativeContext({ appContext }) {
         narrativeContext.name = name;
         appContext.saveDB();
         setNarrativeContext({ ...narrativeContext });
-        setTimeout(() => setNarrativeContext(narrativeContext), 0);
+        appContext.setNarrativeContextById(null);
+        setTimeout(() => {
+            setNarrativeContext(narrativeContext)
+            appContext.setNarrativeContextById(narrativeContextId);
+        }, 0);
     }
 
     const onCategoryChange = () => {
@@ -67,6 +73,15 @@ export function ViewNarrativeContext({ appContext }) {
         setNarrativeContextCategories([...narrativeContext.categories]);
     }
 
+    const exportNarrativeContext = () => {
+        const narrativeContextDownloadLink = document.getElementById('narrativeContextDownloadLink');
+        const content = JSON.stringify(narrativeContext.toJson(), null, 2);
+        const file = new Blob([content], {type: 'application/json'});
+        narrativeContextDownloadLink.href = URL.createObjectURL(file);
+        narrativeContextDownloadLink.download = `${NarrativeContext.TYPES.find(x => x.type === narrativeContext.type).name} - ${narrativeContext.name}.json`;
+        narrativeContextDownloadLink.click();
+    }
+
     return <div className="ViewNarrativeContext">
         <div className='flex narrativeContextTitleBar'>
             <h1 className='flex2'>{
@@ -82,6 +97,11 @@ export function ViewNarrativeContext({ appContext }) {
                 <button onClick={renameMarrativeContext}>
                     <RenameIcon />
                     <span className='tooltip'>Renombrar</span>
+                </button>
+                <a hidden={true} id='narrativeContextDownloadLink'/>
+                <button onClick={exportNarrativeContext}>
+                    <ExportNarrativeContextIcon />
+                    <span className='tooltip'>Exportar</span>
                 </button>
                 <button onClick={deleteNarrativeContext}>
                     <DeleteIcon />

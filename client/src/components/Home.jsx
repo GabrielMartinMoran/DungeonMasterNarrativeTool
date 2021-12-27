@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { EXTERNAL_TOOLS } from '../data/external-tools';
 import { CreateNarrativeContextIcon } from './icons/CreateNarrativeContextIcon';
+import { ImportNarrativeContextIcon } from './icons/ImportNarrativeContextIcon';
+import { NarrativeContextImporter } from '../utils/narrative-context-importer';
 
 export function Home({ appContext }) {
     const navigate = useNavigate();
@@ -23,12 +25,35 @@ export function Home({ appContext }) {
         navigate('/create-narrative-context');
     }
 
+    const importNarrativeContext = async (e) => {
+        e.preventDefault();
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const json = (e.target.result);
+            NarrativeContextImporter.importFromJson(json, appContext);
+            const db = appContext.getDB();
+            setCampaigns([...db.campaigns]);
+            setWorlds([...db.worlds]);
+            setTimeout(() => {
+                setCampaigns(db.campaigns);
+                setWorlds(db.worlds);
+            }, 0);
+            document.getElementById('narrativeContextFileSelector').value = null;
+        };
+        reader.readAsText(e.target.files[0]);
+    }
+
     return <div>
-        <div className='flex'>
-            <h1 className='flex1'>Narrative Tools</h1>
-            <div className='textRight homeTitleButtons'>
+        <div className='homeTitleSection'>
+            <h1 className='flex1'>Contextos narrativos</h1>
+            <div className='homeTitleButtons'>
                 <button onClick={createElementDB}>
-                    <CreateNarrativeContextIcon /> Crear contexto narrativo
+                    <CreateNarrativeContextIcon /> Crear
+                </button>
+                <input type='file' id='narrativeContextFileSelector' hidden={true}
+                    onChange={importNarrativeContext} accept='application/json' />
+                <button onClick={() => document.getElementById('narrativeContextFileSelector').click()}>
+                    <ImportNarrativeContextIcon /> Importar
                 </button>
             </div>
         </div>
