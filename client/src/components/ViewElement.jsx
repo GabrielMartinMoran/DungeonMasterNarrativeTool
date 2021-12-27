@@ -50,7 +50,7 @@ export function ViewElement({ appContext }) {
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
         if (name) {
             const obtainedElement = appContext.getDB().getNarrativeContext(narrativeContextId)
-                .getNarrativeCategory(narrativeCategoryId).getElement(elementId);
+                .getNarrativeCategory(narrativeCategoryId).findElementAnywhere(elementId);
             obtainedElement.name = name;
             appContext.saveDB();
             setElement({ ...obtainedElement });

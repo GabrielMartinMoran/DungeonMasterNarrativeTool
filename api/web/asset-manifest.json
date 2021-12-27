@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.95f5c99c.chunk.css",
-    "main.js": "/static/js/main.2a9be500.chunk.js",
-    "main.js.map": "/static/js/main.2a9be500.chunk.js.map",
+    "main.css": "/static/css/main.b68aaf15.chunk.css",
+    "main.js": "/static/js/main.86c4c7a2.chunk.js",
+    "main.js.map": "/static/js/main.86c4c7a2.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.2a71712c.js",
     "runtime-main.js.map": "/static/js/runtime-main.2a71712c.js.map",
     "static/js/2.32eb5271.chunk.js": "/static/js/2.32eb5271.chunk.js",
     "static/js/2.32eb5271.chunk.js.map": "/static/js/2.32eb5271.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.fae4ef6ddc7e38dad2e5540bc237e1d0.js": "/precache-manifest.fae4ef6ddc7e38dad2e5540bc237e1d0.js",
+    "precache-manifest.2eac83051649f9a6aae28961c18bbb85.js": "/precache-manifest.2eac83051649f9a6aae28961c18bbb85.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.95f5c99c.chunk.css.map": "/static/css/main.95f5c99c.chunk.css.map",
+    "static/css/main.b68aaf15.chunk.css.map": "/static/css/main.b68aaf15.chunk.css.map",
     "static/js/2.32eb5271.chunk.js.LICENSE.txt": "/static/js/2.32eb5271.chunk.js.LICENSE.txt",
     "static/media/index.css": "/static/media/Solbera Imitation.ed397bbd.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.2a71712c.js",
     "static/js/2.32eb5271.chunk.js",
-    "static/css/main.95f5c99c.chunk.css",
-    "static/js/main.2a9be500.chunk.js"
+    "static/css/main.b68aaf15.chunk.css",
+    "static/js/main.86c4c7a2.chunk.js"
   ]
 }
