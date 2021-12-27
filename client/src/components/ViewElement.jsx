@@ -92,10 +92,14 @@ export function ViewElement({ appContext }) {
                             <CopyLinkIcon />
                             <span className='tooltip'>Copiar enlace</span>
                         </button>
-                        <button onClick={deleteElement}>
-                            <DeleteIcon />
-                            <span className='tooltip'>Eliminar</span>
-                        </button>
+                        {
+                            /*
+                            <button onClick={deleteElement}>
+                                <DeleteIcon />
+                                <span className='tooltip'>Eliminar</span>
+                            </button>
+                            */
+                        }
                     </div>
                 </div>
                 {
