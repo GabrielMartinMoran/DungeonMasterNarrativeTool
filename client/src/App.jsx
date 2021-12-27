@@ -16,14 +16,21 @@ import { Navbar } from './components/Navbar';
 import { LoginView } from './components/LoginView';
 import { AuthRepository } from './repositories/auth-repository';
 import { LogoutView } from './components/LogoutView';
+import { UpdatingDBIndicator } from 'components/UpdatingDBIndicator';
 
 export function App({ appContext }) {
 
     const authRepo = appContext.getRepository(AuthRepository);
 
     const [userLogged, setUserLogged] = useState(authRepo.isAuthenticated());
+    const [updatingDB, setUpdatingDB] = useState(false);
+
+    appContext.setUpdatingDBIndicator = setUpdatingDB;
 
     return <div className='App'>
+        {
+            updatingDB ? <UpdatingDBIndicator/> : <></>
+        }
         <Router>
             <Navbar appContext={appContext} />
             <div className='RouterContainer'>

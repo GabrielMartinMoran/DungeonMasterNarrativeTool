@@ -3,6 +3,7 @@ import { DBRepository } from './repositories/db-repository';
 export class AppContext {
 
     _repositories = null;
+    setUpdatingDBIndicator = (status) => {};
     
     constructor() {
         this._repositories = {}
@@ -26,6 +27,7 @@ export class AppContext {
     }
 
     saveDB() {
+        DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
         DBRepository._save();
     }
 }

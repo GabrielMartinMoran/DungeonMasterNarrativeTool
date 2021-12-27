@@ -1,0 +1,35 @@
+.UpdatingDBIndicator {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 100;
+    background-color: rgb(65, 65, 65);
+    font-size: 1.5rem;
+    padding: 0.2rem;
+    margin-right: 0.2rem;
+    margin-bottom: 0.2rem;
+    border-radius: 15%;
+}
+
+.updatingDBIcon {
+    color: white;
+}
+
+@keyframes updatingDBIconJump {
+    0% {
+        transform: translate3d(0, 40%, 0) scale3d(1, 1, 1);
+    }
+
+    40% {
+        transform: translate3d(0, -10%, 0) scale3d(.8, 1.5, 1);
+    }
+
+    100% {
+        transform: translate3d(0, -40%, 0) scale3d(1.1, .7, 1);
+    }
+}
+
+.updatingDBIcon {
+    transform-origin: 50% 50%;
+    animation: updatingDBIconJump .5s linear alternate infinite;
+}

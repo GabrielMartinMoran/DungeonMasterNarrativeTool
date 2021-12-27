@@ -10,6 +10,7 @@ export class DBRepository {
     static _onDirtyDBCallback = () => { };
     static _dbSyncRepository = new DBSyncRepository();
     static _onCloudDBDownloadedHooks = [];
+    static setUpdatingDBIndicator = (value) => {};
 
     constructor() {
         DBRepository._loadOrCreateLocalDB();
@@ -46,7 +47,7 @@ export class DBRepository {
         DBRepository._onCloudDBDownloadedHooks.push(hook);
     }
 
-    static _save(saveInCloud = true) {
+    static async _save(saveInCloud = true) {
         if (DBRepository._preventSave) {
             DBRepository._onDirtyDBCallback();
             return;
@@ -55,7 +56,9 @@ export class DBRepository {
         localStorage.setItem(DBRepository._DB_KEY, JSON.stringify(DBRepository._db.toJson()));
         if (saveInCloud) {
             DBRepository._callAfterSaveHooks();
-            DBRepository._dbSyncRepository.pushDB(DBRepository._db.toJson());
+            DBRepository.setUpdatingDBIndicator(true);
+            await DBRepository._dbSyncRepository.pushDB(DBRepository._db.toJson());
+            DBRepository.setUpdatingDBIndicator(false);
         }
     }
 
