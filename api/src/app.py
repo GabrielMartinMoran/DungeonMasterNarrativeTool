@@ -1,4 +1,6 @@
+import gzip
 import os
+import json
 
 from flask import Flask, request, send_from_directory, make_response, Response, jsonify
 from flask_cors import CORS
@@ -19,6 +21,15 @@ compress = Compress(app)
 
 @app.before_request
 def before_request_callback():
+    # Decoding body
+    request.decoded_json = None
+    if request.data:
+        if getattr(request, 'content_encoding') == 'gzip':
+            request.decoded_json = json.loads(gzip.decompress(request.data))
+        else:
+            request.decoded_json = request.json
+
+    # Token
     request.token = None
     auth_header = request.headers.get('Authorization')
     if not auth_header:
@@ -33,8 +44,8 @@ def before_request_callback():
 def login():
     repo = UserRepository()
     user = repo.get_by_credentials(
-        request.json.get('username'),
-        hashing.hash_password(request.json.get('password'))
+        request.decoded_json.get('username'),
+        hashing.hash_password(request.decoded_json.get('password'))
     )
     if user:
         return jsonify({
@@ -63,7 +74,7 @@ def save_user_database():
             'message': 'Forbidden'
         }), 403
     repo = UserDatabaseRepository()
-    repo.set(request.token.username, request.json)
+    repo.set(request.token.username, request.decoded_json)
     return jsonify({})
 
 

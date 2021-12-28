@@ -56,7 +56,7 @@ export class DataCorruptionPreventer {
 
     _onDirtyDB() {
         const shouldReload = window.confirm('Usted esta trabajando con una version desactualizada de la base de datos local y no podra guardar cambios en esta.' +
-            ' Por favor recargue la aplicación para poder volver a utilizarla con normalidad o haga click en aceptar para hacerlo automáticamente.');
+            ' Por favor recargue la aplicación para poder volver a utilizarla con normalidad o haga click en aceptar / ok para hacerlo automáticamente.');
         if (shouldReload) window.location.reload();
     }
 }
