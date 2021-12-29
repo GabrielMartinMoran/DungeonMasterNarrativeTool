@@ -1,3 +1,11 @@
 .ElementListItem {
     margin-left: 1rem;
 }
+
+.elementListItemName {
+    margin-top: 0.2rem;
+}
+
+.highlightedListItem {
+    border: 1px dotted black;
+}

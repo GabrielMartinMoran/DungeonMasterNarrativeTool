@@ -17,6 +17,8 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
     onDeleteElement = (element) => { }, onRenameElement = (element) => { },
     onChildUpdate = () => { } }) {
 
+    const [highlight, setHighlight] = useState(false);
+
     const isContainer = () => {
         return element.type === BaseElement.TYPES.CONTAINER;
     }
@@ -70,10 +72,18 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
         onChildUpdate();
     }
 
+    const highlightElement = () => {
+        setHighlight(true);
+    }
 
-    return <div className="ElementListItem">
-        <div className='flex'>
-            <div className='flex2'><span role='img' aria-label='icon'>{getIcon()} </span>
+    const unhighlightElement = () => {
+        setHighlight(false);
+    }
+
+
+    return <div className='ElementListItem' onMouseEnter={highlightElement} onMouseLeave={unhighlightElement}>
+        <div className={'flex ' + (highlight ? 'highlightedListItem': '')}>
+            <div className={'flex2 elementListItemName '}><span role='img' aria-label='icon'>{getIcon()} </span>
                 {
                     shouldDisplayLink() ?
                         <Link to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}>
