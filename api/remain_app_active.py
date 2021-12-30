@@ -2,7 +2,7 @@ import requests
 import time
 import random
 
-URL = 'http://regalista.herokuapp.com'
+URL = 'https://narrativetools.herokuapp.com/'
 LOG_BODY = False
 
 while True:
