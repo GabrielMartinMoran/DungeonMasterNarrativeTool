@@ -3,31 +3,37 @@ import { DBRepository } from './repositories/db-repository';
 export class AppContext {
 
     _repositories = null;
-    setUpdatingDBIndicator = (status) => {};
-    
+    setUpdatingDBIndicator = (status) => { };
+
     constructor() {
         this._repositories = {}
     }
 
     getRepository(repositoryClass) {
-        if (!this._repositories[repositoryClass]){
+        if (!this._repositories[repositoryClass]) {
             this._repositories[repositoryClass] = new repositoryClass();
         }
         return this._repositories[repositoryClass];
     }
 
-    setBackButtonUrl(url) {}
+    setBackButtonUrl(url) { }
 
-    setForwardButtonUrl(url) {}
+    setForwardButtonUrl(url) { }
 
-    setNarrativeContextById(narrativeContextId) {}
+    setNarrativeContextById(narrativeContextId) { }
 
     getDB() {
         return DBRepository._db;
     }
 
-    saveDB() {
+    async saveDB() {
         DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
-        DBRepository._save();
+        console.log('Enviando datos al servidor de la aplicación...');
+        try {
+            await DBRepository._save();
+            console.log('Los datos se enviaron al servidor correctamente!');
+        } catch {
+            alert('Ha ocurrido un error al tratar de enviar los cambios al servidor de la aplicación!');
+        }
     }
 }
