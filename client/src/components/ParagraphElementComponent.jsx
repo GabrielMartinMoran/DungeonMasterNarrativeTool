@@ -19,8 +19,7 @@ export function ParagraphElementComponent({ appContext, element, parentExposedFu
             return;
         }
         element.body = currentEditorValue;
-        const repo = appContext.getRepository(DBRepository);
-        repo.save();
+        appContext.saveDBAsync();
         setEditMode(false);
     }
 

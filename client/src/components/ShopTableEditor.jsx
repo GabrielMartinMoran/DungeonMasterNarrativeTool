@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { DBRepository } from '../repositories/db-repository';
-import { RichTextEditor } from './RichTextEditor';
 import '../styles/ParagraphElementComponent.css';
 import { ShopItem } from '../models/shop-item';
 

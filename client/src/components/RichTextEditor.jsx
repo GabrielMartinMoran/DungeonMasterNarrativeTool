@@ -15,27 +15,27 @@ export function RichTextEditor({ onChange, initialValue }) {
         ],
         formats: [
             {
-                tag:'p',
+                tag: 'p',
                 name: 'Párrafo'
             },
             {
-                tag:'h1',
+                tag: 'h1',
                 name: 'Título'
             },
             {
-                tag:'h2',
+                tag: 'h2',
                 name: 'Subtítulo'
             },
             {
-                tag:'h3',
+                tag: 'h3',
                 name: 'Sección'
             },
             {
-                tag:'blockquote',
+                tag: 'blockquote',
                 name: 'Bloque de descripción'
             },
             {
-                tag:'pre',
+                tag: 'pre',
                 name: 'Notas de DM'
             },
             //'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
@@ -48,17 +48,13 @@ export function RichTextEditor({ onChange, initialValue }) {
         editor.current = sunEditor;
     };
 
-    const onEditorChange = (state) => {
-        onChange(editor.current.getContents());
-    }
-
     const handleInput = (event) => {
         onChange(editor.current.getContents());
     }
 
     return <div className="EditorContainer">
         <SunEditor lang='es' defaultValue={initialValue} height='40vh'
-            onChange={onEditorChange} onInput={handleInput} 
-            getSunEditorInstance={getSunEditorInstance} setOptions={editorOptions} />
+            onInput={handleInput} getSunEditorInstance={getSunEditorInstance}
+            setOptions={editorOptions} />
     </div >;
 }

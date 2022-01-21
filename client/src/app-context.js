@@ -26,6 +26,10 @@ export class AppContext {
         return DBRepository._db;
     }
 
+    saveDBAsync() {
+        setTimeout(() => this.saveDB(), 0);
+    }
+
     async saveDB() {
         DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
         console.log('Enviando datos al servidor de la aplicación...');

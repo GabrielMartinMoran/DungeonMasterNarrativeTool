@@ -21,8 +21,7 @@ export function ShopElementComponent({ appContext, element, parentExposedFuntion
             return;
         }
         element.items = currentEditorItems;
-        const repo = appContext.getRepository(DBRepository);
-        repo.save();
+        appContext.saveDBAsync();
         setEditMode(false);
     }
 
