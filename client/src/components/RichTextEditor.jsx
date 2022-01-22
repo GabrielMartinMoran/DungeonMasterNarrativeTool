@@ -45,7 +45,7 @@ export function RichTextEditor({ onChange, initialValue }) {
     const editor = useRef();
 
     let currentChangeId = 0;
-    const changeUpdateTimeout = 400;
+    const changeUpdateTimeout = 250;
 
     const getSunEditorInstance = (sunEditor) => {
         editor.current = sunEditor;
@@ -68,7 +68,6 @@ export function RichTextEditor({ onChange, initialValue }) {
         const height = window.innerHeight
             || document.documentElement.clientHeight
             || document.body.clientHeight;
-        console.log('Height:', height);
         if (height <= 640) return '48vh';
         if (height <= 900) return '67vh';
         return '73vh';
