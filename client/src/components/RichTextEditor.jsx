@@ -45,7 +45,7 @@ export function RichTextEditor({ onChange, initialValue }) {
     const editor = useRef();
 
     let currentChangeId = 0;
-    const changeUpdateTimeout = 250;
+    const changeUpdateTimeout = 200;
 
     const getSunEditorInstance = (sunEditor) => {
         editor.current = sunEditor;
@@ -59,7 +59,7 @@ export function RichTextEditor({ onChange, initialValue }) {
         }, changeUpdateTimeout);
     }
 
-    const handleInput = (event) => {
+    const handleInput = () => {
         currentChangeId += 1;
         deferredUpdate(currentChangeId);
     }
@@ -75,7 +75,7 @@ export function RichTextEditor({ onChange, initialValue }) {
 
     return <div className="EditorContainer">
         <SunEditor lang='es' defaultValue={initialValue} height={getEditorHeight()}
-            onInput={handleInput} getSunEditorInstance={getSunEditorInstance}
-            setOptions={editorOptions} />
+            onChange={(state) => handleInput()} onInput={(event) => handleInput()}
+            getSunEditorInstance={getSunEditorInstance} setOptions={editorOptions} />
     </div >;
 }
