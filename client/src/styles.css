@@ -10,6 +10,7 @@ body {
     font-family: BookSanity;
     font-size: 1rem;
     text-rendering: optimizeLegibility;
+    overflow: scroll;
 }
 
 button {

@@ -9,8 +9,8 @@
 .sun-editor {
     position: relative;
     box-sizing: border-box;
-    border: 1px solid #dadada;
-    background-color: #fff;
+    border: 0px solid #dadada;
+    background-color: rgba(0, 0, 0, 0.0);
     color: #000;
     user-select: none;
     -o-user-select: none;

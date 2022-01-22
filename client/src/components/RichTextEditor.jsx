@@ -61,11 +61,21 @@ export function RichTextEditor({ onChange, initialValue }) {
 
     const handleInput = (event) => {
         currentChangeId += 1;
-        deferredUpdate(currentChangeId);        
+        deferredUpdate(currentChangeId);
+    }
+
+    const getEditorHeight = () => {
+        const height = window.innerHeight
+            || document.documentElement.clientHeight
+            || document.body.clientHeight;
+        console.log('Height:', height);
+        if (height <= 640) return '48vh';
+        if (height <= 900) return '67vh';
+        return '73vh';
     }
 
     return <div className="EditorContainer">
-        <SunEditor lang='es' defaultValue={initialValue} height='40vh'
+        <SunEditor lang='es' defaultValue={initialValue} height={getEditorHeight()}
             onInput={handleInput} getSunEditorInstance={getSunEditorInstance}
             setOptions={editorOptions} />
     </div >;
