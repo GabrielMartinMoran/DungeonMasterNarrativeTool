@@ -11,13 +11,16 @@ import { DeleteIcon } from './icons/DeleteIcon';
 import { ScrollIcon } from './icons/ScrollIcon';
 import { FolderIcon } from './icons/FolderIcon';
 import { ShopIcon } from './icons/ShopIcon';
+import { CollapseIcon } from './icons/CollapseIcon';
+import { ExpandIcon } from './icons/ExpandIcon';
 
 export function ElementListItem({ appContext, narrativeContextId, narrativeCategoryId, element,
     onMoveElementUp = (element) => { }, onMoveElementDown = (element) => { },
     onDeleteElement = (element) => { }, onRenameElement = (element) => { },
-    onChildUpdate = () => { } }) {
+    onChildUpdate = () => { }, tabElement = false}) {
 
     const [highlight, setHighlight] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     const isContainer = () => {
         return element.type === BaseElement.TYPES.CONTAINER;
@@ -80,9 +83,21 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
         setHighlight(false);
     }
 
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    }
 
-    return <div className='ElementListItem' onMouseEnter={highlightElement} onMouseLeave={unhighlightElement}>
-        <div className={'flex ' + (highlight ? 'highlightedListItem': '')}>
+
+    return <div className={tabElement ? 'listItemTabbed' : ''} onMouseEnter={highlightElement} onMouseLeave={unhighlightElement}>
+        <div className={'flex ' + (highlight ? 'highlightedListItem' : '')}>
+            {
+                isContainer() ? <button className="collapseExpandButton" onClick={() => toggleExpand()}>
+                    {
+                        expanded ? <CollapseIcon /> : <ExpandIcon />
+                    }
+
+                </button> : <></>
+            }
             <div className={'flex2 elementListItemName '}><span role='img' aria-label='icon'>{getIcon()} </span>
                 {
                     shouldDisplayLink() ?
@@ -121,14 +136,15 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
         {
             isContainer() ?
                 <div>{
-                    element.elements.map(chileElement =>
-                        <ElementListItem key={chileElement.id} appContext={appContext}
+                    expanded ? element.elements.map(childElement =>
+                        <ElementListItem key={childElement.id} appContext={appContext}
                             narrativeContextId={narrativeContextId}
-                            narrativeCategoryId={narrativeCategoryId} element={chileElement}
+                            narrativeCategoryId={narrativeCategoryId} element={childElement}
                             onMoveElementUp={moveChildElementUp} onMoveElementDown={moveChildElementDown}
                             onDeleteElement={deleteChildElement} onRenameElement={renameChildElement}
-                            onChildUpdate={onChildUpdate} />
-                    )
+                            onChildUpdate={onChildUpdate}
+                            tabElement={true} />
+                    ) : <></>
                 }
                 </div> : <></>
         }

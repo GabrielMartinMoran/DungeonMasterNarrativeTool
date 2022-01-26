@@ -40,21 +40,21 @@
         font-size: 2rem;
         margin-top: 0.75rem;
     }
-    
+
     .App h2 {
         font-size: 1.5rem;
         margin-top: 0.5rem;
     }
-    
+
     .App h3 {
         font-size: 1.2rem;
         margin-top: 2.3rem;
     }
-    
+
     .App h4 {
         font-size: .423cm
     }
-    
+
     .App h5 {
         font-size: .3cm;
     }
@@ -149,4 +149,27 @@
 
 .App li {
     font-family: ScalySans;
+}
+
+.App table {
+    border-radius: 5px;
+    border-collapse: collapse;
+    border-top: 3px solid #c9ad6a;
+    border-bottom: 3px solid #c9ad6a;
+    text-align: center;
+    font-family: ScalySans;
+}
+
+.App td {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border-collapse: collapse;
+}
+
+.App tbody tr:nth-child(even) {
+    background-color: #C6D094;
+}
+
+.App tbody tr:nth-child(odd) {
+    background-color: #F2F0E3;
 }

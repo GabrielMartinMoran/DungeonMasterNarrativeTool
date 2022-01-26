@@ -30,7 +30,7 @@ export function ShopTableEditor({ appContext, items, onItemsChange = (items) => 
 
     return <div className="ShopTableEditor">
         <table className="shopTable">
-            <thead>
+            <tbody>
                 <tr>
                     <th>Objeto</th>
                     <th>Enlace</th>
@@ -38,13 +38,8 @@ export function ShopTableEditor({ appContext, items, onItemsChange = (items) => 
                     <th>Cantidad disponible</th>
                     <th></th>
                 </tr>
-            </thead>
-            <tbody>
                 {
-                    itemsList?.map(x => <tr key={x.id} className={
-                        itemsList.indexOf(x) % 2 ?
-                            'oddRow' : 'evenRow'
-                    }>
+                    itemsList?.map(x => <tr key={x.id}>
                         <td>
                             <input key={`${x.id}-titleInput`} onChange={(event) => updateItemProp(x, 'title', event.target.value)}
                                 value={x.title || ''} />

@@ -63,20 +63,14 @@ export function ShopElementComponent({ appContext, element, parentExposedFuntion
                         parentExposedFuntions={childFunctions} />
                 </> :
                 <table className="shopTable">
-                    <thead>
+                    <tbody>
                         <tr>
                             <th>Objeto</th>
                             <th>Precio</th>
                             <th>Cantidad disponible</th>
                         </tr>
-                    </thead>
-                    <tbody>
                         {
-                            element.items.map(x => <tr key={x.id}
-                                className={
-                                    element.items.indexOf(x) % 2 ?
-                                        'oddRow' : 'evenRow'
-                                }>
+                            element.items.map(x => <tr key={x.id}>
                                 <td>{
                                     x.link ?
                                         <a href={x.link}>{x.title}</a> :

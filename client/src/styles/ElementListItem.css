@@ -1,5 +1,5 @@
-.ElementListItem {
-    margin-left: 1rem;
+.listItemTabbed {
+    margin-left: 1.5rem;
 }
 
 .elementListItemName {
@@ -8,4 +8,9 @@
 
 .highlightedListItem {
     border: 1px dotted black;
+}
+
+.collapseExpandButton {
+    background: none;
+    border: none;
 }
