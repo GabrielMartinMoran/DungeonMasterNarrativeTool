@@ -46,7 +46,6 @@ export function ParagraphElementComponent({ appContext, element, parentExposedFu
                 </button>
             </> : <></>
         }
-        <br></br>
         {
             editMode ?
                 <>

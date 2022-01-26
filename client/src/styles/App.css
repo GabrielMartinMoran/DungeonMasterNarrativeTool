@@ -154,10 +154,19 @@
 .App table {
     border-radius: 5px;
     border-collapse: collapse;
-    border-top: 3px solid #c9ad6a;
-    border-bottom: 3px solid #c9ad6a;
     text-align: center;
     font-family: ScalySans;
+    display: block;
+    padding-right: 2rem;
+}
+
+.App tbody {
+    border-top: 3px solid #c9ad6a;
+    border-bottom: 3px solid #c9ad6a;
+    width: 100%;
+    display: table;
+    position: relative;
+    margin-left: 1rem;    
 }
 
 .App td {
