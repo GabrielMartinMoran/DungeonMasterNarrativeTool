@@ -31,6 +31,10 @@ export function RichTextEditor({ onChange, initialValue }) {
                 name: 'Sección'
             },
             {
+                tag: 'h4',
+                name: 'Subsección'
+            },
+            {
                 tag: 'blockquote',
                 name: 'Bloque de descripción'
             },
