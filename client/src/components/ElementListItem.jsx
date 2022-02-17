@@ -20,7 +20,7 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
     onChildUpdate = () => { }, tabElement = false}) {
 
     const [highlight, setHighlight] = useState(false);
-    const [expanded, setExpanded] = useState(true);
+    const [expanded, setExpanded] = useState(false);
 
     const isContainer = () => {
         return element.type === BaseElement.TYPES.CONTAINER;

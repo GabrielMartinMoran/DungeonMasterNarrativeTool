@@ -58,6 +58,8 @@ export function RichTextEditor({ onChange, initialValue }) {
     const deferredUpdate = (changeId) => {
         setTimeout(() => {
             if (changeId === currentChangeId) {
+                // Sometimes the ref does not have getContents function, in that case we skip this deferred update
+                if (!editor.current.getContents) return;
                 onChange(editor.current.getContents());
             }
         }, changeUpdateTimeout);

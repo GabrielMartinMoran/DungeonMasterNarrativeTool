@@ -32,10 +32,10 @@ export class AppContext {
 
     async saveDB() {
         DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
-        console.log('Enviando datos al servidor de la aplicación...');
+        // console.log('Enviando datos al servidor de la aplicación...');
         try {
             await DBRepository._save();
-            console.log('Los datos se enviaron al servidor correctamente!');
+            // console.log('Los datos se enviaron al servidor correctamente!');
         } catch {
             alert('Ha ocurrido un error al tratar de enviar los cambios al servidor de la aplicación!');
         }
