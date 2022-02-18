@@ -4,6 +4,9 @@ export class AppContext {
 
     _repositories = null;
     setUpdatingDBIndicator = (status) => { };
+    elementListItemExpandedStatuses = {
+        
+    }
 
     constructor() {
         this._repositories = {}

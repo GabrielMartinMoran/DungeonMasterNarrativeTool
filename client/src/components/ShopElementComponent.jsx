@@ -1,6 +1,5 @@
 import '../styles/ShopElementComponent.css';
 import React, { useState } from 'react';
-import { DBRepository } from '../repositories/db-repository';
 import { ShopTableEditor } from './ShopTableEditor';
 
 

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { DBRepository } from '../repositories/db-repository';
-import { RichTextEditor } from './RichTextEditor';
 import '../styles/ParagraphElementComponent.css';
+import React, { useState } from 'react';
+import { RichTextEditor } from './RichTextEditor';
+
 
 export function ParagraphElementComponent({ appContext, element, parentExposedFuntions }) {
 

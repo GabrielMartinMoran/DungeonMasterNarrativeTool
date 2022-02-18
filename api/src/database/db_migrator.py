@@ -5,6 +5,7 @@ from pymongo import MongoClient
 
 from src.config_provider import ConfigProvider
 from src.database.migrations.migration_001 import Migration001
+from src.repositories.local_db_repository import LocalDBRepository
 
 
 class DBMigrator:
@@ -33,9 +34,14 @@ class DBMigrator:
         print('\n\n')
 
     def load_collection(self):
-        self.client = MongoClient(ConfigProvider.DB_URL, int(ConfigProvider.DB_PORT))
-        self.db = self.client[ConfigProvider.DB_NAME]
-        self.collection = self.db[ConfigProvider.APP_INFO_COLLECTION]
+        if ConfigProvider.USE_LOCAL_DEBUGGING_DB:
+            _local_repository = LocalDBRepository()
+            _local_repository.create_collection(ConfigProvider.APP_INFO_COLLECTION)
+            self.collection = _local_repository.db[ConfigProvider.APP_INFO_COLLECTION]
+        else:
+            self.client = MongoClient(ConfigProvider.DB_URL, int(ConfigProvider.DB_PORT))
+            self.db = self.client[ConfigProvider.DB_NAME]
+            self.collection = self.db[ConfigProvider.APP_INFO_COLLECTION]
 
     def load_app_info(self):
         self.app_info = self.collection.find_one({})

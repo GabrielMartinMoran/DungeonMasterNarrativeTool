@@ -1,5 +1,5 @@
 import '../styles/ElementListItem.css';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { BaseElement } from '../models/base-element';
 import { Link } from 'react-router-dom';
 import { ElementsFactory } from '../utils/elements-factory';
@@ -20,7 +20,7 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
     onChildUpdate = () => { }, tabElement = false}) {
 
     const [highlight, setHighlight] = useState(false);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(appContext.elementListItemExpandedStatuses[element.id] || false);
 
     const isContainer = () => {
         return element.type === BaseElement.TYPES.CONTAINER;
@@ -85,6 +85,8 @@ export function ElementListItem({ appContext, narrativeContextId, narrativeCateg
 
     const toggleExpand = () => {
         setExpanded(!expanded);
+        // To store the expanded status while navigating through the app
+        appContext.elementListItemExpandedStatuses[element.id] = !expanded;
     }
 
 

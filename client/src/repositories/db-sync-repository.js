@@ -1,5 +1,4 @@
 import { WebApiRepository } from './web-api-repository';
-import { DBRepository } from './db-repository';
 import { Database } from '../models/database';
 
 export class DBSyncRepository extends WebApiRepository {

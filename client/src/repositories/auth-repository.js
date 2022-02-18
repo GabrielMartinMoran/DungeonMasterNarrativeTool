@@ -1,5 +1,4 @@
 import { WebApiRepository } from './web-api-repository.js';
-import { WEB_API_URL } from '../config.js';
 
 export class AuthRepository extends WebApiRepository {
     

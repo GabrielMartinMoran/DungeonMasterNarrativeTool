@@ -6,7 +6,6 @@ import { ShopElementComponent } from './ShopElementComponent';
 import { RenameIcon } from './icons/RenameIcon';
 import { EditIcon } from './icons/EditIcon';
 import { CopyLinkIcon } from './icons/CopyLinkIcon';
-import { DeleteIcon } from './icons/DeleteIcon';
 
 export function ViewElement({ appContext }) {
     const navigate = useNavigate();

@@ -1,7 +1,5 @@
 import '../styles/NarrativeCategoryComponent.css';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { BaseElement } from '../models/base-element';
 import { CreateElementButton } from './CreateElementButton';
 import { ElementsFactory } from '../utils/elements-factory';
 import { ElementListItem } from './ElementListItem';

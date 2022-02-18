@@ -22,7 +22,7 @@ export function App({ appContext }) {
 
     const authRepo = appContext.getRepository(AuthRepository);
 
-    const [userLogged, setUserLogged] = useState(authRepo.isAuthenticated());
+    const [userLogged] = useState(authRepo.isAuthenticated());
     const [updatingDB, setUpdatingDB] = useState(false);
 
     appContext.setUpdatingDBIndicator = setUpdatingDB;

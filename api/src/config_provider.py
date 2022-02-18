@@ -1,4 +1,5 @@
 import os
+from distutils.util import strtobool
 
 
 class ConfigProvider:
@@ -16,3 +17,4 @@ class ConfigProvider:
     APP_PORT = os.environ.get('PORT', 5000)
     JWT_SECRET = os.environ.get('JWT_SECRET', 'jwt_insecure_secret')
     CLIENT_APP_FOLDER = 'web'
+    USE_LOCAL_DEBUGGING_DB = strtobool(os.environ.get('USE_LOCAL_DEBUGGING_DB', 'false'))

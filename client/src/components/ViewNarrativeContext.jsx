@@ -76,7 +76,7 @@ export function ViewNarrativeContext({ appContext }) {
     const exportNarrativeContext = () => {
         const narrativeContextDownloadLink = document.getElementById('narrativeContextDownloadLink');
         const content = JSON.stringify(narrativeContext.toJson(), null, 2);
-        const file = new Blob([content], {type: 'application/json'});
+        const file = new Blob([content], { type: 'application/json' });
         narrativeContextDownloadLink.href = URL.createObjectURL(file);
         narrativeContextDownloadLink.download = `${NarrativeContext.TYPES.find(x => x.type === narrativeContext.type).name} - ${narrativeContext.name}.json`;
         narrativeContextDownloadLink.click();
@@ -98,7 +98,7 @@ export function ViewNarrativeContext({ appContext }) {
                     <RenameIcon />
                     <span className='tooltip'>Renombrar</span>
                 </button>
-                <a hidden={true} id='narrativeContextDownloadLink'/>
+                <a hidden={true} id='narrativeContextDownloadLink' href='/'> </a>
                 <button onClick={exportNarrativeContext}>
                     <ExportNarrativeContextIcon />
                     <span className='tooltip'>Exportar</span>
