@@ -18,3 +18,6 @@ class ConfigProvider:
     JWT_SECRET = os.environ.get('JWT_SECRET', 'jwt_insecure_secret')
     CLIENT_APP_FOLDER = 'web'
     USE_LOCAL_DEBUGGING_DB = strtobool(os.environ.get('USE_LOCAL_DEBUGGING_DB', 'false'))
+
+    IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID', None)
+    IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET', None)

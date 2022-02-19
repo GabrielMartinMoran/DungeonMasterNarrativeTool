@@ -8,9 +8,11 @@ from flask_compress import Compress
 
 from src.database.db_migrator import DBMigrator
 from src.models.token import Token
+from src.repositories.imgur_repository import ImgurRepository
 from src.repositories.user_database_repository import UserDatabaseRepository
 from src.repositories.user_repository import UserRepository
 from src.config_provider import ConfigProvider
+from src.services.bd_lightener import DBLightener
 from src.utils import http_methods, hashing
 
 app = Flask(__name__, static_folder='./web')
@@ -73,9 +75,11 @@ def save_user_database():
         return jsonify({
             'message': 'Forbidden'
         }), 403
-    repo = UserDatabaseRepository()
-    repo.set(request.token.username, request.decoded_json)
-    return jsonify({})
+    enlightned = DBLightener(UserDatabaseRepository(), ImgurRepository()).enlight_and_save(request.token.username,
+                                                                                           request.decoded_json)
+    return jsonify({
+        'reload_suggested': enlightned
+    })
 
 
 @app.route('/', defaults={
