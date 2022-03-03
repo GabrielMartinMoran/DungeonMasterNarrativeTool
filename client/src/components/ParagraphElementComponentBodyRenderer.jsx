@@ -26,6 +26,7 @@ export function ParagraphElementComponentBodyRenderer({ appContext, body }) {
 
     const replaceCharacters = (html) => {
         const regex = /\[C\]\{([a-zA-Z0-9\-]+)\}/gm;
+        if (!html) return;
         const matches = html.matchAll(regex);
         let replaced_body = html;
         for (const match of matches) {
