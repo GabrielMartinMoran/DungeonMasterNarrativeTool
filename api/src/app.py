@@ -13,6 +13,8 @@ from src.repositories.user_database_repository import UserDatabaseRepository
 from src.repositories.user_repository import UserRepository
 from src.config_provider import ConfigProvider
 from src.services.bd_lightener import DBLightener
+from src.services.dnd_5e_data_updater import DnD5EDataUpdater
+from src.services.nivel_20_character_retriever import Nivel20CharacterRetriever
 from src.utils import http_methods, hashing
 
 app = Flask(__name__, static_folder='./web')
@@ -80,6 +82,16 @@ def save_user_database():
     return jsonify({
         'reload_suggested': enlightned
     })
+
+
+@app.route('/api/dnd_5e/data', methods=[http_methods.GET])
+def get_dnd_5e_data():
+    return jsonify(DnD5EDataUpdater().get_data())
+
+
+@app.route('/api/dnd_5e/characters/<string:character_id>', methods=[http_methods.GET])
+def get_dnd_5e_character(character_id: str):
+    return jsonify(Nivel20CharacterRetriever().get_character(character_id))
 
 
 @app.route('/', defaults={

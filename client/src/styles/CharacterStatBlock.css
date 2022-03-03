@@ -1,0 +1,53 @@
+.CharacterStatBlock {
+    border: 1px solid black;
+    padding: 1rem;
+    font-size: 0.9rem;
+    text-align: left;
+    background-color: rgba(255,255,255,0.4);
+}
+
+.CharacterStatBlock h1 {
+    font-size: 1.5rem;
+}
+
+.CharacterStatBlock h1 a {
+    color: #58180D;
+    text-decoration: none;
+}
+
+.CharacterStatBlock h1 a:hover {
+    color: #58180D;
+}
+
+.CharacterStatBlock .divider {
+    border-top: 2px solid #822000;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.CharacterStatBlock table {
+    padding-right: 0rem;
+    border-top: 2px solid #822000;
+    border-bottom: 2px solid #822000;
+    border-radius: 0px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.CharacterStatBlock tbody {
+    margin: 0rem;
+    border: 0px;
+    margin: 0.5rem;
+}
+
+.CharacterStatBlock tbody tr:nth-child(even) {
+    background-color: transparent;
+}
+
+.CharacterStatBlock tbody tr:nth-child(odd) {
+    background-color: transparent;
+}
+
+.CharacterStatBlock tr {
+    margin: 1rem;
+}

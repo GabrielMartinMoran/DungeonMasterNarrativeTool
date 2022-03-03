@@ -1,6 +1,7 @@
 import '../styles/ParagraphElementComponent.css';
 import React, { useState } from 'react';
 import { RichTextEditor } from './RichTextEditor';
+import { ParagraphElementComponentBodyRenderer } from './ParagraphElementComponentBodyRenderer';
 
 
 export function ParagraphElementComponent({ appContext, element, parentExposedFuntions }) {
@@ -51,7 +52,7 @@ export function ParagraphElementComponent({ appContext, element, parentExposedFu
                 <>
                     <RichTextEditor onChange={onBodyChange} initialValue={element.body} />
                 </> :
-                <div dangerouslySetInnerHTML={{ __html: element.body }} />
+                <ParagraphElementComponentBodyRenderer appContext={appContext} body={element.body}/>
 
         }
     </div>;
