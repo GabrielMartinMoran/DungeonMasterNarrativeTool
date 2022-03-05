@@ -53,7 +53,7 @@ export class NarrativeCategory {
     }   
     
     // Returns a plain list of viewable elements obtained through iteraring al childs
-    _getPlainViewableElements() {
+    getPlainViewableElements() {
         let plainElements = [];
         for (const element of this.elements) {
             if (element.type === BaseElement.TYPES.CONTAINER) {
@@ -66,14 +66,14 @@ export class NarrativeCategory {
     }
 
     getPrevElement(elementId) {
-        const viewableElements = this._getPlainViewableElements();
+        const viewableElements = this.getPlainViewableElements();
         const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
         if (index === 0) return null;
         return viewableElements[index - 1];
     }
 
     getNextElement(elementId) {
-        const viewableElements = this._getPlainViewableElements();
+        const viewableElements = this.getPlainViewableElements();
         const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
         if (index === (viewableElements.length - 1)) return null;
         return viewableElements[index + 1];

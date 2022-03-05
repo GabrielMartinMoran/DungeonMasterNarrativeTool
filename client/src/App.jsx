@@ -17,6 +17,7 @@ import { LoginView } from './components/LoginView';
 import { AuthRepository } from './repositories/auth-repository';
 import { LogoutView } from './components/LogoutView';
 import { UpdatingDBIndicator } from 'components/UpdatingDBIndicator';
+import { SearchBar } from 'components/SearchBar';
 
 export function App({ appContext }) {
 
@@ -24,15 +25,24 @@ export function App({ appContext }) {
 
     const [userLogged] = useState(authRepo.isAuthenticated());
     const [updatingDB, setUpdatingDB] = useState(false);
+    const [searchBarDisplayed, setSearchBarDisplayed] = useState(false);
+
+
 
     appContext.setUpdatingDBIndicator = setUpdatingDB;
+    appContext.showSearchBar = () => setSearchBarDisplayed(true);
+    appContext.hideSearchBar = () => setSearchBarDisplayed(false);
 
     return <div className='App'>
         {
-            updatingDB ? <UpdatingDBIndicator/> : <></>
+            updatingDB ? <UpdatingDBIndicator /> : <></>
         }
         <Router>
             <Navbar appContext={appContext} />
+            {
+                searchBarDisplayed ?
+                    <SearchBar appContext={appContext} /> : <></>
+            }
             <div className='RouterContainer'>
                 <Routes>
 
@@ -43,14 +53,14 @@ export function App({ appContext }) {
                             <Route path='/narrative-context/:narrativeContextId' element={<ViewNarrativeContext appContext={appContext} />} />
                             <Route path='/logout' element={<LogoutView appContext={appContext} />} />
                             <Route path='/' element={<Home appContext={appContext} />} />
-                            <Route path="*" element={<Navigate to ='/' />}/>
+                            <Route path="*" element={<Navigate to='/' />} />
                         </> : <>
                             <Route path='/login' element={<LoginView appContext={appContext} />} />
-                            <Route path="*" element={<Navigate to ='/login' />}/>
-                            <Route path="/" element={<Navigate to ='/login' />}/>
+                            <Route path="*" element={<Navigate to='/login' />} />
+                            <Route path="/" element={<Navigate to='/login' />} />
                         </>
                     }
-                    
+
                 </Routes>
             </div>
         </Router>

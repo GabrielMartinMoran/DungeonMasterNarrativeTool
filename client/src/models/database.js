@@ -7,7 +7,7 @@ export class Database {
 
     constructor() {
         this.campaigns = [];
-        this.worlds = []; 
+        this.worlds = [];
     }
 
     getNarrativeContext(narrativeContextId) {
@@ -53,6 +53,10 @@ export class Database {
         instance.campaigns = data['campaigns'].map(x => NarrativeContext.fromJson(x));
         instance.worlds = data['worlds'].map(x => NarrativeContext.fromJson(x));
         return instance;
+    }
+
+    searchTerm(term, narrativeContextId) {
+        return this.getNarrativeContext(narrativeContextId).searchTerm(term);
     }
 
 }

@@ -1,12 +1,13 @@
 import { IdGenerator } from '../utils/id-generator';
 import { NarrativeCategory } from './narrative-category';
 import { ArrayUtils } from '../utils/array-utils';
+import { createEditorStateWithText } from '@draft-js-plugins/editor';
 
 export class NarrativeContext {
 
     static TYPES = [
-        {type: 'world', name: 'Mundo'},
-        {type: 'campaign', name: 'Campaña'}
+        { type: 'world', name: 'Mundo' },
+        { type: 'campaign', name: 'Campaña' }
     ];
 
     id = null;
@@ -47,6 +48,26 @@ export class NarrativeContext {
         const newIndex = oldIndex + 1;
         if (newIndex === this.categories.length) return;
         ArrayUtils.moveElementInArray(this.categories, oldIndex, newIndex);
+    }
+
+    searchTerm(term) {
+        let elements = []
+        for (const category of this.categories) {
+            elements = elements.concat(category.getPlainViewableElements());
+        }
+        const cleanStr = (str) => {
+            return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');;
+        }
+        return elements.filter(element => cleanStr(element.name).includes(cleanStr(term)));
+    }
+
+    getNarrativeCategoryByElementId(elementId) {
+        for (const category of this.categories) {
+            if (category.findElementAnywhere(elementId)) {
+                return category;
+            }
+        }
+        return null;
     }
 
     toJson() {

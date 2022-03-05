@@ -22,7 +22,7 @@ export function Navbar({ appContext }) {
 
     appContext.setBackButtonUrl = setBackButtonUrl;
     appContext.setForwardButtonUrl = setForwardButtonUrl;
-    appContext.setNarrativeContextById = setNarrativeContextById;
+    appContext._setNarrativeContextById = setNarrativeContextById;
 
     return <div className='Navbar'>
         <div className='navbarContent'>

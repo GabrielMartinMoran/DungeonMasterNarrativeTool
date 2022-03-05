@@ -1,6 +1,6 @@
+import '../styles/RichTextEditor.css';
 import React, { useRef } from 'react';
 import SunEditor from 'suneditor-react';
-import '../styles/RichTextEditor.css';
 
 export function RichTextEditor({ onChange, initialValue }) {
 
