@@ -38,6 +38,20 @@ export class KeyboardShortcutsHandler {
                 this._appContext.triggerEvent('close_search');
                 return;
             }
+
+            // Navigate to previous element
+            if (this._keyPressed('Control') && event.key === 'ArrowLeft') {
+                event.preventDefault();
+                this._appContext.navigateToPreviousElement();
+                return;
+            }
+            
+            // Navigate to next element
+            if (this._keyPressed('Control') && event.key === 'ArrowRight') {
+                event.preventDefault();
+                this._appContext.navigateToNextElement();
+                return;
+            }
         });
         document.addEventListener('keyup', (event) => {
             this._tryRemovePressedKey(event.key);

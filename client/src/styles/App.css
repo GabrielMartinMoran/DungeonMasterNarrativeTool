@@ -69,7 +69,9 @@
     border-width: 11px;
     border-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==") 11;
     border-image-outset: 9px 0px;
-    box-shadow: 1px 4px 14px #888
+    box-shadow: 1px 4px 14px #888;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .App blockquote em {
@@ -127,6 +129,8 @@
     white-space: -o-pre-wrap;
     /* Opera 7 */
     word-wrap: break-word;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .App hr {

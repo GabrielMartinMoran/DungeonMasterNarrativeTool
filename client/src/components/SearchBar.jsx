@@ -57,11 +57,13 @@ export function SearchBar({ appContext }) {
         if (event.key === 'ArrowUp') {
             event.preventDefault();
             moveIndexUp();
+            scrollToSeletedResult();
             return;
         }
         if (event.key === 'ArrowDown') {
             event.preventDefault();
             moveIndexDown();
+            scrollToSeletedResult();
             return;
         }
         if (event.key === 'Enter') {
@@ -70,6 +72,13 @@ export function SearchBar({ appContext }) {
             return;
         }
     };
+
+    const scrollToSeletedResult = () => {
+        const element = document.getElementById(`searchResult_${_resultIndex}`);
+        if (element) {
+            element.scrollIntoView(true);
+        }
+    }
 
     useEffect(() => {
         // Anything in here is fired on component mount.
@@ -82,6 +91,13 @@ export function SearchBar({ appContext }) {
 
 
     const search = (term) => {
+        if (!term) {
+            _searchResults = [];
+            _resultIndex = -1;
+            setSearchResults(_searchResults);
+            setResultIndex(_resultIndex);
+            return;
+        }
         const db = appContext.getDB();
         const narrativeContextId = appContext.getNarrativeContextId();
         if (narrativeContextId) {
@@ -90,19 +106,21 @@ export function SearchBar({ appContext }) {
             _resultIndex = elements.length > 0 ? 0 : -1;
         } else {
             _searchResults = [];
-            _resultIndex = -1;            
+            _resultIndex = -1;
         }
         setSearchResults(_searchResults);
-            setResultIndex(_resultIndex);
+        setResultIndex(_resultIndex);
     }
 
     return <div className='SearchBar'>
-        <input autoFocus key='searchBarTextInput' onChange={(event) => search(event.target.value)}
-            placeholder='Ingrese el término a buscar' className='searchBarInput' />
-        <div>
+        <div className='searchBarInputContainer'>
+            <input autoFocus key='searchBarTextInput' onChange={(event) => search(event.target.value)}
+                placeholder='Ingrese el término a buscar' className='searchBarInput' />
+        </div>
+        <div className='searchResultsContainer'>
             {
                 searchResults.map((element, i) =>
-                    <div className={i === resultIndex ? 'searchResult searchResultSelected' : 'searchResult'} key={`search_result_${element.id}`}>
+                    <div className={i === resultIndex ? 'searchResult searchResultSelected' : 'searchResult'} id={`searchResult_${i}`} key={`searchResult_${i}`}>
                         <Link to={generateElementLink(element)} onClick={() => appContext.hideSearchBar()}>
                             {element.name}
                         </Link>

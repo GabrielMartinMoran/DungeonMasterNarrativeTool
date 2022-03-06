@@ -74,4 +74,9 @@ export class AppContext {
         }
 
     }
+
+    // To be overrided
+    navigateToPreviousElement() {}
+    // To be overrided
+    navigateToNextElement() {}
 }

@@ -1,6 +1,6 @@
 import '../styles/Navbar.css';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { SessionMenuButton } from './SessionMenuButton';
 import { AuthRepository } from '../repositories/auth-repository';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,6 +11,7 @@ export function Navbar({ appContext }) {
     const [backButtonUrl, setBackButtonUrl] = useState('/');
     const [forwardButtonUrl, setForwardButtonUrl] = useState('/');
     const [narrativeContext, setNarrativeContext] = useState(null);
+    const navigate = useNavigate();
 
     const setNarrativeContextById = (narrativeContextId) => {
         let obtainedNarrativeContext = null;
@@ -20,9 +21,21 @@ export function Navbar({ appContext }) {
         setNarrativeContext(obtainedNarrativeContext);
     }
 
+    const navigateToPreviousElement = () => {
+        if(!backButtonUrl) return;
+        navigate(backButtonUrl);
+    }
+
+    const navigateToNextElement = () => {
+        if(!forwardButtonUrl) return;
+        navigate(forwardButtonUrl);
+    }
+
     appContext.setBackButtonUrl = setBackButtonUrl;
     appContext.setForwardButtonUrl = setForwardButtonUrl;
     appContext._setNarrativeContextById = setNarrativeContextById;
+    appContext.navigateToPreviousElement = navigateToPreviousElement;
+    appContext.navigateToNextElement = navigateToNextElement;
 
     return <div className='Navbar'>
         <div className='navbarContent'>
@@ -60,8 +73,8 @@ export function Navbar({ appContext }) {
                     }
                 </span>
                 {
-                    appContext.getRepository(AuthRepository).isAuthenticated() ? <SessionMenuButton appContext={appContext}/> : <></>
-                }                
+                    appContext.getRepository(AuthRepository).isAuthenticated() ? <SessionMenuButton appContext={appContext} /> : <></>
+                }
             </div>
         </div>
     </div>;

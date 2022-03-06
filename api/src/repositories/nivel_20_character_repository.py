@@ -1,11 +1,9 @@
-from datetime import timedelta, datetime
 from typing import List, Optional
 import re
 import bs4
 import requests
 
 from bs4 import BeautifulSoup
-from cachetools import TTLCache
 
 
 class Nivel20CharacterRepository:
@@ -19,14 +17,8 @@ class Nivel20CharacterRepository:
         'Car': 'Carisma'
     }
 
-    _TTL_CACHE_MINUTES = 5
-    _cache = None
-
     def __init__(self) -> None:
         self._base_url = 'https://nivel20.com/games/dnd-5/characters/'
-        if Nivel20CharacterRepository._cache is None:
-            Nivel20CharacterRepository._cache = TTLCache(maxsize=10_000, ttl=timedelta(
-                minutes=Nivel20CharacterRepository._TTL_CACHE_MINUTES), timer=datetime.now)
 
     def _get_player_ability_scores(self, soup: BeautifulSoup) -> List[dict]:
         characteristics = []
@@ -224,8 +216,6 @@ class Nivel20CharacterRepository:
         return response.content.decode('utf-8')
 
     def get_character(self, character_id: str) -> dict:
-        if character_id not in Nivel20CharacterRepository._cache:
-            html = self._get_character_html(character_id)
-            soup = BeautifulSoup(html, 'html5lib')
-            Nivel20CharacterRepository._cache[character_id] = self._format_character_data(character_id, soup)
-        return Nivel20CharacterRepository._cache[character_id]
+        html = self._get_character_html(character_id)
+        soup = BeautifulSoup(html, 'html5lib')
+        return self._format_character_data(character_id, soup)
