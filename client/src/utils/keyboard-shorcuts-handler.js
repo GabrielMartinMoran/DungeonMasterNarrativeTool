@@ -40,14 +40,14 @@ export class KeyboardShortcutsHandler {
             }
 
             // Navigate to previous element
-            if (this._keyPressed('Control') && event.key === 'ArrowLeft') {
+            if (this._keyPressed('Alt') && event.key === 'ArrowLeft') {
                 event.preventDefault();
                 this._appContext.navigateToPreviousElement();
                 return;
             }
             
             // Navigate to next element
-            if (this._keyPressed('Control') && event.key === 'ArrowRight') {
+            if (this._keyPressed('Alt') && event.key === 'ArrowRight') {
                 event.preventDefault();
                 this._appContext.navigateToNextElement();
                 return;
