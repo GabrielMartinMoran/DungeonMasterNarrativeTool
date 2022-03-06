@@ -32,7 +32,7 @@ class Nivel20CharacterRepository:
                     'class': 'name text-muted'
                 }).string],
                 'value': int(x.find('div', attrs={
-                    'class': 'value ml-auto mr-auto'
+                    'class': 'value'
                 }).string),
                 'modifier': int(x.find('span').string)
             })
