@@ -1,1 +1,1 @@
-export const WEB_API_URL = window.location.origin.indexOf('localhost') !== -1 ? 'http://localhost:5000/api': 'https://narrativetools.up.railway.app/api';
+export const WEB_API_URL = window.location.origin.indexOf('localhost') !== -1 ? 'http://localhost:5000/api' : `${window.location.origin}/api`;
