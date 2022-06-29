@@ -22,7 +22,7 @@ export function LoginView({ appContext }) {
     }
 
     return <form className="LoginView" onSubmit={e => e.preventDefault()}>
-        <input type='text' name='username' onChange={(event) => setUsername(event.target.value)} placeholder='Usuario' />
+        <input type='text' autoCorrect='off' autoCapitalize='off' name='username' onChange={(event) => setUsername(event.target.value)} placeholder='Usuario' />
         <input type='password' name='password' onChange={(event) => setPassword(event.target.value)} placeholder='Contraseña' />
         <button type='submit' onClick={login}>Iniciar sesión</button>
     </form>;

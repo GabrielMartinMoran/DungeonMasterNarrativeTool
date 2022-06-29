@@ -83,21 +83,22 @@ export function SearchBar({ appContext }) {
     useEffect(() => {
         // Anything in here is fired on component mount.
         document.addEventListener('keydown', moveIndex);
+        search('');
         return () => {
             // Anything in here is fired on component unmount.
             document.removeEventListener('keydown', moveIndex);
         }
-    }, [_searchResults, _resultIndex]);
+    }, []);
 
 
     const search = (term) => {
-        if (!term) {
+        /*if (!term) {
             _searchResults = [];
             _resultIndex = -1;
             setSearchResults(_searchResults);
             setResultIndex(_resultIndex);
             return;
-        }
+        }*/
         const db = appContext.getDB();
         const narrativeContextId = appContext.getNarrativeContextId();
         if (narrativeContextId) {
