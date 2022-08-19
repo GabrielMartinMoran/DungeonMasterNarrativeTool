@@ -39,6 +39,7 @@ export class KeyboardShortcutsHandler {
                 return;
             }
 
+            /*
             // Navigate to previous element
             if (this._keyPressed('Alt') && event.key === 'ArrowLeft') {
                 event.preventDefault();
@@ -52,6 +53,7 @@ export class KeyboardShortcutsHandler {
                 this._appContext.navigateToNextElement();
                 return;
             }
+            */
         });
         document.addEventListener('keyup', (event) => {
             this._tryRemovePressedKey(event.key);
