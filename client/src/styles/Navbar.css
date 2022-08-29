@@ -3,7 +3,7 @@
     z-index: 100;
     height: 40px;
     width: 100%;
-    background-color: #58180D;
+    background-color: #58180d;
     top: 0px;
 }
 
@@ -40,11 +40,14 @@
     padding-right: 3px;
 }
 
-.iconButtonActive {}
+.iconButtonActive {
+}
 
-.iconButtonActive:hover {}
+.iconButtonActive:hover {
+}
 
-.iconButtonInactive {}
+.iconButtonInactive {
+}
 
 #nabvarNavigationIcons {
     margin-top: 0.1rem;

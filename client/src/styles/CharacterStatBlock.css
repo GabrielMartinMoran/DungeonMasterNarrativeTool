@@ -3,7 +3,7 @@
     padding: 1rem;
     font-size: 0.9rem;
     text-align: left;
-    background-color: rgba(255,255,255,0.4);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .CharacterStatBlock h1 {
@@ -11,12 +11,12 @@
 }
 
 .CharacterStatBlock h1 a {
-    color: #58180D;
+    color: #58180d;
     text-decoration: none;
 }
 
 .CharacterStatBlock h1 a:hover {
-    color: #58180D;
+    color: #58180d;
 }
 
 .CharacterStatBlock .divider {

@@ -11,14 +11,14 @@ export class ShopElement extends BaseElement {
 
     toJson() {
         const json = super.toJson();
-        json['items'] = this.items.map(x => x.toJson());
+        json['items'] = this.items.map((x) => x.toJson());
         return json;
     }
 
     static fromJson(data) {
         const instance = new ShopElement(
             data['name'],
-            data['items'].map(x => ShopItem.fromJson(x))
+            data['items'].map((x) => ShopItem.fromJson(x))
         );
         return instance;
     }

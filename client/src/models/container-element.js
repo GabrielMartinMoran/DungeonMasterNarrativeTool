@@ -11,7 +11,7 @@ export class ContainerElement extends BaseElement {
     }
 
     getElement(elementId) {
-        return this.elements.find(x => x.id === elementId);
+        return this.elements.find((x) => x.id === elementId);
     }
 
     addElement(element) {
@@ -24,14 +24,14 @@ export class ContainerElement extends BaseElement {
     }
 
     moveElementUp(elementId) {
-        const oldIndex = this.elements.indexOf(this.elements.find(x => x.id === elementId));
+        const oldIndex = this.elements.indexOf(this.elements.find((x) => x.id === elementId));
         const newIndex = oldIndex - 1;
         if (oldIndex === 0) return;
         ArrayUtils.moveElementInArray(this.elements, oldIndex, newIndex);
     }
 
     moveElementDown(elementId) {
-        const oldIndex = this.elements.indexOf(this.elements.find(x => x.id === elementId));
+        const oldIndex = this.elements.indexOf(this.elements.find((x) => x.id === elementId));
         const newIndex = oldIndex + 1;
         if (newIndex === this.elements.length) return;
         ArrayUtils.moveElementInArray(this.elements, oldIndex, newIndex);
@@ -63,14 +63,14 @@ export class ContainerElement extends BaseElement {
 
     toJson() {
         const json = super.toJson();
-        json['elements'] = this.elements.map(x => x.toJson());
+        json['elements'] = this.elements.map((x) => x.toJson());
         return json;
     }
 
     static fromJson(data) {
         const instance = new ContainerElement(
             data['name'],
-            (data['elements'] || []).map(x => ElementsFactory.mapElementFromJson(x))
+            (data['elements'] || []).map((x) => ElementsFactory.mapElementFromJson(x))
         );
         return instance;
     }

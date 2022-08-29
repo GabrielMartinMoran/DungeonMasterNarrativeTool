@@ -8,14 +8,20 @@ import { MoveUpIcon } from './icons/MoveUpIcon';
 import { MoveDownIcon } from './icons/MoveDownIcon';
 import { DeleteIcon } from './icons/DeleteIcon';
 
-export function NarrativeCategoryComponent({ appContext, narrativeContext, narrativeCategory, onCategoryChange, moveCategoryUp, moveCategoryDown }) {
-
+export function NarrativeCategoryComponent({
+    appContext,
+    narrativeContext,
+    narrativeCategory,
+    onCategoryChange,
+    moveCategoryUp,
+    moveCategoryDown,
+}) {
     const [elementsState, setElementsState] = useState(narrativeCategory.elements);
 
     const rerender = () => {
         setElementsState([...narrativeCategory.elements]);
         setTimeout(() => setElementsState(narrativeCategory.elements), 0);
-    }
+    };
 
     const onCreateElement = (type) => {
         const name = window.prompt('Ingresa el nombre del nuevo elemento');
@@ -24,7 +30,7 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
         narrativeCategory.addElement(newElement);
         appContext.saveDB();
         rerender();
-    }
+    };
 
     const deleteElement = (element) => {
         const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element.name}`);
@@ -32,19 +38,19 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
         narrativeCategory.removeElement(element.id);
         appContext.saveDB();
         rerender();
-    }
+    };
 
     const moveElementUp = (element) => {
         narrativeCategory.moveElementUp(element.id);
         appContext.saveDB();
         rerender();
-    }
+    };
 
     const moveElementDown = (element) => {
         narrativeCategory.moveElementDown(element.id);
         appContext.saveDB();
         rerender();
-    }
+    };
 
     const renameElement = (element) => {
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
@@ -52,7 +58,7 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
         element.name = name;
         appContext.saveDB();
         onCategoryChange();
-    }
+    };
 
     const deleteCategory = () => {
         const shouldDelete = window.confirm(`Estas seguro de eliminar la categoría ${narrativeCategory.name}`);
@@ -60,7 +66,7 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
         narrativeContext.removeNarrativeCategory(narrativeCategory.id);
         appContext.saveDB();
         onCategoryChange();
-    }
+    };
 
     const renameCategory = () => {
         const name = window.prompt('Ingresa el nuevo nombre de la categoría', narrativeCategory.name);
@@ -68,42 +74,48 @@ export function NarrativeCategoryComponent({ appContext, narrativeContext, narra
         narrativeCategory.name = name;
         appContext.saveDB();
         onCategoryChange();
-    }
+    };
 
-    return <div className="NarrativeCategory">
-        <div className='flex'>
-            <h3 className='flex2'>{narrativeCategory.name}</h3>
-            <div className='textRight narrativeCategoryTitleButtons'>
-                <CreateElementButton onClick={onCreateElement} />
-                <button onClick={renameCategory}>
-                    <RenameIcon />
-                    <span className='tooltip'>Renombrar</span>
-                </button>
-                <button onClick={() => moveCategoryUp(narrativeCategory)}>
-                    <MoveUpIcon />
-                    <span className='tooltip'>Subir</span>
-                </button>
-                <button onClick={() => moveCategoryDown(narrativeCategory)}>
-                    <MoveDownIcon />
-                    <span className='tooltip'>Bajar</span>
-                </button>
-                <button onClick={deleteCategory}>
-                    <DeleteIcon />
-                    <span className='tooltip'>Eliminar categoría</span>
-                </button>
+    return (
+        <div className="NarrativeCategory">
+            <div className="flex">
+                <h3 className="flex2">{narrativeCategory.name}</h3>
+                <div className="textRight narrativeCategoryTitleButtons">
+                    <CreateElementButton onClick={onCreateElement} />
+                    <button onClick={renameCategory}>
+                        <RenameIcon />
+                        <span className="tooltip">Renombrar</span>
+                    </button>
+                    <button onClick={() => moveCategoryUp(narrativeCategory)}>
+                        <MoveUpIcon />
+                        <span className="tooltip">Subir</span>
+                    </button>
+                    <button onClick={() => moveCategoryDown(narrativeCategory)}>
+                        <MoveDownIcon />
+                        <span className="tooltip">Bajar</span>
+                    </button>
+                    <button onClick={deleteCategory}>
+                        <DeleteIcon />
+                        <span className="tooltip">Eliminar categoría</span>
+                    </button>
+                </div>
+            </div>
+            <div className="narrativeCategoryElements">
+                {elementsState.map((element) => (
+                    <ElementListItem
+                        key={element.id}
+                        appContext={appContext}
+                        narrativeContextId={narrativeContext.id}
+                        narrativeCategoryId={narrativeCategory.id}
+                        element={element}
+                        onMoveElementUp={moveElementUp}
+                        onMoveElementDown={moveElementDown}
+                        onDeleteElement={deleteElement}
+                        onRenameElement={renameElement}
+                        onChildUpdate={rerender}
+                    />
+                ))}
             </div>
         </div>
-        <div className="narrativeCategoryElements">
-            {
-                elementsState.map(element =>
-                    <ElementListItem key={element.id} appContext={appContext}
-                        narrativeContextId={narrativeContext.id}
-                        narrativeCategoryId={narrativeCategory.id} element={element}
-                        onMoveElementUp={moveElementUp} onMoveElementDown={moveElementDown}
-                        onDeleteElement={deleteElement} onRenameElement={renameElement}
-                        onChildUpdate={rerender} />
-                )
-            }
-        </div>
-    </div>;
+    );
 }

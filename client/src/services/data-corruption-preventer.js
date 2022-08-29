@@ -1,7 +1,6 @@
 import { DBRepository } from '../repositories/db-repository';
 
 export class DataCorruptionPreventer {
-
     _appContext = null;
     _interval = null;
     _INTERVAL_TIME = 2000;
@@ -41,7 +40,10 @@ export class DataCorruptionPreventer {
 
     _isWorkingDirty() {
         const storedDate = this._getStoredDate();
-        return (storedDate && !this._lastDBSaveTime) || (storedDate && this._lastDBSaveTime && this._lastDBSaveTime < storedDate);
+        return (
+            (storedDate && !this._lastDBSaveTime) ||
+            (storedDate && this._lastDBSaveTime && this._lastDBSaveTime < storedDate)
+        );
     }
 
     start() {
@@ -51,12 +53,14 @@ export class DataCorruptionPreventer {
                 clearInterval(this._interval);
                 this._onDirtyDB();
             }
-        }, this._INTERVAL_TIME)
+        }, this._INTERVAL_TIME);
     }
 
     _onDirtyDB() {
-        const shouldReload = window.confirm('Usted esta trabajando con una version desactualizada de la base de datos local y no podra guardar cambios en esta.' +
-            ' Por favor recargue la aplicación para poder volver a utilizarla con normalidad o haga click en aceptar / ok para hacerlo automáticamente.');
+        const shouldReload = window.confirm(
+            'Usted esta trabajando con una version desactualizada de la base de datos local y no podra guardar cambios en esta.' +
+                ' Por favor recargue la aplicación para poder volver a utilizarla con normalidad o haga click en aceptar / ok para hacerlo automáticamente.'
+        );
         if (shouldReload) window.location.reload();
     }
 }

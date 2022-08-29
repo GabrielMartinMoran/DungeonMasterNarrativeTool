@@ -15,7 +15,7 @@ export class NarrativeCategory {
     }
 
     getElement(elementId) {
-        return this.elements.find(x => x.id === elementId);
+        return this.elements.find((x) => x.id === elementId);
     }
 
     findElementAnywhere(elementId) {
@@ -39,19 +39,19 @@ export class NarrativeCategory {
     }
 
     moveElementUp(elementId) {
-        const oldIndex = this.elements.indexOf(this.elements.find(x => x.id === elementId));
+        const oldIndex = this.elements.indexOf(this.elements.find((x) => x.id === elementId));
         const newIndex = oldIndex - 1;
         if (oldIndex === 0) return;
         ArrayUtils.moveElementInArray(this.elements, oldIndex, newIndex);
     }
 
     moveElementDown(elementId) {
-        const oldIndex = this.elements.indexOf(this.elements.find(x => x.id === elementId));
+        const oldIndex = this.elements.indexOf(this.elements.find((x) => x.id === elementId));
         const newIndex = oldIndex + 1;
         if (newIndex === this.elements.length) return;
         ArrayUtils.moveElementInArray(this.elements, oldIndex, newIndex);
-    }   
-    
+    }
+
     // Returns a plain list of viewable elements obtained through iteraring al childs
     getPlainViewableElements() {
         let plainElements = [];
@@ -67,15 +67,15 @@ export class NarrativeCategory {
 
     getPrevElement(elementId) {
         const viewableElements = this.getPlainViewableElements();
-        const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
+        const index = viewableElements.indexOf(viewableElements.find((x) => x.id === elementId));
         if (index === 0) return null;
         return viewableElements[index - 1];
     }
 
     getNextElement(elementId) {
         const viewableElements = this.getPlainViewableElements();
-        const index = viewableElements.indexOf(viewableElements.find(x => x.id === elementId));
-        if (index === (viewableElements.length - 1)) return null;
+        const index = viewableElements.indexOf(viewableElements.find((x) => x.id === elementId));
+        if (index === viewableElements.length - 1) return null;
         return viewableElements[index + 1];
     }
 
@@ -83,16 +83,14 @@ export class NarrativeCategory {
         return {
             id: this.id,
             name: this.name,
-            elements: this.elements.map(element => element.toJson())
-        }
+            elements: this.elements.map((element) => element.toJson()),
+        };
     }
 
     static fromJson(data) {
-        const instance = new NarrativeCategory(
-            data['name']
-        );
+        const instance = new NarrativeCategory(data['name']);
         instance.id = data['id'];
-        instance.elements = data['elements'].map(x => ElementsFactory.mapElementFromJson(x));
+        instance.elements = data['elements'].map((x) => ElementsFactory.mapElementFromJson(x));
         return instance;
     }
 }

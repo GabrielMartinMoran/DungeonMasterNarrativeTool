@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { AuthRepository } from '../repositories/auth-repository';
 
 export function LogoutView({ appContext }) {
-
     useEffect(() => {
         appContext.setBackButtonUrl(null);
         appContext.setForwardButtonUrl(null);
@@ -10,5 +9,4 @@ export function LogoutView({ appContext }) {
     }, [appContext]);
 
     return <></>;
-
 }

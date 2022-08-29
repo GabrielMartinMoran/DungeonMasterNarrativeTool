@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 import SunEditor from 'suneditor-react';
 
 export function RichTextEditor({ onChange, initialValue }) {
-
     const editorOptions = {
         buttonList: [
             ['formatBlock', 'bold', 'underline', 'italic', 'strike'],
@@ -16,34 +15,34 @@ export function RichTextEditor({ onChange, initialValue }) {
         formats: [
             {
                 tag: 'p',
-                name: 'Párrafo'
+                name: 'Párrafo',
             },
             {
                 tag: 'h1',
-                name: 'Título'
+                name: 'Título',
             },
             {
                 tag: 'h2',
-                name: 'Subtítulo'
+                name: 'Subtítulo',
             },
             {
                 tag: 'h3',
-                name: 'Sección'
+                name: 'Sección',
             },
             {
                 tag: 'h4',
-                name: 'Subsección'
+                name: 'Subsección',
             },
             {
                 tag: 'blockquote',
-                name: 'Bloque de descripción'
+                name: 'Bloque de descripción',
             },
             {
                 tag: 'pre',
-                name: 'Notas de DM'
+                name: 'Notas de DM',
             },
             //'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
-        ]
+        ],
     };
 
     const editor = useRef();
@@ -63,25 +62,31 @@ export function RichTextEditor({ onChange, initialValue }) {
                 onChange(editor.current.getContents());
             }
         }, changeUpdateTimeout);
-    }
+    };
 
     const handleInput = () => {
         currentChangeId += 1;
         deferredUpdate(currentChangeId);
-    }
+    };
 
     const getEditorHeight = () => {
-        const height = window.innerHeight
-            || document.documentElement.clientHeight
-            || document.body.clientHeight;
+        const height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         if (height <= 640) return '48vh';
         if (height <= 900) return '67vh';
         return '73vh';
-    }
+    };
 
-    return <div className="EditorContainer">
-        <SunEditor lang='es' defaultValue={initialValue} height={getEditorHeight()}
-            onChange={(state) => handleInput()} onInput={(event) => handleInput()}
-            getSunEditorInstance={getSunEditorInstance} setOptions={editorOptions} />
-    </div >;
+    return (
+        <div className="EditorContainer">
+            <SunEditor
+                lang="es"
+                defaultValue={initialValue}
+                height={getEditorHeight()}
+                onChange={(state) => handleInput()}
+                onInput={(event) => handleInput()}
+                getSunEditorInstance={getSunEditorInstance}
+                setOptions={editorOptions}
+            />
+        </div>
+    );
 }

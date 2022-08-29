@@ -1,7 +1,6 @@
 import { WebApiRepository } from './web-api-repository.js';
 
 export class AuthRepository extends WebApiRepository {
-    
     onLogin = () => {};
     onLogout = () => {};
 

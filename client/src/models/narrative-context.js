@@ -4,10 +4,9 @@ import { ArrayUtils } from '../utils/array-utils';
 import { createEditorStateWithText } from '@draft-js-plugins/editor';
 
 export class NarrativeContext {
-
     static TYPES = [
         { type: 'world', name: 'Mundo' },
-        { type: 'campaign', name: 'Campaña' }
+        { type: 'campaign', name: 'Campaña' },
     ];
 
     id = null;
@@ -16,7 +15,7 @@ export class NarrativeContext {
     categories = null;
 
     constructor(type, name) {
-        if (!NarrativeContext.TYPES.find(x => x.type === type)) throw Error('Invalid type');
+        if (!NarrativeContext.TYPES.find((x) => x.type === type)) throw Error('Invalid type');
         this.id = IdGenerator.generateId();
         this.type = type;
         this.name = name;
@@ -24,7 +23,7 @@ export class NarrativeContext {
     }
 
     getNarrativeCategory(categoryId) {
-        return this.categories.find(x => x.id === categoryId);
+        return this.categories.find((x) => x.id === categoryId);
     }
 
     addNarrativeCategory(category) {
@@ -37,28 +36,31 @@ export class NarrativeContext {
     }
 
     moveNarrativeCategoryUp(categoryId) {
-        const oldIndex = this.categories.indexOf(this.categories.find(x => x.id === categoryId));
+        const oldIndex = this.categories.indexOf(this.categories.find((x) => x.id === categoryId));
         const newIndex = oldIndex - 1;
         if (oldIndex === 0) return;
         ArrayUtils.moveElementInArray(this.categories, oldIndex, newIndex);
     }
 
     moveNarrativeCategoryDown(categoryId) {
-        const oldIndex = this.categories.indexOf(this.categories.find(x => x.id === categoryId));
+        const oldIndex = this.categories.indexOf(this.categories.find((x) => x.id === categoryId));
         const newIndex = oldIndex + 1;
         if (newIndex === this.categories.length) return;
         ArrayUtils.moveElementInArray(this.categories, oldIndex, newIndex);
     }
 
     searchTerm(term) {
-        let elements = []
+        let elements = [];
         for (const category of this.categories) {
             elements = elements.concat(category.getPlainViewableElements());
         }
         const cleanStr = (str) => {
-            return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');;
-        }
-        return elements.filter(element => cleanStr(element.name).includes(cleanStr(term)));
+            return str
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '');
+        };
+        return elements.filter((element) => cleanStr(element.name).includes(cleanStr(term)));
     }
 
     getNarrativeCategoryByElementId(elementId) {
@@ -75,18 +77,14 @@ export class NarrativeContext {
             id: this.id,
             type: this.type,
             name: this.name,
-            categories: this.categories.map(x => x.toJson())
-        }
+            categories: this.categories.map((x) => x.toJson()),
+        };
     }
 
     static fromJson(data) {
-        const instance = new NarrativeContext(
-            data['type'],
-            data['name']
-        );
+        const instance = new NarrativeContext(data['type'], data['name']);
         instance.id = data['id'];
-        instance.categories = data['categories'].map(x => NarrativeCategory.fromJson(x));
+        instance.categories = data['categories'].map((x) => NarrativeCategory.fromJson(x));
         return instance;
     }
-
 }

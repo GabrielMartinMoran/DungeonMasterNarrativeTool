@@ -10,24 +10,27 @@ export function CreateNarrativeContext({ appContext }) {
 
     useEffect(() => {
         appContext.setNarrativeContextById(null);
-    }, [appContext])
-
+    }, [appContext]);
 
     const create = () => {
         const narrativeContext = new NarrativeContext(type, name);
         appContext.getDB().addNarrativeContext(narrativeContext);
         appContext.saveDB();
         navigate('/');
-    }
+    };
 
-    return <div>
-        <h1>Crear contexto narrativo</h1>
-        <input type='text' placeholder='Nombre' onChange={(event) => setName(event.target.value)} />
-        <select onChange={(event) => setType(event.target.value)}>
-            {NarrativeContext.TYPES.map(x => <option key={x.type} value={x.type}>{x.name}</option>)}
-        </select>
-        <button onClick={create}>
-            Crear
-        </button>
-    </div>;
+    return (
+        <div>
+            <h1>Crear contexto narrativo</h1>
+            <input type="text" placeholder="Nombre" onChange={(event) => setName(event.target.value)} />
+            <select onChange={(event) => setType(event.target.value)}>
+                {NarrativeContext.TYPES.map((x) => (
+                    <option key={x.type} value={x.type}>
+                        {x.name}
+                    </option>
+                ))}
+            </select>
+            <button onClick={create}>Crear</button>
+        </div>
+    );
 }

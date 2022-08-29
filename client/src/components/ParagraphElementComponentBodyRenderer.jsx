@@ -5,7 +5,6 @@ import { CharacterStatBlock } from './CharacterStatBlock';
 import ReactDOMServer from 'react-dom/server';
 
 export function ParagraphElementComponentBodyRenderer({ appContext, body }) {
-
     const [renderedBody, setRenderedBody] = useState();
     let htmlBody = null;
 
@@ -17,12 +16,14 @@ export function ParagraphElementComponentBodyRenderer({ appContext, body }) {
     const getCharacter = async (characterId) => {
         const repo = appContext.getRepository(DnD5eCharactersRepository);
         const character = await repo.getCharacter(characterId);
-        document.getElementById(characterId).innerHTML = ReactDOMServer.renderToString(<CharacterStatBlock character={character} />);
-    }
+        document.getElementById(characterId).innerHTML = ReactDOMServer.renderToString(
+            <CharacterStatBlock character={character} />
+        );
+    };
 
     const getCharacterTempDiv = (characterId) => {
         return ReactDOMServer.renderToString(<div id={characterId}></div>);
-    }
+    };
 
     const replaceCharacters = (html) => {
         const regex = /\[C\]\{([a-zA-Z0-9\-]+)\}/gm;
@@ -34,13 +35,12 @@ export function ParagraphElementComponentBodyRenderer({ appContext, body }) {
             setTimeout(() => getCharacter(match[1]), 0);
         }
         return replaced_body;
-    }
+    };
 
     const renderBody = () => {
         let html = replaceCharacters(body);
         return html;
-    }
-
+    };
 
     return <div dangerouslySetInnerHTML={{ __html: renderedBody }} />;
 }

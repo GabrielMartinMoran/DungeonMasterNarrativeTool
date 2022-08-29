@@ -15,10 +15,7 @@ export class ParagraphElement extends BaseElement {
     }
 
     static fromJson(data) {
-        const instance = new ParagraphElement(
-            data['name'],
-            data['body']
-        );
+        const instance = new ParagraphElement(data['name'], data['body']);
         return instance;
     }
 }

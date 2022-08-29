@@ -1,16 +1,13 @@
 import { DBRepository } from './repositories/db-repository';
 
 export class AppContext {
-
     _repositories = null;
     _narrativeContextId = null;
-    setUpdatingDBIndicator = (status) => { };
-    elementListItemExpandedStatuses = {
-
-    }
+    setUpdatingDBIndicator = (status) => {};
+    elementListItemExpandedStatuses = {};
 
     constructor() {
-        this._repositories = {}
+        this._repositories = {};
     }
 
     getRepository(repositoryClass) {
@@ -21,15 +18,15 @@ export class AppContext {
     }
 
     // To be overrided
-    setBackButtonUrl(url) { }
+    setBackButtonUrl(url) {}
 
     // To be overrided
-    setForwardButtonUrl(url) { }
+    setForwardButtonUrl(url) {}
 
     // To be overrided
-    _setNarrativeContextById(narrativeContextId) { }
+    _setNarrativeContextById(narrativeContextId) {}
 
-    setNarrativeContextById(narrativeContextId) { 
+    setNarrativeContextById(narrativeContextId) {
         this._narrativeContextId = narrativeContextId;
         this._setNarrativeContextById(narrativeContextId);
     }
@@ -72,7 +69,6 @@ export class AppContext {
             this.hideSearchBar();
             return;
         }
-
     }
 
     // To be overrided

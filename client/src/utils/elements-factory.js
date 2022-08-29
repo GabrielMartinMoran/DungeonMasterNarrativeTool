@@ -4,9 +4,9 @@ import { ShopElement } from '../models/shop-element';
 
 export class ElementsFactory {
     static _ELEMENT_TYPES_MAPPING = {
-        'paragraph': ParagraphElement,
-        'container': ContainerElement,
-        'shop': ShopElement
+        paragraph: ParagraphElement,
+        container: ContainerElement,
+        shop: ShopElement,
     };
 
     static mapElementFromJson(data) {

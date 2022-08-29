@@ -5,13 +5,17 @@ export class NarrativeContextImporter {
         try {
             narrativeContext = NarrativeContext.fromJson(JSON.parse(narrativeContextJson));
         } catch {
-            alert('Ha ocurrido un error al importar el contexto narrativo. El formato del archivo no parece ser válido!');
+            alert(
+                'Ha ocurrido un error al importar el contexto narrativo. El formato del archivo no parece ser válido!'
+            );
             return;
         }
 
         const foundExistentNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContext.id);
         if (foundExistentNarrativeContext) {
-            alert('Ha ocurrido un error al importar el contexto narrativo. Parece ser que posees otro contexto narrativo con el mismo identificador!')
+            alert(
+                'Ha ocurrido un error al importar el contexto narrativo. Parece ser que posees otro contexto narrativo con el mismo identificador!'
+            );
             return;
         }
         appContext.getDB().addNarrativeContext(narrativeContext);

@@ -15,11 +15,8 @@ const dbRepo = appContext.getRepository(DBRepository);
 const authRepo = appContext.getRepository(AuthRepository);
 
 const renderApp = () => {
-    ReactDom.render(
-        <App appContext={appContext} />,
-        document.getElementById('root')
-    );
-}
+    ReactDom.render(<App appContext={appContext} />, document.getElementById('root'));
+};
 
 // Just download the remote DB if use is logged in
 const start = async () => {
@@ -33,14 +30,14 @@ const start = async () => {
     } catch {
         alert('Ha ocurrido un error al sincronizar con el servidor, por favor refresca la página!');
     }
-}
+};
 
 authRepo.onLogin = () => {
     window.location = '/';
-}
+};
 
 authRepo.onLogout = () => {
     window.location = '/login';
-}
+};
 
 start();

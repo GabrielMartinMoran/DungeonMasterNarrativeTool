@@ -1,34 +1,30 @@
 export const EXTERNAL_TOOLS = [
     {
-        name: '5e Tools',
-        url: 'https://5e.tools/'
+        name: '5etools',
+        url: 'https://5e.tools/',
     },
     {
-        name: 'Bestiario (5e Tools)',
-        url: 'https://5e.tools/bestiary.html'
-    },
-    {
-        name: 'Objetos mundanos y mágicos (5e Tools)',
-        url: 'https://5e.tools/items.html'
+        name: 'Generador de bloque de estadísticas',
+        url: 'https://gabrielmartinmoran.github.io/DnD5eAbilityScoresGenerator/',
     },
     {
         name: 'Calculadora de encuentros',
-        url: 'https://kastark.co.uk/rpgs/encounter-calculator-5th/'
+        url: 'https://kastark.co.uk/rpgs/encounter-calculator-5th/',
     },
     {
-        name: 'Tabla de encuentros aleatorios (5e Tools)',
-        url: 'https://5e.tools/encountergen.html'
+        name: 'Generador de nombres (Fantasy Name Generator)',
+        url: 'https://www.fantasynamegen.com/',
     },
     {
-        name: 'Generador de nombres',
-        url: 'https://www.fantasynamegen.com/'
+        name: 'Razas (D&D Beyond)',
+        url: 'https://www.dndbeyond.com/races',
     },
     {
-        name: 'Razas',
-        url: 'https://www.dndbeyond.com/races'
+        name: 'Clases (D&D Beyond)',
+        url: 'https://www.dndbeyond.com/classes',
     },
     {
-        name: 'Clases',
-        url: 'https://www.dndbeyond.com/classes'
-    }
+        name: 'Generador de tokens (Token Samp 2)',
+        url: 'https://rolladvantage.com/tokenstamp/',
+    },
 ];

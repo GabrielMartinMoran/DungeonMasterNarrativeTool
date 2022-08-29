@@ -1,7 +1,6 @@
 import { NarrativeContext } from './narrative-context';
 
 export class Database {
-
     campaigns = null; // Array of NarrativeContext
     worlds = null; // Array of NarrativeContext
 
@@ -11,7 +10,7 @@ export class Database {
     }
 
     getNarrativeContext(narrativeContextId) {
-        return this.campaigns.concat(this.worlds).find(x => x.id === narrativeContextId);
+        return this.campaigns.concat(this.worlds).find((x) => x.id === narrativeContextId);
     }
 
     addNarrativeContext(narrativeContext) {
@@ -43,20 +42,19 @@ export class Database {
 
     toJson() {
         return {
-            campaigns: this.campaigns.map(x => x.toJson()),
-            worlds: this.worlds.map(x => x.toJson())
-        }
+            campaigns: this.campaigns.map((x) => x.toJson()),
+            worlds: this.worlds.map((x) => x.toJson()),
+        };
     }
 
     static fromJson(data) {
         const instance = new Database();
-        instance.campaigns = data['campaigns'].map(x => NarrativeContext.fromJson(x));
-        instance.worlds = data['worlds'].map(x => NarrativeContext.fromJson(x));
+        instance.campaigns = data['campaigns'].map((x) => NarrativeContext.fromJson(x));
+        instance.worlds = data['worlds'].map((x) => NarrativeContext.fromJson(x));
         return instance;
     }
 
     searchTerm(term, narrativeContextId) {
         return this.getNarrativeContext(narrativeContextId).searchTerm(term);
     }
-
 }

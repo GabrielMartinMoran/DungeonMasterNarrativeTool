@@ -2,11 +2,11 @@
 .App h2,
 .App h3,
 .App h4 {
-    margin-top: .2rem;
-    margin-bottom: .2rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
     font-family: MrJeeves;
     font-weight: 800;
-    color: #58180D
+    color: #58180d;
 }
 
 .App h1 {
@@ -20,7 +20,7 @@
 .App h3 {
     margin-top: 2rem;
     font-size: 1.5rem;
-    border-bottom: 2px solid #c9ad6a
+    border-bottom: 2px solid #c9ad6a;
 }
 
 .App h4 {
@@ -28,10 +28,10 @@
 }
 
 .App h5 {
-    margin-bottom: .2em;
+    margin-bottom: 0.2em;
     font-family: ScalySansSmallCaps;
-    font-size: .423cm;
-    font-weight: 900
+    font-size: 0.423cm;
+    font-weight: 900;
 }
 
 @media (max-width: 400px) {
@@ -55,7 +55,7 @@
     }
 
     .App h5 {
-        font-size: .3cm;
+        font-size: 0.3cm;
     }
 }
 
@@ -67,7 +67,8 @@
     background-color: #e0e5c1;
     border-style: solid;
     border-width: 11px;
-    border-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==") 11;
+    border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==')
+        11;
     border-image-outset: 9px 0px;
     box-shadow: 1px 4px 14px #888;
     margin-left: 1rem;
@@ -91,11 +92,11 @@
     line-height: 1.083em;
 }
 
-.App pre+blockquote,
-.App h2+blockquote,
-.App h3+blockquote,
-.App h4+blockquote,
-.App h5+blockquote {
+.App pre + blockquote,
+.App h2 + blockquote,
+.App h3 + blockquote,
+.App h4 + blockquote,
+.App h5 + blockquote {
     margin-top: 13px;
 }
 
@@ -103,7 +104,6 @@
 .App p code {
     font-family: ScalySans;
 }
-
 
 .App pre,
 .App pre code {
@@ -113,7 +113,8 @@
     margin: 2.5rem 2.5rem 2.5rem 2.5rem;
     padding: 5px 10px;
     background-color: #e2d4c0;
-    border-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==") 11;
+    border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==')
+        11;
     border-style: solid;
     border-width: 11px;
     border-image-outset: 9px 0px;
@@ -179,9 +180,9 @@
 }
 
 .App tbody tr:nth-child(even) {
-    background-color: #C6D094;
+    background-color: #c6d094;
 }
 
 .App tbody tr:nth-child(odd) {
-    background-color: #F2F0E3;
+    background-color: #f2f0e3;
 }

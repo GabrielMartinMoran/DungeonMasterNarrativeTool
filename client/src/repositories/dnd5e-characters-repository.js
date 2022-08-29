@@ -1,7 +1,6 @@
 import { WebApiRepository } from './web-api-repository.js';
 
 export class DnD5eCharactersRepository extends WebApiRepository {
-
     static _characters = {};
 
     async getCharacter(characterId) {

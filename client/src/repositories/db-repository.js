@@ -2,15 +2,14 @@ import { Database } from '../models/database';
 import { DBSyncRepository } from './db-sync-repository';
 
 export class DBRepository {
-
-    static _DB_KEY = 'db'
+    static _DB_KEY = 'db';
     static _db = null;
     static _afterSaveHooks = [];
     static _preventSave = false;
-    static _onDirtyDBCallback = () => { };
+    static _onDirtyDBCallback = () => {};
     static _dbSyncRepository = new DBSyncRepository();
     static _onCloudDBDownloadedHooks = [];
-    static setUpdatingDBIndicator = (value) => { };
+    static setUpdatingDBIndicator = (value) => {};
 
     constructor() {
         DBRepository._db = new Database();
@@ -67,5 +66,4 @@ export class DBRepository {
     save() {
         DBRepository._save();
     }
-
 }

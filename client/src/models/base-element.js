@@ -1,7 +1,6 @@
 import { IdGenerator } from '../utils/id-generator';
 
 export class BaseElement {
-
     id = null;
     name = null;
     type = null;
@@ -9,8 +8,8 @@ export class BaseElement {
     static TYPES = {
         PARAGRAPH: 'paragraph',
         CONTAINER: 'container',
-        SHOP: 'shop'
-    };    
+        SHOP: 'shop',
+    };
 
     constructor(name, type) {
         this.id = IdGenerator.generateId();
@@ -22,8 +21,8 @@ export class BaseElement {
         return {
             id: this.id,
             name: this.name,
-            type: this.type
-        }
+            type: this.type,
+        };
     }
 
     static fromJson(data) {

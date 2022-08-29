@@ -2,7 +2,6 @@ import Pako from 'pako';
 import { WEB_API_URL } from '../config.js';
 
 export class WebApiRepository {
-
     _get_token() {
         return localStorage.getItem('token');
     }
@@ -15,7 +14,7 @@ export class WebApiRepository {
         }
         const response = await fetch(`${WEB_API_URL}${endpoint}`, {
             method: 'GET',
-            headers: headers
+            headers: headers,
         });
         if (response.ok) return await response.json();
         throw await response.json();
@@ -41,7 +40,7 @@ export class WebApiRepository {
         const response = await fetch(`${WEB_API_URL}${endpoint}`, {
             method: 'POST',
             body: data,
-            headers: headers
+            headers: headers,
         });
         if (response.ok) return await response.json();
         throw await response.json();
@@ -56,7 +55,7 @@ export class WebApiRepository {
         const response = await fetch(`${WEB_API_URL}${endpoint}`, {
             method: 'PUT',
             body: JSON.stringify(body),
-            headers: headers
+            headers: headers,
         });
         if (response.ok) return await response.json();
         throw await response.json();
@@ -71,10 +70,9 @@ export class WebApiRepository {
         const response = await fetch(`${WEB_API_URL}${endpoint}`, {
             method: 'DELETE',
             body: JSON.stringify(body),
-            headers: headers
+            headers: headers,
         });
         if (response.ok) return await response.json();
         throw await response.json();
     }
-
 }

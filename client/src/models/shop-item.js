@@ -1,7 +1,6 @@
 import { IdGenerator } from '../utils/id-generator';
 
 export class ShopItem {
-
     id = null;
     title = null;
     price = null;
@@ -26,17 +25,12 @@ export class ShopItem {
             title: this.title,
             price: this.price,
             link: this.link,
-            amount: this.amount
-        }
+            amount: this.amount,
+        };
     }
 
     static fromJson(data) {
-        const instance = new ShopItem(
-            data['title'],
-            data['price'],
-            data['link'],
-            data['amount']
-        );
+        const instance = new ShopItem(data['title'], data['price'], data['link'], data['amount']);
         instance.id = data['id'];
         return instance;
     }

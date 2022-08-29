@@ -1,5 +1,4 @@
 export class KeyboardShortcutsHandler {
-
     _pressedKeys = [];
 
     constructor(appContext) {
@@ -7,7 +6,7 @@ export class KeyboardShortcutsHandler {
     }
 
     _addPressedKey(key) {
-        if (!this._pressedKeys.find(x => x === key)) {
+        if (!this._pressedKeys.find((x) => x === key)) {
             this._pressedKeys.push(key);
         }
     }
@@ -17,7 +16,7 @@ export class KeyboardShortcutsHandler {
         if (index !== -1) {
             this._pressedKeys.splice(index, 1);
         }
-    }
+    };
 
     _keyPressed(key) {
         return this._pressedKeys.indexOf(key) !== -1;
