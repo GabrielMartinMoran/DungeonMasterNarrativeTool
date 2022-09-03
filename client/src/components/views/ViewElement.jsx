@@ -1,11 +1,11 @@
-import '../styles/ViewElement.css';
+import '../../styles/ViewElement.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ParagraphElementComponent } from './ParagraphElementComponent';
-import { ShopElementComponent } from './ShopElementComponent';
-import { RenameIcon } from './icons/RenameIcon';
-import { EditIcon } from './icons/EditIcon';
-import { CopyLinkIcon } from './icons/CopyLinkIcon';
+import { ParagraphElementComponent } from '../ParagraphElementComponent';
+import { ShopElementComponent } from '../ShopElementComponent';
+import { RenameIcon } from '../icons/RenameIcon';
+import { EditIcon } from '../icons/EditIcon';
+import { CopyLinkIcon } from '../icons/CopyLinkIcon';
 
 export function ViewElement({ appContext }) {
     const navigate = useNavigate();
@@ -36,16 +36,24 @@ export function ViewElement({ appContext }) {
                 appContext.setForwardButtonUrl(null);
             }
         };
-        appContext.setNarrativeContextById(narrativeContextId);
 
-        const obtainedElement = appContext
-            .getDB()
-            .getNarrativeContext(narrativeContextId)
-            .getNarrativeCategory(narrativeCategoryId)
-            .findElementAnywhere(elementId);
-        setElement(obtainedElement);
+        const init = async () => {
+            appContext.setNarrativeContextById(narrativeContextId);
 
-        setNavigationButtons();
+            let obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+            if (!obtainedNarrativeContext || obtainedNarrativeContext.isOnlyReference()) {
+                await appContext.pullNarrativeContext(narrativeContextId);
+                obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+            }
+
+            const obtainedElement = obtainedNarrativeContext
+                .getNarrativeCategory(narrativeCategoryId)
+                .findElementAnywhere(elementId);
+            setElement(obtainedElement);
+
+            setNavigationButtons();
+        };
+        init();
     }, [appContext, narrativeContextId, narrativeCategoryId, elementId]);
 
     const copyRelativeLink = () => {
@@ -56,13 +64,12 @@ export function ViewElement({ appContext }) {
     const editName = () => {
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
         if (name) {
-            const obtainedElement = appContext
-                .getDB()
-                .getNarrativeContext(narrativeContextId)
+            const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+            const obtainedElement = narrativeContext
                 .getNarrativeCategory(narrativeCategoryId)
                 .findElementAnywhere(elementId);
             obtainedElement.name = name;
-            appContext.saveDB();
+            appContext.saveNarrativeContext(narrativeContext);
             setElement({ ...obtainedElement });
             setTimeout(() => {
                 setElement(obtainedElement);
@@ -77,12 +84,10 @@ export function ViewElement({ appContext }) {
     const deleteElement = () => {
         const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element.name}`);
         if (!shouldDelete) return;
-        const narrativeCategory = appContext
-            .getDB()
-            .getNarrativeContext(narrativeContextId)
-            .getNarrativeCategory(narrativeCategoryId);
+        const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+        const narrativeCategory = narrativeContext.getNarrativeCategory(narrativeCategoryId);
         narrativeCategory.removeElement(element.id);
-        appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         navigate(`/narrative-context/${narrativeContextId}`);
     };
 
@@ -120,8 +125,8 @@ export function ViewElement({ appContext }) {
                                     key={element.id}
                                     appContext={appContext}
                                     element={element}
-                                    onDelete={deleteElement}
                                     parentExposedFuntions={childFuntions}
+                                    narrativeContextId={narrativeContextId}
                                 />
                             ),
                             shop: (
@@ -129,8 +134,8 @@ export function ViewElement({ appContext }) {
                                     key={element.id}
                                     appContext={appContext}
                                     element={element}
-                                    onDelete={deleteElement}
                                     parentExposedFuntions={childFuntions}
+                                    narrativeContextId={narrativeContextId}
                                 />
                             ),
                         }[element.type]

@@ -54,6 +54,39 @@ export class AppContext {
         }
     }
 
+    async getNarrativeContextSharedUsernames(narrativeContextId) {
+        return await DBRepository._getNarrativeContextSharedUsernames(narrativeContextId);
+    }
+
+    async pullNarrativeContext(narrativeContextId) {
+        await DBRepository._pullNarrativeContext(narrativeContextId);
+    }
+
+    async deleteNarrativeContext(narrativeContextId) {
+        await DBRepository._deleteNarrativeContext(narrativeContextId);
+    }
+
+    async saveNarrativeContext(narrativeContext) {
+        DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
+        // console.log('Enviando datos al servidor de la aplicación...');
+        try {
+            await DBRepository._saveNarrativeContext(narrativeContext);
+            // console.log('Los datos se enviaron al servidor correctamente!');
+        } catch {
+            alert('Ha ocurrido un error al tratar de enviar los cambios al servidor de la aplicación!');
+        }
+    }
+
+    async shareNarrativeContext(username, narrativeContextId) {
+        await DBRepository._shareNarrativeContext(username, narrativeContextId);
+    }
+
+    async unshareNarrativeContext(username, narrativeContextId) {
+        await DBRepository._unshareNarrativeContext(username, narrativeContextId);
+    }
+
+    
+
     // To be overrided
     showSearchBar() {}
 

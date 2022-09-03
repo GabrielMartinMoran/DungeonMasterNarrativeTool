@@ -4,8 +4,8 @@ from distutils.util import strtobool
 
 class ConfigProvider:
     # DATABASE
-    DB_URL = os.environ.get('DB_URL', 'localhost')
-    DB_PORT = os.environ.get('DB_PORT', 27017)
+    DB_URL = os.environ.get('DB_URL', 'mongodb://root:pass@localhost:27017')
+    DB_PORT = os.environ.get('DB_PORT', None)
     DB_NAME = 'DMNarrativeTools'
 
     APP_INFO_COLLECTION = 'app'

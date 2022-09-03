@@ -9,49 +9,52 @@ export class NarrativeContext {
         { type: 'campaign', name: 'Campaña' },
     ];
 
-    id = null;
-    type = null;
-    name = null;
-    categories = null;
+    narrativeContextId;
+    username;
+    type;
+    name;
+    narrativeCategories;
+    isReference = false;
 
-    constructor(type, name) {
+    constructor({ narrativeContextId = null, username, type, name, narrativeCategories = [] }) {
         if (!NarrativeContext.TYPES.find((x) => x.type === type)) throw Error('Invalid type');
-        this.id = IdGenerator.generateId();
+        this.narrativeContextId = narrativeContextId ?? IdGenerator.generateId();
+        this.username = username;
         this.type = type;
         this.name = name;
-        this.categories = [];
+        this.narrativeCategories = narrativeCategories;
     }
 
     getNarrativeCategory(categoryId) {
-        return this.categories.find((x) => x.id === categoryId);
+        return this.narrativeCategories.find((x) => x.id === categoryId);
     }
 
     addNarrativeCategory(category) {
-        this.categories.push(category);
+        this.narrativeCategories.push(category);
     }
 
     removeNarrativeCategory(categoryId) {
         const category = this.getNarrativeCategory(categoryId);
-        this.categories.splice(this.categories.indexOf(category), 1);
+        this.narrativeCategories.splice(this.narrativeCategories.indexOf(category), 1);
     }
 
     moveNarrativeCategoryUp(categoryId) {
-        const oldIndex = this.categories.indexOf(this.categories.find((x) => x.id === categoryId));
+        const oldIndex = this.narrativeCategories.indexOf(this.narrativeCategories.find((x) => x.id === categoryId));
         const newIndex = oldIndex - 1;
         if (oldIndex === 0) return;
-        ArrayUtils.moveElementInArray(this.categories, oldIndex, newIndex);
+        ArrayUtils.moveElementInArray(this.narrativeCategories, oldIndex, newIndex);
     }
 
     moveNarrativeCategoryDown(categoryId) {
-        const oldIndex = this.categories.indexOf(this.categories.find((x) => x.id === categoryId));
+        const oldIndex = this.narrativeCategories.indexOf(this.narrativeCategories.find((x) => x.id === categoryId));
         const newIndex = oldIndex + 1;
-        if (newIndex === this.categories.length) return;
-        ArrayUtils.moveElementInArray(this.categories, oldIndex, newIndex);
+        if (newIndex === this.narrativeCategories.length) return;
+        ArrayUtils.moveElementInArray(this.narrativeCategories, oldIndex, newIndex);
     }
 
     searchTerm(term) {
         let elements = [];
-        for (const category of this.categories) {
+        for (const category of this.narrativeCategories) {
             elements = elements.concat(category.getPlainViewableElements());
         }
         const cleanStr = (str) => {
@@ -64,7 +67,7 @@ export class NarrativeContext {
     }
 
     getNarrativeCategoryByElementId(elementId) {
-        for (const category of this.categories) {
+        for (const category of this.narrativeCategories) {
             if (category.findElementAnywhere(elementId)) {
                 return category;
             }
@@ -72,19 +75,29 @@ export class NarrativeContext {
         return null;
     }
 
+    isOnlyReference() {
+        return this.isReference;
+    }
+
     toJson() {
         return {
-            id: this.id,
+            narrative_context_id: this.narrativeContextId,
+            username: this.username,
             type: this.type,
             name: this.name,
-            categories: this.categories.map((x) => x.toJson()),
+            narrative_categories: this.narrativeCategories.map((x) => x.toJson()),
         };
     }
 
     static fromJson(data) {
-        const instance = new NarrativeContext(data['type'], data['name']);
-        instance.id = data['id'];
-        instance.categories = data['categories'].map((x) => NarrativeCategory.fromJson(x));
+        const instance = new NarrativeContext({
+            narrativeContextId: data.narrative_context_id,
+            username: data.username,
+            type: data.type,
+            name: data.name,
+            narrativeCategories: (data.narrative_categories ?? []).map((x) => NarrativeCategory.fromJson(x)),
+        });
+        instance.isReference = data.isReference;
         return instance;
     }
 }

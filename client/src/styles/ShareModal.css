@@ -1,0 +1,16 @@
+.ShareModal {
+    width: 600px;
+    height: 400px;
+    border: 1px solid #58180d;
+    position: fixed;
+    z-index: 1;
+    top: 25%;
+    width: 75%;
+    margin-top: -100px;
+    /* Negative half of height. */
+    left: 12.5%;
+    /* Negative half of width. */
+    background-color: white;
+    
+    padding: 1rem;
+}

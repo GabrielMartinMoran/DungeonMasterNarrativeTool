@@ -2,18 +2,23 @@ import gzip
 import os
 import json
 
-from flask import Flask, request, send_from_directory, make_response, Response, jsonify
+from flask import Flask, request, send_from_directory, jsonify
 from flask_cors import CORS
 from flask_compress import Compress
 
 from src.database.db_migrator import DBMigrator
+from src.models.narrative_context import NarrativeContext
 from src.models.token import Token
 from src.repositories.imgur_repository import ImgurRepository
+from src.repositories.narrative_context_repository import NarrativeContextRepository
 from src.repositories.user_database_repository import UserDatabaseRepository
 from src.repositories.user_repository import UserRepository
 from src.config_provider import ConfigProvider
-from src.services.bd_lightener import DBLightener
+from src.services.narrative_contexts.narrative_context_modifier import NarrativeContextModifier
 from src.services.dnd_5e_data_updater import DnD5EDataUpdater
+from src.services.narrative_contexts.narrative_context_remover import NarrativeContextRemover
+from src.services.narrative_contexts.narrative_context_retriever import NarrativeContextRetriever
+from src.services.narrative_contexts.narrative_context_sharer import NarrativeContextSharer
 from src.services.nivel_20_character_retriever import Nivel20CharacterRetriever
 from src.utils import http_methods, hashing
 
@@ -71,17 +76,104 @@ def get_user_database():
     return jsonify(database)
 
 
-@app.route('/api/database', methods=[http_methods.POST])
-def save_user_database():
+@app.route('/api/narrative_contexts', methods=[http_methods.GET])
+def list_narrative_contexts():
     if not request.token:
         return jsonify({
             'message': 'Forbidden'
         }), 403
-    enlightned = DBLightener(UserDatabaseRepository(), ImgurRepository()).enlight_and_save(request.token.username,
-                                                                                           request.decoded_json)
-    return jsonify({
-        'reload_suggested': enlightned
+    repo = NarrativeContextRepository()
+    narrative_contexts = repo.list(request.token.username)
+    return jsonify([x.to_dict() for x in narrative_contexts])
+
+
+@app.route('/api/narrative_contexts/shared', methods=[http_methods.GET])
+def list_shared_narrative_contexts():
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    repo = NarrativeContextRepository()
+    narrative_contexts = repo.list_shared(request.token.username)
+    return jsonify([x.to_dict() for x in narrative_contexts])
+
+
+@app.route('/api/narrative_contexts/<string:narrative_context_id>', methods=[http_methods.GET])
+def get_narrative_context(narrative_context_id: str):
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    service = NarrativeContextRetriever(NarrativeContextRepository())
+    narrative_context = service.get(request.token.username, narrative_context_id)
+    return jsonify(narrative_context.to_dict())
+
+
+@app.route('/api/narrative_contexts', methods=[http_methods.POST])
+def save_narrative_contexts():
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    narrative_context = NarrativeContext.from_dict({
+        **request.decoded_json,
+        **{
+            'username': request.token.username
+        }
     })
+    enlightened = NarrativeContextModifier(NarrativeContextRepository(), ImgurRepository()).save(narrative_context)
+    return jsonify({
+        'reload_suggested': enlightened
+    })
+
+
+@app.route('/api/narrative_contexts/<string:narrative_context_id>', methods=[http_methods.DELETE])
+def delete_narrative_context(narrative_context_id: str):
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    service = NarrativeContextRemover(NarrativeContextRepository())
+    service.delete(request.token.username, narrative_context_id)
+    return jsonify({})
+
+
+@app.route('/api/narrative_contexts/shared/<string:narrative_context_id>', methods=[http_methods.GET])
+def get_narrative_context_shared_users(narrative_context_id: str):
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    service = NarrativeContextRetriever(NarrativeContextRepository())
+    usernames = service.get_shared_usernames(request.token.username, narrative_context_id)
+    return jsonify(usernames)
+
+
+@app.route('/api/narrative_contexts/share', methods=[http_methods.POST])
+def share_narrative_context():
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    NarrativeContextSharer(NarrativeContextRepository(), UserRepository()).share(
+        request.token.username,
+        request.decoded_json['username'],
+        request.decoded_json['narrative_context_id']
+    )
+    return jsonify({})
+
+@app.route('/api/narrative_contexts/unshare', methods=[http_methods.POST])
+def unshare_narrative_context():
+    if not request.token:
+        return jsonify({
+            'message': 'Forbidden'
+        }), 403
+    NarrativeContextSharer(NarrativeContextRepository(), UserRepository()).unshare(
+        request.token.username,
+        request.decoded_json['username'],
+        request.decoded_json['narrative_context_id']
+    )
+    return jsonify({})
 
 
 @app.route('/api/dnd_5e/data', methods=[http_methods.GET])

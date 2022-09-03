@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { AuthRepository } from '../repositories/auth-repository';
+import { AuthRepository } from 'repositories/auth-repository';
 
 export function LogoutView({ appContext }) {
     useEffect(() => {

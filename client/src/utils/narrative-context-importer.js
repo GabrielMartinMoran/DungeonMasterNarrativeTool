@@ -11,7 +11,7 @@ export class NarrativeContextImporter {
             return;
         }
 
-        const foundExistentNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContext.id);
+        const foundExistentNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContext.narrativeContextId);
         if (foundExistentNarrativeContext) {
             alert(
                 'Ha ocurrido un error al importar el contexto narrativo. Parece ser que posees otro contexto narrativo con el mismo identificador!'

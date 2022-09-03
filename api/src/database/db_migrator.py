@@ -39,7 +39,8 @@ class DBMigrator:
             _local_repository.create_collection(ConfigProvider.APP_INFO_COLLECTION)
             self.collection = _local_repository.db[ConfigProvider.APP_INFO_COLLECTION]
         else:
-            self.client = MongoClient(ConfigProvider.DB_URL, int(ConfigProvider.DB_PORT))
+            self.client = MongoClient(ConfigProvider.DB_URL,
+                                      int(ConfigProvider.DB_PORT) if ConfigProvider.DB_PORT is not None else None)
             self.db = self.client[ConfigProvider.DB_NAME]
             self.collection = self.db[ConfigProvider.APP_INFO_COLLECTION]
 

@@ -1,6 +1,7 @@
+import { NarrativeContextFactory } from 'factories/narrative-context-factory';
+import { NarrativeContext } from 'models/narrative-context';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { NarrativeContext } from '../models/narrative-context';
 
 export function CreateNarrativeContext({ appContext }) {
     const navigate = useNavigate();
@@ -13,9 +14,9 @@ export function CreateNarrativeContext({ appContext }) {
     }, [appContext]);
 
     const create = () => {
-        const narrativeContext = new NarrativeContext(type, name);
+        const narrativeContext = NarrativeContextFactory.create(type, name);
         appContext.getDB().addNarrativeContext(narrativeContext);
-        appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         navigate('/');
     };
 

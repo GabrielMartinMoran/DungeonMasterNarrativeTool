@@ -12,7 +12,10 @@ export class DBRepository {
     static setUpdatingDBIndicator = (value) => {};
 
     constructor() {
-        DBRepository._db = new Database();
+        DBRepository._db = new Database({
+            narrativeContexts: [],
+            sharedNarrativeContexts: [],
+        });
     }
 
     async tryGetCloudDB() {
@@ -43,6 +46,46 @@ export class DBRepository {
         await DBRepository._dbSyncRepository.pushDB(DBRepository._db.toJson());
         DBRepository._callAfterSaveHooks();
         DBRepository.setUpdatingDBIndicator(false);
+    }
+
+    static async _pullNarrativeContext(narrativeContextId) {
+        const narrativeContext = await DBRepository._dbSyncRepository.getNarrativeContext(narrativeContextId);
+        if (narrativeContext.username === localStorage.getItem('tokenUsername')) {
+            if (DBRepository._db.getNarrativeContext(narrativeContextId))
+                DBRepository._db.removeNarrativeContext(narrativeContextId);
+            DBRepository._db.addNarrativeContext(narrativeContext);
+        } else {
+            if (DBRepository._db.getSharedNarrativeContext(narrativeContextId))
+                DBRepository._db.removeSharedNarrativeContext(narrativeContextId);
+            DBRepository._db.addSharedNarrativeContext(narrativeContext);
+        }
+    }
+
+    static async _saveNarrativeContext(narrativeContext) {
+        if (DBRepository._preventSave) {
+            DBRepository._onDirtyDBCallback();
+            return;
+        }
+        DBRepository.setUpdatingDBIndicator(true);
+        await DBRepository._dbSyncRepository.saveNarrativeContext(narrativeContext);
+        DBRepository._callAfterSaveHooks();
+        DBRepository.setUpdatingDBIndicator(false);
+    }
+
+    static async _deleteNarrativeContext(narrativeContextId) {
+        await DBRepository._dbSyncRepository.deleteNarrativeContext(narrativeContextId);
+    }
+
+    static async _getNarrativeContextSharedUsernames(narrativeContextId) {
+        return await DBRepository._dbSyncRepository.getNarrativeContextSharedUsernames(narrativeContextId);
+    }
+
+    static async _shareNarrativeContext(username, narrativeContextId) {
+        await DBRepository._dbSyncRepository.shareNarrativeContext(username, narrativeContextId);
+    }
+
+    static async _unshareNarrativeContext(username, narrativeContextId) {
+        await DBRepository._dbSyncRepository.unshareNarrativeContext(username, narrativeContextId);
     }
 
     registerAfterSaveHook(hook) {

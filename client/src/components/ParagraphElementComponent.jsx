@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { RichTextEditor } from './RichTextEditor';
 import { ParagraphElementComponentBodyRenderer } from './ParagraphElementComponentBodyRenderer';
 
-export function ParagraphElementComponent({ appContext, element, parentExposedFuntions }) {
+export function ParagraphElementComponent({ appContext, narrativeContextId, element, parentExposedFuntions }) {
     const [editMode, setEditMode] = useState(false);
     let currentEditorValue = null;
     let hasChangedAtLeastOneTime = false;
@@ -18,7 +18,8 @@ export function ParagraphElementComponent({ appContext, element, parentExposedFu
             return;
         }
         element.body = currentEditorValue;
-        appContext.saveDBAsync();
+        const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+        appContext.saveNarrativeContext(narrativeContext);
         setEditMode(false);
     };
 

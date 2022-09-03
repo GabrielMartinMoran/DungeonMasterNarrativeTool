@@ -3,33 +3,40 @@ import { NarrativeContext } from './narrative-context';
 export class Database {
     campaigns = null; // Array of NarrativeContext
     worlds = null; // Array of NarrativeContext
+    narrativeContexts = null;
+    sharedNarrativeContexts = null;
 
-    constructor() {
+    constructor({ narrativeContexts = [], sharedNarrativeContexts = [] }) {
         this.campaigns = [];
         this.worlds = [];
+        this.narrativeContexts = narrativeContexts;
+        this.sharedNarrativeContexts = sharedNarrativeContexts;
     }
 
     getNarrativeContext(narrativeContextId) {
-        return this.campaigns.concat(this.worlds).find((x) => x.id === narrativeContextId);
+        return this.narrativeContexts.find((x) => x.narrativeContextId === narrativeContextId);
     }
 
     addNarrativeContext(narrativeContext) {
-        if (narrativeContext.type === 'world') {
-            this.addWorld(narrativeContext);
-        } else {
-            this.addCampaign(narrativeContext);
-        }
+        this.narrativeContexts.push(narrativeContext);
     }
 
     removeNarrativeContext(narrativeContextId) {
         const narrativeContext = this.getNarrativeContext(narrativeContextId);
-        let narrativeContextsList = null;
-        if (narrativeContext.type === 'world') {
-            narrativeContextsList = this.worlds;
-        } else {
-            narrativeContextsList = this.campaigns;
-        }
-        narrativeContextsList.splice(narrativeContextsList.indexOf(narrativeContext), 1);
+        this.narrativeContexts.splice(this.narrativeContexts.indexOf(narrativeContext), 1);
+    }
+
+    getSharedNarrativeContext(narrativeContextId) {
+        return this.sharedNarrativeContexts.find((x) => x.narrativeContextId === narrativeContextId);
+    }
+
+    addSharedNarrativeContext(narrativeContext) {
+        this.sharedNarrativeContexts.push(narrativeContext);
+    }
+
+    removeSharedNarrativeContext(narrativeContextId) {
+        const narrativeContext = this.getSharedNarrativeContext(narrativeContextId);
+        this.sharedNarrativeContexts.splice(this.sharedNarrativeContexts.indexOf(narrativeContext), 1);
     }
 
     addWorld(world) {
@@ -38,6 +45,22 @@ export class Database {
 
     addCampaign(campaign) {
         this.campaigns.push(campaign);
+    }
+
+    getWorlds() {
+        return this.narrativeContexts.filter((x) => x.type === 'world');
+    }
+
+    getCampaigns() {
+        return this.narrativeContexts.filter((x) => x.type === 'campaign');
+    }
+
+    getSharedWorlds() {
+        return this.sharedNarrativeContexts.filter((x) => x.type === 'world');
+    }
+
+    getSharedCampaigns() {
+        return this.sharedNarrativeContexts.filter((x) => x.type === 'campaign');
     }
 
     toJson() {

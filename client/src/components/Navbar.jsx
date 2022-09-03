@@ -46,7 +46,7 @@ export function Navbar({ appContext }) {
                 </div>
                 <div className="textCenter">
                     {narrativeContext ? (
-                        <Link to={`/narrative-context/${narrativeContext.id}`} id="narrativeContextTitleLink">
+                        <Link to={`/narrative-context/${narrativeContext.narrativeContextId}`} id="narrativeContextTitleLink">
                             {narrativeContext.name}
                         </Link>
                     ) : (

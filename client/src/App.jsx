@@ -8,16 +8,16 @@ import {
     Navigate,
     //Link
 } from 'react-router-dom';
-import { Home } from './components/Home';
-import { CreateNarrativeContext } from './components/CreateNarrativeContext';
-import { ViewNarrativeContext } from './components/ViewNarrativeContext';
-import { ViewElement } from './components/ViewElement';
+import { HomeView } from './components/views/HomeView';
+import { ViewNarrativeContext } from './components/views/ViewNarrativeContext';
+import { ViewElement } from './components/views/ViewElement';
 import { Navbar } from './components/Navbar';
-import { LoginView } from './components/LoginView';
+import { LoginView } from './components/views/LoginView';
 import { AuthRepository } from './repositories/auth-repository';
-import { LogoutView } from './components/LogoutView';
 import { UpdatingDBIndicator } from 'components/UpdatingDBIndicator';
 import { SearchBar } from 'components/SearchBar';
+import { LogoutView } from 'components/views/LogoutView';
+import { CreateNarrativeContext } from 'components/views/CreateNarrativeContext';
 
 export function App({ appContext }) {
     const authRepo = appContext.getRepository(AuthRepository);
@@ -53,7 +53,7 @@ export function App({ appContext }) {
                                     element={<ViewNarrativeContext appContext={appContext} />}
                                 />
                                 <Route path="/logout" element={<LogoutView appContext={appContext} />} />
-                                <Route path="/" element={<Home appContext={appContext} />} />
+                                <Route path="/" element={<HomeView appContext={appContext} />} />
                                 <Route path="*" element={<Navigate to="/" />} />
                             </>
                         ) : (

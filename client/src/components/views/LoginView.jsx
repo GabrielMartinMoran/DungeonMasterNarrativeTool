@@ -1,6 +1,6 @@
-import '../styles/LoginView.css';
+import '../../styles/LoginView.css';
 import React, { useEffect, useState } from 'react';
-import { AuthRepository } from '../repositories/auth-repository';
+import { AuthRepository } from '../../repositories/auth-repository';
 
 export function LoginView({ appContext }) {
     const [username, setUsername] = useState(null);

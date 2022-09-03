@@ -21,7 +21,11 @@ class BaseMigration:
             BaseMigration._local_db_repository_instance = LocalDBRepository()
             self.database = BaseMigration._local_db_repository_instance
         else:
-            self.client = MongoClient(ConfigProvider.DB_URL, int(ConfigProvider.DB_PORT))
+            if ConfigProvider.DB_PORT is not None:
+                port = int(ConfigProvider.DB_PORT)
+            else:
+                port = None
+            self.client = MongoClient(ConfigProvider.DB_URL, port)
             self.database = self.client[ConfigProvider.DB_NAME]
 
     def create_collection(self, collection_name):

@@ -18,7 +18,8 @@ export function NarrativeCategoryComponent({
 }) {
     const [elementsState, setElementsState] = useState(narrativeCategory.elements);
 
-    const rerender = () => {
+    const rerender = async () => {
+        await appContext.saveNarrativeContext(narrativeContext);
         setElementsState([...narrativeCategory.elements]);
         setTimeout(() => setElementsState(narrativeCategory.elements), 0);
     };
@@ -28,7 +29,8 @@ export function NarrativeCategoryComponent({
         if (!name) return;
         const newElement = ElementsFactory.createElement(name, type);
         narrativeCategory.addElement(newElement);
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         rerender();
     };
 
@@ -36,19 +38,22 @@ export function NarrativeCategoryComponent({
         const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element.name}`);
         if (!shouldDelete) return;
         narrativeCategory.removeElement(element.id);
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         rerender();
     };
 
     const moveElementUp = (element) => {
         narrativeCategory.moveElementUp(element.id);
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         rerender();
     };
 
     const moveElementDown = (element) => {
         narrativeCategory.moveElementDown(element.id);
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         rerender();
     };
 
@@ -56,7 +61,8 @@ export function NarrativeCategoryComponent({
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
         if (!name) return;
         element.name = name;
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         onCategoryChange();
     };
 
@@ -64,7 +70,8 @@ export function NarrativeCategoryComponent({
         const shouldDelete = window.confirm(`Estas seguro de eliminar la categoría ${narrativeCategory.name}`);
         if (!shouldDelete) return;
         narrativeContext.removeNarrativeCategory(narrativeCategory.id);
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         onCategoryChange();
     };
 
@@ -72,7 +79,8 @@ export function NarrativeCategoryComponent({
         const name = window.prompt('Ingresa el nuevo nombre de la categoría', narrativeCategory.name);
         if (!name) return;
         narrativeCategory.name = name;
-        appContext.saveDB();
+        //appContext.saveDB();
+        appContext.saveNarrativeContext(narrativeContext);
         onCategoryChange();
     };
 
@@ -105,7 +113,7 @@ export function NarrativeCategoryComponent({
                     <ElementListItem
                         key={element.id}
                         appContext={appContext}
-                        narrativeContextId={narrativeContext.id}
+                        narrativeContextId={narrativeContext.narrativeContextId}
                         narrativeCategoryId={narrativeCategory.id}
                         element={element}
                         onMoveElementUp={moveElementUp}

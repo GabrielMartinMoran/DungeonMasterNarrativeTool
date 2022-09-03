@@ -2,7 +2,7 @@ import '../styles/ShopElementComponent.css';
 import React, { useState } from 'react';
 import { ShopTableEditor } from './ShopTableEditor';
 
-export function ShopElementComponent({ appContext, element, parentExposedFuntions }) {
+export function ShopElementComponent({ appContext, narrativeContextId, element, parentExposedFuntions }) {
     const [editMode, setEditMode] = useState(false);
     let currentEditorItems = null;
     let hasChangedAtLeastOneTime = false;
@@ -18,7 +18,8 @@ export function ShopElementComponent({ appContext, element, parentExposedFuntion
             return;
         }
         element.items = currentEditorItems;
-        appContext.saveDBAsync();
+        const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+        appContext.saveNarrativeContext(narrativeContext);
         setEditMode(false);
     };
 
