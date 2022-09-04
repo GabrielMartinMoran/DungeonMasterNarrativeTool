@@ -1,12 +1,12 @@
 import './index.css';
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { AppContext } from './app-context';
 import { DataCorruptionPreventer } from './services/data-corruption-preventer';
 import { DBRepository } from './repositories/db-repository';
 import { AuthRepository } from './repositories/auth-repository';
-import { KeyboardShortcutsHandler } from 'utils/keyboard-shorcuts-handler';
+import { KeyboardShortcutsHandler } from './utils/keyboard-shorcuts-handler';
 
 const appContext = new AppContext();
 const dataCorruptionPreventer = new DataCorruptionPreventer(appContext);
@@ -15,7 +15,12 @@ const dbRepo = appContext.getRepository(DBRepository);
 const authRepo = appContext.getRepository(AuthRepository);
 
 const renderApp = () => {
-    ReactDom.render(<App appContext={appContext} />, document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+        <React.StrictMode>
+            <App appContext={appContext} />
+        </React.StrictMode>
+    );
 };
 
 // Just download the remote DB if use is logged in
