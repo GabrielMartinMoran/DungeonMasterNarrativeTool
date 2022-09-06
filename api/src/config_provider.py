@@ -4,8 +4,8 @@ from distutils.util import strtobool
 
 class ConfigProvider:
     # DATABASE
-    DB_URL = os.environ.get('DB_URL', 'localhost')
-    DB_PORT = os.environ.get('DB_PORT', 27017)
+    DB_URL = os.environ.get('DB_URL', 'mongodb://root:pass@localhost:27017')
+    DB_PORT = os.environ.get('DB_PORT', None)
     DB_NAME = 'DMNarrativeTools'
 
     APP_INFO_COLLECTION = 'app'
@@ -21,3 +21,6 @@ class ConfigProvider:
 
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID', None)
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET', None)
+
+    COMMONER_ROLE = 'commoner'
+    ADMIN_ROLE = 'admin'

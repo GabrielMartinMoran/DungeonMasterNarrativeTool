@@ -1,3 +1,6 @@
+.ViewNarrativeContext {
+}
+
 .narrativeContextTitleButtons {
     position: relative;
     bottom: -1.5rem;
@@ -5,4 +8,9 @@
 
 .narrativeContextTitleBar {
     position: relative;
+}
+
+.EmptyNarrativeContextText {
+    margin-top: 1rem;
+    margin-left: 1rem;
 }

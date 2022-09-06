@@ -1,2 +1,0 @@
-class GiftAlreadyClaimedException(Exception):
-    pass

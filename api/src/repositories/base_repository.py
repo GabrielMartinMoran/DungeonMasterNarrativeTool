@@ -17,9 +17,15 @@ class BaseRepository:
             self.collection = self.get_collection()
         else:
             if not BaseRepository._MONGO_CLIENT_INSTANCE:
-                BaseRepository._MONGO_CLIENT_INSTANCE = MongoClient(ConfigProvider.DB_URL, int(ConfigProvider.DB_PORT))
+                if ConfigProvider.DB_PORT is None:
+                    port = None
+                else:
+                    port = int(ConfigProvider.DB_PORT)
+                BaseRepository._MONGO_CLIENT_INSTANCE = MongoClient(ConfigProvider.DB_URL, port)
             self.data_base = BaseRepository._MONGO_CLIENT_INSTANCE[ConfigProvider.DB_NAME]
             self.collection = self.get_collection()
 
     def get_collection(self):
+        if self.COLLECTION_NAME is None:
+            return None
         return self.data_base[self.COLLECTION_NAME]

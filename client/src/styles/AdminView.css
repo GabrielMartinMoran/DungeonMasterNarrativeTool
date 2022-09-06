@@ -1,0 +1,15 @@
+.AdminViewUser {
+    display: flex;
+    justify-content: space-between;
+}
+
+.AdminViewUsersTitleContainer {
+    display: flex;
+    margin-bottom: 1.5rem;
+}
+
+.AdminViewUsersTitleButtons {
+    position: relative;
+    bottom: -1.5rem;
+    text-align: right;
+}
