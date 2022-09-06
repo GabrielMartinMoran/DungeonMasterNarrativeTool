@@ -1,14 +1,11 @@
-import { renderToReadableStream } from 'react-dom/server';
 import { AppContextRepositories } from './app-context-repositories';
-import { NarrativeContext } from './models/narrative-context';
 import { User } from './models/user';
-import { DBRepository } from './repositories/db-repository';
 
 export class AppContext {
     _narrativeContextId: string | null = null;
-    setUpdatingDBIndicator = (status: boolean) => {};
     elementListItemExpandedStatuses: any = {};
 
+    protected _setUpdatingDBIndicator = (status: boolean) => {};
     protected _repositories: AppContextRepositories;
     protected _authenticatedUser: User | null = null;
     menuButtonRef: any | null;
@@ -67,5 +64,14 @@ export class AppContext {
 
     public get authenticatedUser(): User {
         return this._authenticatedUser!;
+    }
+
+    public set setUpdatingDBIndicator(setter: (value: boolean) => void) {
+        this._setUpdatingDBIndicator = setter;
+        this.repositories.configureUpdatingDBIndicator(setter);
+    }
+
+    public get setUpdatingDBIndicator(): (value: boolean) => void {
+        return this._setUpdatingDBIndicator;
     }
 }

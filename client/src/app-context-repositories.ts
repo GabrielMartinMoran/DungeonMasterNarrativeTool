@@ -1,3 +1,4 @@
+import { AppContext } from './app-context';
 import { AuthRepository } from './repositories/auth-repository';
 import { DnD5eCharactersRepository } from './repositories/dnd5e-characters-repository';
 import { HealthRepository } from './repositories/health-repository';
@@ -17,6 +18,14 @@ export class AppContextRepositories {
         this._dnd5eCharactersRepository = new DnD5eCharactersRepository();
         this._userRepository = new UserRepository();
         this._healthRepository = new HealthRepository();
+    }
+
+    public configureUpdatingDBIndicator(setter: (status: boolean) => void) {
+        this._narrativeContextRepository.configureUpdatingDBIndicator(setter);
+        this._authRepository.configureUpdatingDBIndicator(setter);
+        this._dnd5eCharactersRepository.configureUpdatingDBIndicator(setter);
+        this._userRepository.configureUpdatingDBIndicator(setter);
+        this._healthRepository.configureUpdatingDBIndicator(setter);
     }
 
     public get narrativeContext(): NarrativeContextRepository {
