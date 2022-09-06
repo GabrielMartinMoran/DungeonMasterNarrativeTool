@@ -3,6 +3,12 @@ import { ConnectionError } from '../errors/connection-error';
 const Pako = require('pako');
 
 export class WebApiRepository {
+    protected updatingDBIndicatorSetter = (status: boolean) => {};
+
+    public configureUpdatingDBIndicator(setter: (status: boolean) => void) {
+        this.updatingDBIndicatorSetter = setter;
+    }
+
     protected _get_token() {
         return localStorage.getItem('token');
     }
@@ -15,13 +21,16 @@ export class WebApiRepository {
         }
 
         try {
+            this.setUpdatingIndicator(true);
             const response = await fetch(`${WEB_API_URL}${endpoint}`, {
                 method: 'GET',
                 headers: headers,
             });
+            this.setUpdatingIndicator(false);
             if (response.ok) return await response.json();
             await this.throwResponseError(response);
         } catch (e) {
+            this.setUpdatingIndicator(false);
             this.throwConnectionError();
         }
     }
@@ -43,14 +52,17 @@ export class WebApiRepository {
             data = stringBody;
         }
         try {
+            this.setUpdatingIndicator(true);
             const response = await fetch(`${WEB_API_URL}${endpoint}`, {
                 method: 'POST',
                 body: data,
                 headers: headers,
             });
+            this.setUpdatingIndicator(false);
             if (response.ok) return await response.json();
             await this.throwResponseError(response);
         } catch (e) {
+            this.setUpdatingIndicator(false);
             this.throwConnectionError();
         }
     }
@@ -63,14 +75,17 @@ export class WebApiRepository {
         }
 
         try {
+            this.setUpdatingIndicator(true);
             const response = await fetch(`${WEB_API_URL}${endpoint}`, {
                 method: 'PUT',
                 body: JSON.stringify(body),
                 headers: headers,
             });
+            this.setUpdatingIndicator(false);
             if (response.ok) return await response.json();
             await this.throwResponseError(response);
         } catch (e) {
+            this.setUpdatingIndicator(false);
             this.throwConnectionError();
         }
     }
@@ -83,13 +98,17 @@ export class WebApiRepository {
         }
 
         try {
+            this.setUpdatingIndicator(true);
             const response = await fetch(`${WEB_API_URL}${endpoint}`, {
                 method: 'DELETE',
                 headers: headers,
             });
+
+            this.setUpdatingIndicator(false);
             if (response.ok) return await response.json();
             await this.throwResponseError(response);
         } catch (e) {
+            this.setUpdatingIndicator(false);
             this.throwConnectionError();
         }
     }
@@ -101,5 +120,9 @@ export class WebApiRepository {
 
     private throwConnectionError() {
         throw new ConnectionError('Ha ocurrido un error al tratar de conectar con el servidor');
+    }
+
+    private setUpdatingIndicator(status: boolean) {
+        this.updatingDBIndicatorSetter(status);
     }
 }

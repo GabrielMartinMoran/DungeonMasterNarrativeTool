@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.cfd9a9b2.css",
-    "main.js": "/static/js/main.c573eddb.js",
+    "main.css": "/static/css/main.5f8feb82.css",
+    "main.js": "/static/js/main.215f71bb.js",
     "static/media/Mr Eaves Small Caps.woff2": "/static/media/Mr Eaves Small Caps.7618853cc26e636d5da0.woff2",
     "static/media/Scaly Sans.woff2": "/static/media/Scaly Sans.dec3d8e1bea88db18166.woff2",
     "static/media/Solbera Imitation.woff2": "/static/media/Solbera Imitation.bed38437f1329af1722e.woff2",
@@ -10,11 +10,11 @@
     "static/media/Scaly Sans Caps.woff2": "/static/media/Scaly Sans Caps.0cb3d73216dd9a3252e4.woff2",
     "static/media/Bookinsanity.woff2": "/static/media/Bookinsanity.0c8c01dd9ce1523d1626.woff2",
     "index.html": "/index.html",
-    "main.cfd9a9b2.css.map": "/static/css/main.cfd9a9b2.css.map",
-    "main.c573eddb.js.map": "/static/js/main.c573eddb.js.map"
+    "main.5f8feb82.css.map": "/static/css/main.5f8feb82.css.map",
+    "main.215f71bb.js.map": "/static/js/main.215f71bb.js.map"
   },
   "entrypoints": [
-    "static/css/main.cfd9a9b2.css",
-    "static/js/main.c573eddb.js"
+    "static/css/main.5f8feb82.css",
+    "static/js/main.215f71bb.js"
   ]
 }
