@@ -43,7 +43,7 @@ def login(request: Request) -> Response:
 
 @route('/api/auth/password', http_methods.PUT)
 def change_logged_user_password(request: Request) -> Response:
-    service = UserRetriever(UserRepository())
+    service = UserModifier(UserRepository())
     service.set_password(request.token.username, request.body['password'])
     return jsonify({})
 

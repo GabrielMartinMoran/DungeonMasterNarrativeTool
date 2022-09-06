@@ -67,6 +67,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ appContext }) => {
                     value={username}
                     onChange={onUsernameChange}
                     placeholder="Usuario"
+                    autoFocus
                 />
                 <input
                     className="LoginPasswordInput"
