@@ -1,10 +1,6 @@
 import '../styles/CreateUserModal.css';
-import React, { useEffect, useState } from 'react';
-import { ShareIcon } from './icons/ShareIcon';
+import React, { useState } from 'react';
 import { AppContext } from '../app-context';
-import { NarrativeContext } from '../models/narrative-context';
-import { UserIcon } from './icons/UserIcon';
-import { RemoveIcon } from './icons/RemoveIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 
@@ -43,7 +39,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({ appContext, on
     };
 
     return (
-        <div className="CreateUserModal">
+        <form className="CreateUserModal" onSubmit={(e) => e.preventDefault()}>
             <h3>Crear usuario</h3>
             <input
                 className="LoginNameInput"
@@ -56,6 +52,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({ appContext, on
                     onInputChange(event.target.value, username, password);
                 }}
                 placeholder="Nombre"
+                autoFocus
             />
             <input
                 className="LoginUsernameInput"
@@ -88,12 +85,12 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({ appContext, on
                     </option>
                 ))}
             </select>
-            <button onClick={createUser} disabled={!createBtnEnabled}>
+            <button type="submit" onClick={createUser} disabled={!createBtnEnabled}>
                 <FontAwesomeIcon icon={faUserPlus} /> Crear
             </button>
             <button onClick={onClosed}>
                 <FontAwesomeIcon icon={faXmark} /> Cerrar
             </button>
-        </div>
+        </form>
     );
 };

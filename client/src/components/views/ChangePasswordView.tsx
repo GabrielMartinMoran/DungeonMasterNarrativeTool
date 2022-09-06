@@ -66,6 +66,7 @@ export const ChangePasswordView: React.FC<ChangePasswordViewProps> = ({ appConte
                     onChange={onPasswordChange}
                     placeholder="Contraseña nueva"
                     required={true}
+                    autoFocus
                 />
                 <input
                     className="ChangePasswordPasswordInput"

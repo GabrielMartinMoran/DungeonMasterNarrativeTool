@@ -31,10 +31,10 @@ export const CreateNarrativeContext: React.FC<CreateNarrativeContextProps> = ({ 
     };
 
     return (
-        <div className="CreateNarrativeContext">
-            <div className="CreateNarrativeContextContainer">
+        <div className="CreateNarrativeContext" onSubmit={(e) => e.preventDefault()}>
+            <form className="CreateNarrativeContextContainer">
                 <h3>Crear contexto narrativo</h3>
-                <input type="text" placeholder="Nombre" onChange={(event) => setName(event.target.value)} />
+                <input type="text" placeholder="Nombre" onChange={(event) => setName(event.target.value)} autoFocus/>
                 <select onChange={(event) => setType(event.target.value)}>
                     {NarrativeContext.TYPES.map((x) => (
                         <option key={x.type} value={x.type}>
@@ -42,13 +42,13 @@ export const CreateNarrativeContext: React.FC<CreateNarrativeContextProps> = ({ 
                         </option>
                     ))}
                 </select>
-                <button onClick={create}>
+                <button type="submit" onClick={create}>
                     <FontAwesomeIcon icon={faBook} /> Crear
                 </button>
                 <button onClick={() => navigate('/')}>
                     <FontAwesomeIcon icon={faArrowLeft} /> Cancelar
                 </button>
-            </div>
+            </form>
         </div>
     );
 };
