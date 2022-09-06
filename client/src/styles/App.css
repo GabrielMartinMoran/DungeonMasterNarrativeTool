@@ -1,35 +1,40 @@
+.AppContainer {
+}
+
 .App h1,
 .App h2,
 .App h3,
 .App h4 {
     margin-top: 0.2rem;
-    margin-bottom: 0.2rem;
-    font-family: MrJeeves;
-    font-weight: 800;
-    color: #58180d;
+    font-family: var(--titlesFontFamily);
+    font-weight: 100;
+    color: var(--titlesColor);
 }
 
 .App h1 {
     font-size: 3rem;
+    margin-bottom: 0.5rem;
 }
 
 .App h2 {
     font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .App h3 {
-    margin-top: 2rem;
     font-size: 1.5rem;
-    border-bottom: 2px solid #c9ad6a;
+    border-bottom: 2px solid var(--dividersColor);
+    margin-bottom: 0.5rem;
 }
 
 .App h4 {
     font-size: 1.3rem;
+    margin-bottom: -0.5rem;
 }
 
 .App h5 {
     margin-bottom: 0.2em;
-    font-family: ScalySansSmallCaps;
+    font-family: var(--fontFamily);
     font-size: 0.423cm;
     font-weight: 900;
 }
@@ -47,7 +52,6 @@
 
     .App h3 {
         font-size: 1.2rem;
-        margin-top: 2.3rem;
     }
 
     .App h4 {
@@ -60,28 +64,25 @@
 }
 
 .App blockquote {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
     box-sizing: border-box;
-    margin-bottom: 1em;
     padding: 5px 10px;
-    background-color: #e0e5c1;
-    border-style: solid;
-    border-width: 11px;
-    border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==')
-        11;
-    border-image-outset: 9px 0px;
+    background-color: var(--descriptionBlockColor);
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
     box-shadow: 1px 4px 14px #888;
     margin-left: 1rem;
     margin-right: 1rem;
+    font-style: italic;
 }
 
 .App blockquote em {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
     font-style: italic;
 }
 
 .App blockquote strong {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
     font-weight: 800;
     letter-spacing: -0.02em;
 }
@@ -102,22 +103,19 @@
 
 .App p,
 .App p code {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
 }
 
 .App pre,
 .App pre code {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
     display: block;
     box-sizing: border-box;
-    margin: 2.5rem 2.5rem 2.5rem 2.5rem;
+    margin: 0rem 2.5rem 0rem 2.5rem;
     padding: 5px 10px;
-    background-color: #e2d4c0;
-    border-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAAA8CAMAAADG+c2+AAAANlBMVEX///8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABHL6OuAAAAEXRSTlMABAwYJDRIXHSLo7fL2+fz+6go4VUAAAB6SURBVHgB7dg5DsJQAANRZ9+Xuf9lQUKKEHT5LlL4HWB6W5d61m1zrT/dhm5j6/RjPCkJco761ixQFoSl0aXfKQ+y9/qoJnAEYar01q64gqytNBz4ghyDMPMHnyYiIiIiIgIzYeYfj/Z56x3g7ovAf2L4bxb/EWS/ql7LZCDx/Ry3RwAAAABJRU5ErkJggg==')
-        11;
-    border-style: solid;
-    border-width: 11px;
-    border-image-outset: 9px 0px;
+    background-color: var(--gmBlockColor);
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
     box-shadow: 1px 4px 14px #888;
     line-height: 1.083em;
     font-size: 0.9rem;
@@ -137,7 +135,7 @@
 .App hr {
     margin: 1px;
     border: 0px;
-    border-top: 1px solid #c9ad6a;
+    border-top: 1px solid var(--dividersColor);
     margin: 1rem 1rem 1rem 1rem;
 }
 
@@ -148,25 +146,25 @@
 
 .App a:hover {
     text-decoration: underline;
-    color: blue;
+    color: var(--linksHoverColor);
 }
 
 .App li {
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
 }
 
 .App table {
     border-radius: 5px;
     border-collapse: collapse;
     text-align: center;
-    font-family: ScalySans;
+    font-family: var(--fontFamily);
     display: block;
     padding-right: 2rem;
 }
 
 .App tbody {
-    border-top: 3px solid #c9ad6a;
-    border-bottom: 3px solid #c9ad6a;
+    border-top: 3px solid var(--dividersColor);
+    border-bottom: 3px solid var(--dividersColor);
     width: 100%;
     display: table;
     position: relative;
@@ -180,9 +178,9 @@
 }
 
 .App tbody tr:nth-child(even) {
-    background-color: #c6d094;
+    background-color: var(--tableBodyEvenRow);
 }
 
 .App tbody tr:nth-child(odd) {
-    background-color: #f2f0e3;
+    background-color: var(--tableBodyOddRow);
 }

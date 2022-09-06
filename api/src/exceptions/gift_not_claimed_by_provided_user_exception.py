@@ -1,2 +1,0 @@
-class GiftNotClaimedByProvidedUserException(Exception):
-    pass

@@ -1,26 +1,20 @@
+import functools
 import gzip
 import os
 import json
+from typing import Optional, Tuple
 
-from flask import Flask, request, send_from_directory, jsonify
+from flask import Flask, request as flask_request, send_from_directory, Response
 from flask_cors import CORS
 from flask_compress import Compress
+from pymodelio.exceptions import ModelValidationException
 
 from src.database.db_migrator import DBMigrator
-from src.models.narrative_context import NarrativeContext
+from src.exceptions.element_not_found_exception import ElementNotFoundException
 from src.models.token import Token
-from src.repositories.imgur_repository import ImgurRepository
-from src.repositories.narrative_context_repository import NarrativeContextRepository
-from src.repositories.user_database_repository import UserDatabaseRepository
-from src.repositories.user_repository import UserRepository
 from src.config_provider import ConfigProvider
-from src.services.narrative_contexts.narrative_context_modifier import NarrativeContextModifier
-from src.services.dnd_5e_data_updater import DnD5EDataUpdater
-from src.services.narrative_contexts.narrative_context_remover import NarrativeContextRemover
-from src.services.narrative_contexts.narrative_context_retriever import NarrativeContextRetriever
-from src.services.narrative_contexts.narrative_context_sharer import NarrativeContextSharer
-from src.services.nivel_20_character_retriever import Nivel20CharacterRetriever
-from src.utils import http_methods, hashing
+from src.services.users.user_role_retriever import UserRoleRetriever
+from src.utils import router
 
 app = Flask(__name__, static_folder='./web')
 cors = CORS(app)
@@ -28,162 +22,71 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 compress = Compress(app)
 
 
-@app.before_request
-def before_request_callback():
-    # Decoding body
-    request.decoded_json = None
-    if request.data:
-        if getattr(request, 'content_encoding') == 'gzip':
-            request.decoded_json = json.loads(gzip.decompress(request.data))
-        else:
-            request.decoded_json = request.json
-
-    # Token
-    request.token = None
-    auth_header = request.headers.get('Authorization')
+def _get_request_token() -> Optional[Token]:
+    auth_header = flask_request.headers.get('Authorization')
     if not auth_header:
         return
     try:
-        request.token = Token.from_jwt(auth_header)
+        return Token.from_jwt(auth_header)
     except Exception as e:
         print(e)
+        return None
 
 
-@app.route('/api/auth/login', methods=[http_methods.POST])
-def login():
-    repo = UserRepository()
-    user = repo.get_by_credentials(
-        request.decoded_json.get('username'),
-        hashing.hash_password(request.decoded_json.get('password'))
-    )
-    if user:
+def _get_body() -> dict:
+    if not flask_request.data:
+        return {}
+    if getattr(flask_request, 'content_encoding') == 'gzip':
+        return json.loads(gzip.decompress(flask_request.data))
+    else:
+        return flask_request.json
+
+
+def _handle_error(e: Exception) -> Tuple[Response, int]:
+    print(e)
+    if isinstance(e, PermissionError):
         return jsonify({
-            'token': Token.from_user(user).to_jwt()
-        })
+            'type': 'permission_error',
+            'message': 'Forbidden'
+        }), 403
+    if isinstance(e, ElementNotFoundException):
+        return jsonify({
+            'type': 'element_not_found_error',
+            'message': 'Bad request'
+        }), 400
+    if isinstance(e, ModelValidationException):
+        return jsonify({
+            'type': 'validation_error',
+            'message': str(e)
+        }), 400
     return jsonify({
-        'message': 'Forbidden'
-    }), 403
+        'type': 'server_error',
+        'message': 'Internal server error'
+    }), 500
 
 
-@app.route('/api/database', methods=[http_methods.GET])
-def get_user_database():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    repo = UserDatabaseRepository()
-    database = repo.get(request.token.username)
-    return jsonify(database)
+def _check_permissions(token: Optional[Token], auth_required: bool, admin_required: bool) -> None:
+    if token is None and (auth_required or admin_required):
+        raise PermissionError()
+    if admin_required and not UserRoleRetriever(UserRepository()).is_admin(token.username):
+        raise PermissionError()
 
 
-@app.route('/api/narrative_contexts', methods=[http_methods.GET])
-def list_narrative_contexts():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    repo = NarrativeContextRepository()
-    narrative_contexts = repo.list(request.token.username)
-    return jsonify([x.to_dict() for x in narrative_contexts])
+def _route(path: str, http_method: str, auth_required: bool = True, admin_required: bool = False):
+    def outer(endpoint_method):
+        @app.route(path, methods=[http_method])
+        @functools.wraps(endpoint_method)
+        def inner(*f_args, **f_kwargs):
+            request = Request(token=_get_request_token(), body=_get_body())
+            try:
+                _check_permissions(request.token, auth_required, admin_required)
+                return endpoint_method(request, *f_args, **f_kwargs)
+            except Exception as e:
+                return _handle_error(e)
 
+        return inner
 
-@app.route('/api/narrative_contexts/shared', methods=[http_methods.GET])
-def list_shared_narrative_contexts():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    repo = NarrativeContextRepository()
-    narrative_contexts = repo.list_shared(request.token.username)
-    return jsonify([x.to_dict() for x in narrative_contexts])
-
-
-@app.route('/api/narrative_contexts/<string:narrative_context_id>', methods=[http_methods.GET])
-def get_narrative_context(narrative_context_id: str):
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    service = NarrativeContextRetriever(NarrativeContextRepository())
-    narrative_context = service.get(request.token.username, narrative_context_id)
-    return jsonify(narrative_context.to_dict())
-
-
-@app.route('/api/narrative_contexts', methods=[http_methods.POST])
-def save_narrative_contexts():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    narrative_context = NarrativeContext.from_dict({
-        **request.decoded_json,
-        **{
-            'username': request.token.username
-        }
-    })
-    enlightened = NarrativeContextModifier(NarrativeContextRepository(), ImgurRepository()).save(narrative_context)
-    return jsonify({
-        'reload_suggested': enlightened
-    })
-
-
-@app.route('/api/narrative_contexts/<string:narrative_context_id>', methods=[http_methods.DELETE])
-def delete_narrative_context(narrative_context_id: str):
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    service = NarrativeContextRemover(NarrativeContextRepository())
-    service.delete(request.token.username, narrative_context_id)
-    return jsonify({})
-
-
-@app.route('/api/narrative_contexts/shared/<string:narrative_context_id>', methods=[http_methods.GET])
-def get_narrative_context_shared_users(narrative_context_id: str):
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    service = NarrativeContextRetriever(NarrativeContextRepository())
-    usernames = service.get_shared_usernames(request.token.username, narrative_context_id)
-    return jsonify(usernames)
-
-
-@app.route('/api/narrative_contexts/share', methods=[http_methods.POST])
-def share_narrative_context():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    NarrativeContextSharer(NarrativeContextRepository(), UserRepository()).share(
-        request.token.username,
-        request.decoded_json['username'],
-        request.decoded_json['narrative_context_id']
-    )
-    return jsonify({})
-
-@app.route('/api/narrative_contexts/unshare', methods=[http_methods.POST])
-def unshare_narrative_context():
-    if not request.token:
-        return jsonify({
-            'message': 'Forbidden'
-        }), 403
-    NarrativeContextSharer(NarrativeContextRepository(), UserRepository()).unshare(
-        request.token.username,
-        request.decoded_json['username'],
-        request.decoded_json['narrative_context_id']
-    )
-    return jsonify({})
-
-
-@app.route('/api/dnd_5e/data', methods=[http_methods.GET])
-def get_dnd_5e_data():
-    return jsonify(DnD5EDataUpdater().get_data())
-
-
-@app.route('/api/dnd_5e/characters/<string:character_id>', methods=[http_methods.GET])
-def get_dnd_5e_character(character_id: str):
-    return jsonify(Nivel20CharacterRetriever().get_character(character_id))
+    return outer
 
 
 @app.route('/', defaults={
@@ -196,6 +99,13 @@ def serve(path):
         return send_from_directory(os.path.join(path_dir), path, max_age=-1)
     else:
         return send_from_directory(os.path.join(path_dir), 'index.html', max_age=-1)
+
+
+# Set router 'route' method with the decorator defined here based on the app
+router.route = _route
+
+# Import routes here because first we have to set router.route
+from src.routes import *
 
 
 def on_starting(server):

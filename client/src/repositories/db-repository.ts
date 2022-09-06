@@ -78,14 +78,14 @@ export class DBRepository {
         await DBRepository._dbSyncRepository.unshareNarrativeContext(username, narrativeContextId);
     }
 
-    registerAfterSaveHook(hook: () => void) {
-        DBRepository._afterSaveHooks.push(hook);
-    }
-
     static _callAfterSaveHooks() {
         for (const hook of DBRepository._afterSaveHooks) {
             hook();
         }
+    }
+
+    registerAfterSaveHook(hook: () => void) {
+        DBRepository._afterSaveHooks.push(hook);
     }
 
     registerOnDirtyDBCallback(callback: () => void) {

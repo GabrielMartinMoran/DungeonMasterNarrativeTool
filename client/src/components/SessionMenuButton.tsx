@@ -18,7 +18,7 @@ export const SessionMenuButton: React.FC<SessionMenuButtonProps> = ({ appContext
     };
 
     const logout = () => {
-        appContext.getRepository(AuthRepository).logout();
+        appContext.repositories.auth.logout();
     };
 
     const changePassword = () => {

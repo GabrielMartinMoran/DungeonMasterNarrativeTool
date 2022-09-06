@@ -26,17 +26,8 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
 
     useEffect(() => {
         const init = async () => {
-            appContext.setNarrativeContextById(narrativeContextId!);
-            let obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
-            // If it was not obatined from the user narrative contexts, search on the shared ones
-            if (!obtainedNarrativeContext)
-                obtainedNarrativeContext = appContext.getDB().getSharedNarrativeContext(narrativeContextId!);
-            if (!obtainedNarrativeContext || obtainedNarrativeContext.isOnlyReference()) {
-                await appContext.pullNarrativeContext(narrativeContextId!);
-                obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
-                if (!obtainedNarrativeContext)
-                    obtainedNarrativeContext = appContext.getDB().getSharedNarrativeContext(narrativeContextId!);
-            }
+            await appContext.setNarrativeContextById(narrativeContextId!);
+            const obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
             setNarrativeContext(obtainedNarrativeContext);
             setNarrativeContextCategories(obtainedNarrativeContext.narrativeCategories);
             appContext.setBackButtonUrl('/');
@@ -46,14 +37,13 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
         init();
     }, []);
 
-    const addNarrativeCategory = () => {
+    const addNarrativeCategory = async () => {
         const categoryName = window.prompt('Ingresa nombre de la categoría');
         if (categoryName) {
             const category = new NarrativeCategory(categoryName);
-            const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
+            const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
             narrativeContext.addNarrativeCategory(category);
-            //appContext.saveDB();
-            appContext.saveNarrativeContext(narrativeContext);
+            await appContext.repositories.narrativeContext.save(narrativeContext!);
             setNarrativeContextCategories([...narrativeContext.narrativeCategories]);
         }
     };
@@ -65,26 +55,23 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
             }`
         );
         if (!shouldDelete) return;
-        //appContext.saveDB();
-        await appContext.deleteNarrativeContext(narrativeContextId!);
-        appContext.getDB().removeNarrativeContext(narrativeContextId!);
+        await appContext.repositories.narrativeContext.delete(narrativeContextId!);
         navigate('/');
     };
 
-    const renameMarrativeContext = () => {
+    const renameMarrativeContext = async () => {
         const name = window.prompt(
             `Ingresa el nuevo nombre de ${narrativeContext!.type === 'world' ? 'el mundo' : 'la campaña'}`,
             narrativeContext!.name
         );
         if (!name) return;
         narrativeContext!.name = name;
-        //appContext.saveDB();
-        appContext.saveNarrativeContext(narrativeContext!);
+        await appContext.repositories.narrativeContext.save(narrativeContext!);
         setNarrativeContext(NarrativeContext.fromJson(narrativeContext!.toJson()));
-        appContext.setNarrativeContextById(null);
-        setTimeout(() => {
+        await appContext.setNarrativeContextById(null);
+        setTimeout(async () => {
             setNarrativeContext(narrativeContext);
-            appContext.setNarrativeContextById(narrativeContextId!);
+            await appContext.setNarrativeContextById(narrativeContextId!);
         }, 0);
     };
 
@@ -92,17 +79,15 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
         setNarrativeContextCategories([...narrativeContext!.narrativeCategories]);
     };
 
-    const moveCategoryUp = (category: NarrativeCategory) => {
+    const moveCategoryUp = async (category: NarrativeCategory) => {
         narrativeContext!.moveNarrativeCategoryUp(category.id);
-        //appContext.saveDB();
-        appContext.saveNarrativeContext(narrativeContext!);
+        await appContext.repositories.narrativeContext.save(narrativeContext!);
         setNarrativeContextCategories([...narrativeContext!.narrativeCategories]);
     };
 
-    const moveCategoryDown = (category: NarrativeCategory) => {
+    const moveCategoryDown = async (category: NarrativeCategory) => {
         narrativeContext!.moveNarrativeCategoryDown(category.id);
-        //appContext.saveDB();
-        appContext.saveNarrativeContext(narrativeContext!);
+        await appContext.repositories.narrativeContext.save(narrativeContext!);
         setNarrativeContextCategories([...narrativeContext!.narrativeCategories]);
     };
 
@@ -141,14 +126,18 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
                         {narrativeContext?.name}
                     </h1>
                     <div className="textRight narrativeContextTitleButtons">
-                        <button onClick={addNarrativeCategory}>
-                            <CreateIcon />
-                            <span className="tooltip">Crear categoría</span>
-                        </button>
-                        <button onClick={renameMarrativeContext}>
-                            <RenameIcon />
-                            <span className="tooltip">Renombrar</span>
-                        </button>
+                        {narrativeContext?.isEditable ? (
+                            <>
+                                <button onClick={addNarrativeCategory}>
+                                    <CreateIcon />
+                                    <span className="tooltip">Crear categoría</span>
+                                </button>
+                                <button onClick={renameMarrativeContext}>
+                                    <RenameIcon />
+                                    <span className="tooltip">Renombrar</span>
+                                </button>
+                            </>
+                        ) : null}
                         <a hidden={true} id="narrativeContextDownloadLink" href="/">
                             {' '}
                         </a>
@@ -156,27 +145,40 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
                             <ExportNarrativeContextIcon />
                             <span className="tooltip">Exportar</span>
                         </button>
-                        <button onClick={() => setShareModalVisible(true)}>
-                            <ShareIcon />
-                            <span className="tooltip">Compartir</span>
-                        </button>
-                        <button onClick={deleteNarrativeContext}>
-                            <DeleteIcon />
-                            <span className="tooltip">Eliminar</span>
-                        </button>
+                        {narrativeContext?.isEditable ? (
+                            <>
+                                <button onClick={() => setShareModalVisible(true)}>
+                                    <ShareIcon />
+                                    <span className="tooltip">Compartir</span>
+                                </button>
+
+                                <button onClick={deleteNarrativeContext}>
+                                    <DeleteIcon />
+                                    <span className="tooltip">Eliminar</span>
+                                </button>
+                            </>
+                        ) : null}
                     </div>
                 </div>
-                {narrativeContextCategories.map((category) => (
-                    <NarrativeCategoryComponent
-                        key={category.id}
-                        appContext={appContext}
-                        narrativeCategory={category}
-                        narrativeContext={narrativeContext!}
-                        onCategoryChange={onCategoryChange}
-                        moveCategoryUp={moveCategoryUp}
-                        moveCategoryDown={moveCategoryDown}
-                    />
-                ))}
+                {narrativeContextCategories.length > 0 ? (
+                    narrativeContextCategories.map((category) => (
+                        <NarrativeCategoryComponent
+                            key={category.id}
+                            appContext={appContext}
+                            narrativeCategory={category}
+                            narrativeContext={narrativeContext!}
+                            onCategoryChange={onCategoryChange}
+                            moveCategoryUp={moveCategoryUp}
+                            moveCategoryDown={moveCategoryDown}
+                        />
+                    ))
+                ) : (
+                    <div className='EmptyNarrativeContextText'>
+                        {narrativeContext?.isEditable
+                            ? 'Todavía no has creado ninguna categoría para este contexto narrativo...'
+                            : 'Parece que este contexto narrativo esta vacío!'}
+                    </div>
+                )}
             </div>
         </>
     );

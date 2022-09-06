@@ -26,14 +26,14 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
         setEditMode(true);
     };
 
-    const save = () => {
+    const save = async () => {
         if (!hasChangedAtLeastOneTime) {
             discardChanges();
             return;
         }
         element.body = currentEditorValue;
-        const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
-        appContext.saveNarrativeContext(narrativeContext);
+        const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
+        await appContext.repositories.narrativeContext.save(narrativeContext);
         setEditMode(false);
     };
 

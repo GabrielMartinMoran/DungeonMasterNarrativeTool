@@ -13,7 +13,7 @@
 }
 
 .sessionIconButton:hover {
-    color: #c9ad6a;
+    color: var(--dividersColor)
 }
 
 .dropdownBody {

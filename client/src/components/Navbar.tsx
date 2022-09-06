@@ -1,5 +1,5 @@
 import '../styles/Navbar.css';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SessionMenuButton } from './SessionMenuButton';
 import { AuthRepository } from '../repositories/auth-repository';
@@ -7,21 +7,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faDiceD20 } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../app-context';
 import { NarrativeContext } from '../models/narrative-context';
+import { MenuIcon } from './icons/MenuIcon';
+import logo from '../assets/img/logo.png';
 
 export type NavbarProps = {
     appContext: AppContext;
+    toggleShowMenu: () => void;
 };
 
-export const Navbar: React.FC<NavbarProps> = ({ appContext }) => {
+export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) => {
     const [backButtonUrl, setBackButtonUrl] = useState('/');
     const [forwardButtonUrl, setForwardButtonUrl] = useState('/');
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const navigate = useNavigate();
+    const menuButtonRef = useRef(null);
 
-    const setNarrativeContextById = (narrativeContextId: string) => {
+    useEffect(() => {
+        appContext.menuButtonRef = menuButtonRef;
+        return () => {
+            appContext.menuButtonRef = null;
+        };
+    }, []);
+
+    const setNarrativeContextById = async (narrativeContextId: string) => {
         let obtainedNarrativeContext = null;
         if (narrativeContextId) {
-            obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId);
+            obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
         }
         setNarrativeContext(obtainedNarrativeContext);
     };
@@ -45,12 +56,10 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext }) => {
     return (
         <div className="Navbar">
             <div className="navbarContent">
-                <div className="flex1">
-                    <Link to={`/`} id="homeTitleLink">
-                        <FontAwesomeIcon icon={faDiceD20} /> Inicio
-                    </Link>
-                </div>
-                <div className="textCenter">
+                <span ref={menuButtonRef} className="toggleMenuBtn" onClick={toggleShowMenu}>
+                    <MenuIcon />
+                </span>
+                <div className="NavbarNarrativeContextName">
                     {narrativeContext ? (
                         <Link
                             to={`/narrative-context/${narrativeContext.narrativeContextId}`}
@@ -82,11 +91,6 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext }) => {
                             <FontAwesomeIcon icon={faAngleRight} className="inactiveLink" />
                         )}
                     </span>
-                    {appContext.getRepository(AuthRepository).isAuthenticated() ? (
-                        <SessionMenuButton appContext={appContext} />
-                    ) : (
-                        <></>
-                    )}
                 </div>
             </div>
         </div>

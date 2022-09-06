@@ -1,21 +1,24 @@
+import { renderToReadableStream } from 'react-dom/server';
+import { AppContextRepositories } from './app-context-repositories';
 import { NarrativeContext } from './models/narrative-context';
+import { User } from './models/user';
 import { DBRepository } from './repositories/db-repository';
 
 export class AppContext {
-    _repositories: any;
     _narrativeContextId: string | null = null;
     setUpdatingDBIndicator = (status: boolean) => {};
     elementListItemExpandedStatuses: any = {};
 
+    protected _repositories: AppContextRepositories;
+    protected _authenticatedUser: User | null = null;
+    menuButtonRef: any | null;
+
     constructor() {
-        this._repositories = {};
+        this._repositories = new AppContextRepositories();
     }
 
-    getRepository(repositoryClass: any) {
-        if (!this._repositories[repositoryClass]) {
-            this._repositories[repositoryClass] = new repositoryClass();
-        }
-        return this._repositories[repositoryClass];
+    public get repositories(): AppContextRepositories {
+        return this._repositories;
     }
 
     // To be overrided
@@ -25,50 +28,15 @@ export class AppContext {
     setForwardButtonUrl(url: string | null) {}
 
     // To be overrided
-    _setNarrativeContextById(narrativeContextId: string | null) {}
+    public async _setNarrativeContextById(narrativeContextId: string | null) {}
 
-    setNarrativeContextById(narrativeContextId: string | null) {
+    public async setNarrativeContextById(narrativeContextId: string | null) {
         this._narrativeContextId = narrativeContextId;
-        this._setNarrativeContextById(narrativeContextId);
+        await this._setNarrativeContextById(narrativeContextId);
     }
 
     getNarrativeContextId() {
         return this._narrativeContextId;
-    }
-
-    getDB() {
-        return DBRepository._db;
-    }
-
-    async getNarrativeContextSharedUsernames(narrativeContextId: string) {
-        return await DBRepository._getNarrativeContextSharedUsernames(narrativeContextId);
-    }
-
-    async pullNarrativeContext(narrativeContextId: string) {
-        await DBRepository._pullNarrativeContext(narrativeContextId);
-    }
-
-    async deleteNarrativeContext(narrativeContextId: string) {
-        await DBRepository._deleteNarrativeContext(narrativeContextId);
-    }
-
-    async saveNarrativeContext(narrativeContext: NarrativeContext) {
-        DBRepository.setUpdatingDBIndicator = this.setUpdatingDBIndicator;
-        // console.log('Enviando datos al servidor de la aplicación...');
-        try {
-            await DBRepository._saveNarrativeContext(narrativeContext);
-            // console.log('Los datos se enviaron al servidor correctamente!');
-        } catch {
-            alert('Ha ocurrido un error al tratar de enviar los cambios al servidor de la aplicación!');
-        }
-    }
-
-    async shareNarrativeContext(username: string, narrativeContextId: string) {
-        await DBRepository._shareNarrativeContext(username, narrativeContextId);
-    }
-
-    async unshareNarrativeContext(username: string, narrativeContextId: string) {
-        await DBRepository._unshareNarrativeContext(username, narrativeContextId);
     }
 
     // To be overrided
@@ -92,4 +60,12 @@ export class AppContext {
     navigateToPreviousElement() {}
     // To be overrided
     navigateToNextElement() {}
+
+    public async pullAuthenticatedUserInfo() {
+        this._authenticatedUser = await this.repositories.auth.getAuthenticatedUser();
+    }
+
+    public get authenticatedUser(): User {
+        return this._authenticatedUser!;
+    }
 }

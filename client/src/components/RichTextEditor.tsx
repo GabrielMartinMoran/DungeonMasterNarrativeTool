@@ -23,6 +23,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
                 tag: 'p',
                 name: 'Párrafo',
             },
+            /*
             {
                 tag: 'h1',
                 name: 'Título',
@@ -31,6 +32,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
                 tag: 'h2',
                 name: 'Subtítulo',
             },
+            */
             {
                 tag: 'h3',
                 name: 'Sección',
@@ -45,7 +47,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
             },
             {
                 tag: 'pre',
-                name: 'Notas de DM',
+                name: 'Notas del director de juego',
             },
             //'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
         ],

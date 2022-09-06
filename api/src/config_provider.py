@@ -21,3 +21,6 @@ class ConfigProvider:
 
     IMGUR_CLIENT_ID = os.environ.get('IMGUR_CLIENT_ID', None)
     IMGUR_CLIENT_SECRET = os.environ.get('IMGUR_CLIENT_SECRET', None)
+
+    COMMONER_ROLE = 'commoner'
+    ADMIN_ROLE = 'admin'

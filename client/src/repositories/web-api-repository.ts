@@ -1,26 +1,32 @@
-const Pako = require('pako');
 import { WEB_API_URL } from '../config';
+import { ConnectionError } from '../errors/connection-error';
+const Pako = require('pako');
 
 export class WebApiRepository {
-    _get_token() {
+    protected _get_token() {
         return localStorage.getItem('token');
     }
 
-    async _get(endpoint: string) {
+    protected async _get(endpoint: string) {
         const headers: any = { 'Content-Type': 'application/json' };
         const authToken = this._get_token();
         if (authToken) {
             headers['Authorization'] = authToken;
         }
-        const response = await fetch(`${WEB_API_URL}${endpoint}`, {
-            method: 'GET',
-            headers: headers,
-        });
-        if (response.ok) return await response.json();
-        throw await response.json();
+
+        try {
+            const response = await fetch(`${WEB_API_URL}${endpoint}`, {
+                method: 'GET',
+                headers: headers,
+            });
+            if (response.ok) return await response.json();
+            await this.throwResponseError(response);
+        } catch (e) {
+            this.throwConnectionError();
+        }
     }
 
-    async _post(endpoint: string, body: any) {
+    protected async _post(endpoint: string, body: any) {
         const headers: any = { 'Content-Type': 'application/json' };
         const authToken = this._get_token();
         if (authToken) {
@@ -36,42 +42,64 @@ export class WebApiRepository {
             headers['Content-Encoding'] = undefined;
             data = stringBody;
         }
-
-        const response = await fetch(`${WEB_API_URL}${endpoint}`, {
-            method: 'POST',
-            body: data,
-            headers: headers,
-        });
-        if (response.ok) return await response.json();
-        throw await response.json();
+        try {
+            const response = await fetch(`${WEB_API_URL}${endpoint}`, {
+                method: 'POST',
+                body: data,
+                headers: headers,
+            });
+            if (response.ok) return await response.json();
+            await this.throwResponseError(response);
+        } catch (e) {
+            this.throwConnectionError();
+        }
     }
 
-    async _put(endpoint: string, body: any) {
+    protected async _put(endpoint: string, body: any) {
         const headers: any = { 'Content-Type': 'application/json' };
         const authToken = this._get_token();
         if (authToken) {
             headers['Authorization'] = authToken;
         }
-        const response = await fetch(`${WEB_API_URL}${endpoint}`, {
-            method: 'PUT',
-            body: JSON.stringify(body),
-            headers: headers,
-        });
-        if (response.ok) return await response.json();
-        throw await response.json();
+
+        try {
+            const response = await fetch(`${WEB_API_URL}${endpoint}`, {
+                method: 'PUT',
+                body: JSON.stringify(body),
+                headers: headers,
+            });
+            if (response.ok) return await response.json();
+            await this.throwResponseError(response);
+        } catch (e) {
+            this.throwConnectionError();
+        }
     }
 
-    async _delete(endpoint: string) {
+    protected async _delete(endpoint: string) {
         const headers: any = { 'Content-Type': 'application/json' };
         const authToken = this._get_token();
         if (authToken) {
             headers['Authorization'] = authToken;
         }
-        const response = await fetch(`${WEB_API_URL}${endpoint}`, {
-            method: 'DELETE',
-            headers: headers,
-        });
-        if (response.ok) return await response.json();
-        throw await response.json();
+
+        try {
+            const response = await fetch(`${WEB_API_URL}${endpoint}`, {
+                method: 'DELETE',
+                headers: headers,
+            });
+            if (response.ok) return await response.json();
+            await this.throwResponseError(response);
+        } catch (e) {
+            this.throwConnectionError();
+        }
+    }
+
+    private async throwResponseError(response: Response) {
+        const data = await response.json();
+        throw data;
+    }
+
+    private throwConnectionError() {
+        throw new ConnectionError('Ha ocurrido un error al tratar de conectar con el servidor');
     }
 }

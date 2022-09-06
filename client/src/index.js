@@ -4,15 +4,11 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { AppContext } from './app-context';
 import { DataCorruptionPreventer } from './services/data-corruption-preventer';
-import { DBRepository } from './repositories/db-repository';
-import { AuthRepository } from './repositories/auth-repository';
 import { KeyboardShortcutsHandler } from './utils/keyboard-shorcuts-handler';
 
 const appContext = new AppContext();
 const dataCorruptionPreventer = new DataCorruptionPreventer(appContext);
 const keyboardShortcutsHandler = new KeyboardShortcutsHandler(appContext);
-const dbRepo = appContext.getRepository(DBRepository);
-const authRepo = appContext.getRepository(AuthRepository);
 
 const renderApp = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -26,9 +22,6 @@ const renderApp = () => {
 // Just download the remote DB if use is logged in
 const start = async () => {
     try {
-        if (authRepo.isAuthenticated()) {
-            await dbRepo.tryGetCloudDB();
-        }
         dataCorruptionPreventer.start();
         keyboardShortcutsHandler.registerKeyboardShortcuts();
         renderApp();
@@ -37,12 +30,12 @@ const start = async () => {
     }
 };
 
-authRepo.onLogin = () => {
-    window.location = '/';
+appContext.repositories.auth.onLogin = () => {
+    window.location.assign('/');
 };
 
-authRepo.onLogout = () => {
-    window.location = '/login';
+appContext.repositories.auth.onLogout = () => {
+    window.location.assign('/login');
 };
 
 start();

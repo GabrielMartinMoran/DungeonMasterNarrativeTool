@@ -4,9 +4,11 @@ import { ArrayUtils } from '../utils/array-utils';
 import { BaseElement } from './base-element';
 
 export class NarrativeContext {
+    static CAMPAIGN_TYPE = 'campaign';
+    static WORLD_TYPE = 'world';
     static TYPES: any[] = [
-        { type: 'world', name: 'Mundo' },
-        { type: 'campaign', name: 'Campaña' },
+        { type: this.WORLD_TYPE, name: 'Mundo' },
+        { type: this.CAMPAIGN_TYPE, name: 'Campaña' },
     ];
 
     narrativeContextId: string;
@@ -15,6 +17,7 @@ export class NarrativeContext {
     name: string;
     narrativeCategories: NarrativeCategory[];
     isReference: boolean;
+    isEditable: boolean;
 
     constructor(
         narrativeContextId: string | null,
@@ -22,7 +25,8 @@ export class NarrativeContext {
         type: string,
         name: string,
         narrativeCategories: NarrativeCategory[] = [],
-        isReference: boolean = false
+        isReference: boolean = false,
+        isEditable: boolean = false
     ) {
         if (!NarrativeContext.TYPES.find((x: any) => x.type === type)) throw Error('Invalid type');
         this.narrativeContextId = narrativeContextId ?? IdGenerator.generateId();
@@ -31,6 +35,7 @@ export class NarrativeContext {
         this.name = name;
         this.narrativeCategories = narrativeCategories;
         this.isReference = isReference;
+        this.isEditable = isEditable;
     }
 
     getNarrativeCategory(categoryId: string): NarrativeCategory {
@@ -87,6 +92,18 @@ export class NarrativeContext {
         return this.isReference;
     }
 
+    public isCampaign(): boolean {
+        return this.type === NarrativeContext.CAMPAIGN_TYPE;
+    }
+
+    public isWorld(): boolean {
+        return this.type === NarrativeContext.WORLD_TYPE;
+    }
+
+    public regenerateId(): void {
+        this.narrativeContextId = IdGenerator.generateId();
+    }
+
     toJson(): any {
         return {
             narrative_context_id: this.narrativeContextId,
@@ -104,7 +121,8 @@ export class NarrativeContext {
             data.type,
             data.name,
             (data.narrative_categories ?? []).map((x: any) => NarrativeCategory.fromJson(x)),
-            data.isReference
+            data.isReference,
+            data.isEditable
         );
     }
 }

@@ -1,2 +1,23 @@
 .LoginView {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.LoginView h1 {
+    display: flex;
+    align-self: center;
+}
+
+.LoginContainer {
+    align-self: center;
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    border: 2px solid var(--dividersColor);
+    padding: 1rem;
+}
+
+.LoginContainer input {
+    margin-bottom: 1rem;
 }

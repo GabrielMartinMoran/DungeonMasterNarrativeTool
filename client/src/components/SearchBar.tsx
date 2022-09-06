@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../app-context';
 import { BaseElement } from '../models/base-element';
+import { NarrativeContext } from '../models/narrative-context';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 let _searchResults: any[] = [];
 let _resultIndex = -1;
@@ -16,6 +19,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
 
     const [searchResults, setSearchResults] = useState<BaseElement[]>([]);
     const [resultIndex, setResultIndex] = useState(-1);
+    const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
 
     const moveIndexUp = () => {
         if (_searchResults.length === 0) {
@@ -43,9 +47,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
         setResultIndex(_resultIndex);
     };
 
-    const generateElementLink = (element: BaseElement) => {
-        const db = appContext.getDB();
-        const narrativeContext = db.getNarrativeContext(appContext.getNarrativeContextId()!);
+    const generateElementLink = (element: BaseElement): string => {
+        if (!narrativeContext) return '';
         const narrativeCategory = narrativeContext.getNarrativeCategoryByElementId(element.id);
         return `/narrative-context/${appContext.getNarrativeContextId()}/${narrativeCategory!.id}/${element.id}`;
     };
@@ -84,27 +87,24 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
     };
 
     useEffect(() => {
-        // Anything in here is fired on component mount.
-        document.addEventListener('keydown', moveIndex);
-        search('');
+        const init = async () => {
+            setNarrativeContext(
+                await appContext.repositories.narrativeContext.get(appContext.getNarrativeContextId()!)
+            );
+            // Anything in here is fired on component mount.
+            document.addEventListener('keydown', moveIndex);
+            search('');
+        };
+        init();
         return () => {
             // Anything in here is fired on component unmount.
             document.removeEventListener('keydown', moveIndex);
         };
-    }, []);
+    }, [narrativeContext]);
 
     const search = (term: string) => {
-        /*if (!term) {
-            _searchResults = [];
-            _resultIndex = -1;
-            setSearchResults(_searchResults);
-            setResultIndex(_resultIndex);
-            return;
-        }*/
-        const db = appContext.getDB();
-        const narrativeContextId = appContext.getNarrativeContextId();
-        if (narrativeContextId) {
-            const elements = db.searchTerm(term, narrativeContextId);
+        if (narrativeContext) {
+            const elements = narrativeContext.searchTerm(term);
             _searchResults = elements;
             _resultIndex = elements.length > 0 ? 0 : -1;
         } else {
@@ -125,6 +125,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
                     placeholder="Ingrese el término a buscar"
                     className="searchBarInput"
                 />
+                <button onClick={appContext.hideSearchBar}>
+                    <FontAwesomeIcon icon={faXmark} /> Cerrar
+                </button>
             </div>
             <div className="searchResultsContainer">
                 {searchResults.map((element: BaseElement, i: number) => (

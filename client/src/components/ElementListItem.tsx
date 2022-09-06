@@ -15,12 +15,14 @@ import { CollapseIcon } from './icons/CollapseIcon';
 import { ExpandIcon } from './icons/ExpandIcon';
 import { AppContext } from '../app-context';
 import { ContainerElement } from '../models/container-element';
+import { Container } from 'react-dom';
 
 export type ElementListItemProps = {
     appContext: AppContext;
     narrativeContextId: string;
     narrativeCategoryId: string;
     element: BaseElement;
+    isEditable: boolean;
     onMoveElementUp: (element: BaseElement) => void;
     onMoveElementDown: (element: BaseElement) => void;
     onDeleteElement: (element: BaseElement) => void;
@@ -34,6 +36,7 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
     narrativeContextId,
     narrativeCategoryId,
     element,
+    isEditable,
     onMoveElementUp,
     onMoveElementDown,
     onDeleteElement,
@@ -112,7 +115,7 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
             onMouseEnter={highlightElement}
             onMouseLeave={unhighlightElement}
         >
-            <div className={'flex ' + (highlight ? 'highlightedListItem' : '')}>
+            <div className={'flex ' + (highlight ? 'highlightedListItem' : 'unhighlightedListItem')}>
                 {isContainer() ? (
                     <button className="collapseExpandButton" onClick={() => toggleExpand()}>
                         {expanded ? <CollapseIcon /> : <ExpandIcon />}
@@ -134,23 +137,27 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
                 </div>
 
                 <div className="textRight">
-                    {isContainer() ? <CreateElementButton onClick={createChildElement} /> : <></>}
-                    <button onClick={() => onRenameElement(element)}>
-                        <RenameIcon />
-                        <span className="tooltip">Renombrar</span>
-                    </button>
-                    <button onClick={() => onMoveElementUp(element)}>
-                        <MoveUpIcon />
-                        <span className="tooltip">Subir</span>
-                    </button>
-                    <button onClick={() => onMoveElementDown(element)}>
-                        <MoveDownIcon />
-                        <span className="tooltip">Bajar</span>
-                    </button>
-                    <button onClick={() => onDeleteElement(element)}>
-                        <DeleteIcon />
-                        <span className="tooltip">Eliminar</span>
-                    </button>
+                    {isEditable ? (
+                        <>
+                            {isContainer() ? <CreateElementButton onClick={createChildElement} /> : <></>}
+                            <button onClick={() => onRenameElement(element)}>
+                                <RenameIcon />
+                                <span className="tooltip">Renombrar</span>
+                            </button>
+                            <button onClick={() => onMoveElementUp(element)}>
+                                <MoveUpIcon />
+                                <span className="tooltip">Subir</span>
+                            </button>
+                            <button onClick={() => onMoveElementDown(element)}>
+                                <MoveDownIcon />
+                                <span className="tooltip">Bajar</span>
+                            </button>
+                            <button onClick={() => onDeleteElement(element)}>
+                                <DeleteIcon />
+                                <span className="tooltip">Eliminar</span>
+                            </button>
+                        </>
+                    ) : null}
                 </div>
             </div>
             {isContainer() ? (
@@ -163,6 +170,7 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
                                 narrativeContextId={narrativeContextId}
                                 narrativeCategoryId={narrativeCategoryId}
                                 element={childElement}
+                                isEditable={isEditable}
                                 onMoveElementUp={moveChildElementUp}
                                 onMoveElementDown={moveChildElementDown}
                                 onDeleteElement={deleteChildElement}

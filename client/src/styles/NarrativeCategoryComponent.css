@@ -1,9 +1,9 @@
 .narrativeCategoryTitleButtons {
     position: relative;
-    bottom: -2rem;
+    bottom: -0.5rem;
     margin-bottom: 1rem;
 }
 
 .narrativeCategoryElements {
-    margin-top: 1rem;
+    margin-bottom: 1rem;
 }

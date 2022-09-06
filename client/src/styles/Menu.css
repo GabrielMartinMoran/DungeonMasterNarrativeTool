@@ -1,0 +1,41 @@
+.Menu {
+    position: fixed;
+    z-index: 100;
+    background-color: var(--menuBackgroundColor);
+    background-image: var(--backgroundImage);
+    width: auto;
+    border-right: 2px solid var(--dividersColor);
+    height: 100vh;
+    top: 0px;
+    padding-left: 0.5rem;
+    padding-top: calc(1rem + var(--navbarSize));
+    padding-bottom: 1rem;
+    padding-right: 1rem;
+}
+
+.MenuContainer {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+.MenuContainer a,
+span {
+    margin-left: 0.5rem;
+    text-decoration: none;
+}
+
+.MenuContainer span {
+    cursor: pointer;
+}
+
+.MenuContainer span:hover {
+    color: var(--linksHoverColor);
+    text-decoration: underline;
+}
+
+.MenuContainer h3 {
+    font-size: 1.6rem;
+    margin-top: 1rem;
+}

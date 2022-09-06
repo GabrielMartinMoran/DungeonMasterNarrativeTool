@@ -1,6 +1,6 @@
+import '../styles/ParagraphElementComponentBodyRenderer.css';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { DnD5eCharactersRepository } from '../repositories/dnd5e-characters-repository';
 import { CharacterStatBlock } from './CharacterStatBlock';
 import ReactDOMServer from 'react-dom/server';
 import { AppContext } from '../app-context';
@@ -14,17 +14,17 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
     appContext,
     body,
 }) => {
-    const [renderedBody, setRenderedBody] = useState<string | undefined>();
-    let htmlBody = null;
+    const [renderedBody, setRenderedBody] = useState<string | undefined>('');
+    const [docSections, setDocSections] = useState<any[]>([]);
 
     useEffect(() => {
-        htmlBody = renderBody();
-        setRenderedBody(htmlBody);
-    }, [setRenderedBody, htmlBody]);
+        const _renderedBody = renderBody();
+        setRenderedBody(_renderedBody);
+        setDocSections(getDocSections(_renderedBody ?? ''));
+    }, []);
 
     const getCharacter = async (characterId: string) => {
-        const repo = appContext.getRepository(DnD5eCharactersRepository);
-        const character = await repo.getCharacter(characterId);
+        const character = await appContext.repositories.dnd5eCharacters.getCharacter(characterId);
         document.getElementById(characterId)!.innerHTML = ReactDOMServer.renderToString(
             <CharacterStatBlock character={character} />
         );
@@ -46,10 +46,87 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
         return replaced_body;
     };
 
-    const renderBody = () => {
+    const completeDocSections = (html: string): string => {
+        // First the string is copied
+        let sectionedHtml = html.slice();
+        let sectionIndex = 0;
+        for (const tag of ['h3', 'h4']) {
+            const tags = getTags(html, tag);
+            for (const foundTag of tags) {
+                const sectionedTag = foundTag.replace(`<${tag}`, `<${tag} id="section_${sectionIndex}"`);
+                sectionedHtml = sectionedHtml.replace(foundTag, sectionedTag);
+                sectionIndex++;
+            }
+        }
+        return sectionedHtml;
+    };
+
+    const renderBody = (): string | undefined => {
         let html = replaceCharacters(body);
+        if (html) html = completeDocSections(html);
         return html;
     };
 
-    return <div dangerouslySetInnerHTML={{ __html: renderedBody ?? '' }} />;
+    const getTags = (html: string, tag: string): string[] => {
+        const matches = [...html.matchAll(new RegExp(`<${tag}>.*?</${tag}>`, 'g'))];
+        return matches.map((x: string[]) => x[0]);
+    };
+
+    const searchSection = (html: string, tag: string): any | null => {
+        const match = html.match(`<${tag} id="(.+)">(.*?)</${tag}>`);
+        if (!match) return null;
+        return {
+            tag,
+            id: match[1],
+            text: match[2].replace(new RegExp('(<.*>)|(&nbsp;)', 'g'), ''),
+        };
+    };
+
+    const getDocSections = (html: string): any[] => {
+        const sections: any[] = [];
+        let chunk = '';
+        for (let i = 0; i < html.length; i++) {
+            chunk += html.at(i);
+            for (const tag of ['h3', 'h4']) {
+                const found = searchSection(chunk, tag);
+                if (found) {
+                    chunk = '';
+                    sections.push(found);
+                    break;
+                }
+            }
+        }
+        return sections;
+    };
+
+    return (
+        <div className="ParagraphElementBodyRenderer">
+            <div className="ParagraphElementBodyRendererContainer">
+                <div className="ParagraphElementBodyRendererIndex">
+                    <h3>Indice</h3>
+                    <div className="ParagraphElementBodyRendererIndexBody">
+                        {docSections.map((x: any) => (
+                            <a
+                                key={`${x.id}_link`}
+                                href={`#${x.id}`}
+                                className={
+                                    {
+                                        h3: 'ParagraphElementBodyRendererH3',
+                                        h4: 'ParagraphElementBodyRendererH4',
+                                    }[x.tag as string]
+                                }
+                            >
+                                {x.text}
+                            </a>
+                        ))}
+                    </div>
+                </div>
+                <span />
+                <div
+                    className="ParagraphElementBodyRendererBody"
+                    dangerouslySetInnerHTML={{ __html: renderedBody ?? '' }}
+                />
+            </div>
+        </div>
+    );
 };

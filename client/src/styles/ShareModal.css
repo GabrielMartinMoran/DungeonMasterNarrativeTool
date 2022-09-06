@@ -1,16 +1,65 @@
 .ShareModal {
-    width: 600px;
-    height: 400px;
-    border: 1px solid #58180d;
+    width: 500px;
+    border: 1px solid var(--titlesColor);
     position: fixed;
     z-index: 1;
     top: 25%;
-    width: 75%;
     margin-top: -100px;
-    /* Negative half of height. */
-    left: 12.5%;
-    /* Negative half of width. */
     background-color: white;
-    
     padding: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.ShareModal h3 {
+    margin-top: 0rem;
+}
+
+.ShareModalSharedWithContainer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.ShareModalSharedWithUsername span {
+    margin-left: 0.5rem;
+}
+
+.ShareModalSharedWithBtnContainer .btnText {
+    margin-left: 0.5rem;
+}
+
+.ShareModalShareWithContainer {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.ShareModalShareWithInput {
+    flex-grow: 2;
+    margin-right: 1rem;
+}
+
+.ShareModalShareWithInput input {
+    width: 100%;
+}
+
+.ShareModalShareWithBtn {
+    flex-grow: 1;
+}
+
+.ShareModalShareWithBtn button {
+    width: 100%;
+}
+
+.CloseShareModalContainer {
+    text-align: center;
+}
+
+.CloseShareModalBtn {
+    margin: 0.5rem;
+    width: 5rem;
+    height: 2rem;
 }

@@ -10,6 +10,7 @@ import { AppContext } from '../../app-context';
 import { BaseElement } from '../../models/base-element';
 import { ShopElement } from '../../models/shop-element';
 import { ParagraphElement } from '../../models/paragraph-element';
+import { NarrativeContext } from '../../models/narrative-context';
 
 export type ViewElementProps = {
     appContext: AppContext;
@@ -19,14 +20,14 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     const navigate = useNavigate();
     const { narrativeContextId, narrativeCategoryId, elementId } = useParams();
     const [element, setElement] = useState<BaseElement | null>(null);
+    const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const childFuntions: any = {};
 
     useEffect(() => {
-        const setNavigationButtons = () => {
-            const narrativeCategory = appContext
-                .getDB()
-                .getNarrativeContext(narrativeContextId!)
-                .getNarrativeCategory(narrativeCategoryId!);
+        const setNavigationButtons = async () => {
+            const _narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            setNarrativeContext(_narrativeContext);
+            const narrativeCategory = _narrativeContext.getNarrativeCategory(narrativeCategoryId!);
             const prevElement = narrativeCategory.getPrevElement(elementId!);
             const nextElement = narrativeCategory.getNextElement(elementId!);
             if (prevElement) {
@@ -46,38 +47,39 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         };
 
         const init = async () => {
-            appContext.setNarrativeContextById(narrativeContextId!);
+            await appContext.setNarrativeContextById(narrativeContextId!);
 
-            let obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
-            if (!obtainedNarrativeContext || obtainedNarrativeContext.isOnlyReference()) {
-                await appContext.pullNarrativeContext(narrativeContextId!);
-                obtainedNarrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
-            }
+            const obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
 
             const obtainedElement = obtainedNarrativeContext
                 .getNarrativeCategory(narrativeCategoryId!)
                 .findElementAnywhere(elementId!);
             setElement(obtainedElement);
 
-            setNavigationButtons();
+            await setNavigationButtons();
         };
         init();
-    }, [appContext, narrativeContextId, narrativeCategoryId, elementId]);
+    }, [
+        // narrativeContextId, narrativeCategoryId, elementId are included for reloading after navigating with ctrl+p
+        narrativeContextId,
+        narrativeCategoryId,
+        elementId,
+    ]);
 
     const copyRelativeLink = () => {
         const relLink = `${window.location.origin}/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${elementId}`;
         navigator.clipboard.writeText(relLink);
     };
 
-    const editName = () => {
+    const editName = async () => {
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element!.name);
         if (name) {
-            const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
+            const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
             const obtainedElement = narrativeContext
                 .getNarrativeCategory(narrativeCategoryId!)
                 .findElementAnywhere(elementId!);
             obtainedElement.name = name;
-            appContext.saveNarrativeContext(narrativeContext);
+            await appContext.repositories.narrativeContext.save(narrativeContext!);
             setElement({ ...obtainedElement });
             setTimeout(() => {
                 setElement(obtainedElement);
@@ -89,13 +91,13 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         childFuntions.edit();
     };
 
-    const deleteElement = () => {
+    const deleteElement = async () => {
         const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element!.name}`);
         if (!shouldDelete) return;
-        const narrativeContext = appContext.getDB().getNarrativeContext(narrativeContextId!);
+        const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
         const narrativeCategory = narrativeContext.getNarrativeCategory(narrativeCategoryId!);
         narrativeCategory.removeElement(element!.id);
-        appContext.saveNarrativeContext(narrativeContext);
+        await appContext.repositories.narrativeContext.save(narrativeContext!);
         navigate(`/narrative-context/${narrativeContextId}`);
     };
 
@@ -106,24 +108,22 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
                     <div className="flex viewElementTitleBar">
                         <h2 className="flex2">{element.name}</h2>
                         <div className="textRight viewElementTitleButtons">
-                            <button onClick={editName}>
-                                <RenameIcon />
-                                <span className="tooltip">Renombrar</span>
-                            </button>
-                            <button onClick={editBody}>
-                                <EditIcon />
-                                <span className="tooltip">Editar</span>
-                            </button>
+                            {narrativeContext?.isEditable ? (
+                                <>
+                                    <button onClick={editName}>
+                                        <RenameIcon />
+                                        <span className="tooltip">Renombrar</span>
+                                    </button>
+                                    <button onClick={editBody}>
+                                        <EditIcon />
+                                        <span className="tooltip">Editar</span>
+                                    </button>
+                                </>
+                            ) : null}
                             <button onClick={copyRelativeLink}>
                                 <CopyLinkIcon />
                                 <span className="tooltip">Copiar enlace</span>
                             </button>
-                            {/*
-                            <button onClick={deleteElement}>
-                                <DeleteIcon />
-                                <span className='tooltip'>Eliminar</span>
-                            </button>
-                            */}
                         </div>
                     </div>
                     {
