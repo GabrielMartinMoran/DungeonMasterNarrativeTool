@@ -2,7 +2,7 @@ import '../../styles/ChangePasswordView.css';
 import React, { useEffect, useState } from 'react';
 import { AppContext } from '../../app-context';
 import { ChangePasswordIcon } from '../icons/ChangePasswordIcon';
-import { faKey } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate, useNavigate } from 'react-router-dom';
 
@@ -80,6 +80,9 @@ export const ChangePasswordView: React.FC<ChangePasswordViewProps> = ({ appConte
                 {errorMsg ? <span className="formErrorMsg">{errorMsg}</span> : null}
                 <button type="submit" onClick={changePassword} disabled={!changePasswordBtnEnabled}>
                     <FontAwesomeIcon icon={faKey} /> Cambiar contraseña
+                </button>
+                <button onClick={() => navigate('/')}>
+                    <FontAwesomeIcon icon={faArrowLeft} /> Cancelar
                 </button>
             </div>
         </form>

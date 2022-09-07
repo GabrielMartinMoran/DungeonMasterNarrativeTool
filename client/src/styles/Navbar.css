@@ -23,7 +23,7 @@
     position: relative;
     display: flex;
     margin-left: 0.5rem;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
     margin-top: 0.2rem;
 }
 
@@ -53,9 +53,20 @@
     margin-top: 0.1rem;
 }
 
+@media (max-width: 600px) {
+    .NavbarNarrativeContextName {
+        font-size: 0.7rem;
+        max-width: 15rem;
+    }
+}
+
 @media (max-width: 400px) {
     .navbarContent {
         margin-top: 0.6rem;
+    }
+
+    .toggleMenuBtn {
+        margin-top: -2px !important;
     }
 
     #homeTitleLink {
@@ -69,11 +80,15 @@
     #nabvarNavigationIcons {
         margin-top: -0.3rem;
     }
+
+    .NavbarNarrativeContextName {
+        max-width: 10rem;
+    }
 }
 
 .toggleMenuBtn {
     margin-right: 1rem;
-    margin-top: 3px;
+    margin-top: 5px;
     font-size: 1.5rem;
     color: white;
     cursor: pointer;
@@ -89,4 +104,7 @@
 
 .NavbarNarrativeContextName {
     margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

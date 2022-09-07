@@ -6,7 +6,7 @@
     display: grid;
     grid-template-columns: 300px 1rem 2fr;
     overflow: hidden;
-    height: 100%;
+    height: inherit;
     top: 0px;
 }
 
@@ -18,7 +18,7 @@
 
 @media (max-width: 800px) {
     .ParagraphElementBodyRendererContainer {
-        grid-template-rows: 1fr 1rem 4fr;
+        grid-template-rows: 1fr 1rem 3fr;
         grid-template-columns: 1fr;
     }
 }
@@ -33,6 +33,14 @@
     border: 2px solid var(--dividersColor);
     background-color: #f2f0e361;
     overflow: auto;
+}
+
+.ParagraphElementBodyRendererIndex a {
+    text-decoration: none;
+}
+
+.ParagraphElementBodyRendererIndex a:hover {
+    text-decoration: none;
 }
 
 .ParagraphElementBodyRendererIndexBody {

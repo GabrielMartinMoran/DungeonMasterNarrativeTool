@@ -5,10 +5,11 @@ import SetOptions from 'suneditor-react/dist/types/SetOptions';
 
 export type RichTextEditorProps = {
     onChange: (value: string) => void;
+    setIsProcessing: (isProcessing: boolean) => void;
     initialValue: string;
 };
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initialValue }) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsProcessing, initialValue }) => {
     const editorOptions = {
         buttonList: [
             ['formatBlock', 'bold', 'underline', 'italic', 'strike'],
@@ -23,16 +24,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
                 tag: 'p',
                 name: 'Párrafo',
             },
-            /*
-            {
-                tag: 'h1',
-                name: 'Título',
-            },
-            {
-                tag: 'h2',
-                name: 'Subtítulo',
-            },
-            */
             {
                 tag: 'h3',
                 name: 'Sección',
@@ -49,32 +40,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
                 tag: 'pre',
                 name: 'Notas del director de juego',
             },
-            //'p', 'blockquote', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
         ],
     } as SetOptions;
 
     const editor = useRef();
 
-    let currentChangeId = 0;
-    const changeUpdateTimeout = 200;
-
     const getSunEditorInstance = (sunEditor: any) => {
         editor.current = sunEditor;
     };
 
-    const deferredUpdate = (changeId: number) => {
-        setTimeout(() => {
-            if (changeId === currentChangeId) {
-                // Sometimes the ref does not have getContents function, in that case we skip this deferred update
-                if (!editor || !editor.current || !(editor.current as any).getContents) return;
-                onChange((editor.current as any).getContents());
-            }
-        }, changeUpdateTimeout);
+    const handleInput = (event: any) => {
+        setIsProcessing(true);
     };
 
-    const handleInput = () => {
-        currentChangeId += 1;
-        deferredUpdate(currentChangeId);
+    const handleChange = (event: string) => {
+        onChange(event);
+        setIsProcessing(false);
     };
 
     const getEditorHeight = () => {
@@ -90,8 +71,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, initia
                 lang="es"
                 defaultValue={initialValue}
                 height={getEditorHeight()}
-                onChange={(state) => handleInput()}
-                onInput={(event) => handleInput()}
+                onChange={(state: string) => handleChange(state)}
+                onInput={(event) => handleInput(event)}
                 getSunEditorInstance={getSunEditorInstance}
                 setOptions={editorOptions}
             />

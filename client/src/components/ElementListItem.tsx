@@ -117,24 +117,35 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
         >
             <div className={'flex ' + (highlight ? 'highlightedListItem' : 'unhighlightedListItem')}>
                 {isContainer() ? (
-                    <button className="collapseExpandButton" onClick={() => toggleExpand()}>
-                        {expanded ? <CollapseIcon /> : <ExpandIcon />}
+                    <button className="flex2 elementListItemName collapseExpandButton" onClick={() => toggleExpand()}>
+                        <span className="collapseExpandButtonIcon">{expanded ? <CollapseIcon /> : <ExpandIcon />}</span>
+                        <span role="img" aria-label="icon" className="elementListContainerIcon">
+                            {getIcon()}
+                        </span>{' '}
+                        {element.name}
                     </button>
                 ) : (
-                    <></>
+                    <>
+                        {shouldDisplayLink() ? (
+                            <Link
+                                className="flex2 elementListItemLink"
+                                to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}
+                            >
+                                <span role="img" aria-label="icon">
+                                    {getIcon()}
+                                </span>{' '}
+                                {element.name}
+                            </Link>
+                        ) : (
+                            <span className="flex2 elementListItemLink">
+                                <span role="img" aria-label="icon">
+                                    {getIcon()}{' '}
+                                </span>
+                                {element.name}
+                            </span>
+                        )}
+                    </>
                 )}
-                <div className={'flex2 elementListItemName '}>
-                    <span role="img" aria-label="icon">
-                        {getIcon()}{' '}
-                    </span>
-                    {shouldDisplayLink() ? (
-                        <Link to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}>
-                            {element.name}
-                        </Link>
-                    ) : (
-                        <span>{element.name}</span>
-                    )}
-                </div>
 
                 <div className="textRight">
                     {isEditable ? (

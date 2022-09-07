@@ -65,10 +65,18 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) =>
                             to={`/narrative-context/${narrativeContext.narrativeContextId}`}
                             id="narrativeContextTitleLink"
                         >
+                            {
+                                {
+                                    campaign: '📚',
+                                    world: '🌎',
+                                }[narrativeContext.type]
+                            }{' '}
                             {narrativeContext.name}
                         </Link>
                     ) : (
-                        <></>
+                        <Link to={`/`} id="narrativeContextTitleLink">
+                            🪶 Narrative tools
+                        </Link>
                     )}
                 </div>
                 <div className="flex2 textRight" id="nabvarNavigationIcons">
@@ -81,7 +89,6 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) =>
                             <FontAwesomeIcon icon={faAngleLeft} className="inactiveLink" />
                         )}
                     </span>
-                    <span> </span>
                     <span className={`iconButton ${forwardButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'}`}>
                         {forwardButtonUrl ? (
                             <Link to={forwardButtonUrl}>
