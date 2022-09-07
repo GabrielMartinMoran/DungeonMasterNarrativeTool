@@ -3,7 +3,18 @@
 }
 
 .elementListItemName {
+    text-align: left;
     margin-top: 0.2rem;
+    font-size: 1rem;
+}
+
+.elementListItemLink {
+    margin-top: 0.2rem;
+    text-decoration: none !important;
+}
+
+.elementListItemLink:hover {
+    text-decoration: none;
 }
 
 .unhighlightedListItem {
@@ -19,4 +30,11 @@
 .collapseExpandButton {
     background: none;
     border: none;
+    margin-right: -0.5rem;
+}
+
+.collapseExpandButtonIcon {
+    margin-left: 0rem;
+    margin-right: -0.2rem;
+    z-index: 10;
 }

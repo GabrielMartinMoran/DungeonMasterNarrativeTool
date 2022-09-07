@@ -49,7 +49,7 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
     const completeDocSections = (html: string): string => {
         // First the string is copied
         let sectionedHtml = html.slice();
-        let sectionIndex = 0;
+        let sectionIndex = 1;
         for (const tag of ['h3', 'h4']) {
             const tags = getTags(html, tag);
             for (const foundTag of tags) {
@@ -58,7 +58,7 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
                 sectionIndex++;
             }
         }
-        return sectionedHtml;
+        return `<span id='title_section' style="margin:0;"></span>${sectionedHtml}`;
     };
 
     const renderBody = (): string | undefined => {
@@ -103,7 +103,9 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
         <div className="ParagraphElementBodyRenderer">
             <div className="ParagraphElementBodyRendererContainer">
                 <div className="ParagraphElementBodyRendererIndex">
-                    <h3>Indice</h3>
+                    <a href="#title_section">
+                        <h3>Indice</h3>
+                    </a>
                     <div className="ParagraphElementBodyRendererIndexBody">
                         {docSections.map((x: any) => (
                             <a

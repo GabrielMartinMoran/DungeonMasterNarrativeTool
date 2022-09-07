@@ -5,6 +5,9 @@ import { ParagraphElementComponentBodyRenderer } from './ParagraphElementCompone
 import { AppContext } from '../app-context';
 import { ParagraphElement } from '../models/paragraph-element';
 
+let currentEditorValue: string | null = null;
+let hasChangedAtLeastOneTime = false;
+
 export type ParagraphElementComponentProps = {
     appContext: AppContext;
     narrativeContextId: string;
@@ -19,10 +22,12 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     parentExposedFunctions,
 }) => {
     const [editMode, setEditMode] = useState(false);
-    let currentEditorValue: string | null = null;
-    let hasChangedAtLeastOneTime = false;
+    const [canSave, setCanSave] = useState(true);
 
     const edit = () => {
+        currentEditorValue = element.body;
+        hasChangedAtLeastOneTime = false;
+        setCanSave(true);
         setEditMode(true);
     };
 
@@ -49,11 +54,15 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
 
     parentExposedFunctions.edit = edit;
 
+    const setIsProcessing = (isProcessing: boolean) => {
+        setCanSave(!isProcessing);
+    };
+
     return (
         <div className="ParagraphElement">
             {editMode ? (
-                <>
-                    <button onClick={save}>
+                <div>
+                    <button onClick={save} disabled={!canSave}>
                         <span role="img" aria-label="save">
                             💾
                         </span>{' '}
@@ -65,13 +74,17 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
                         </span>{' '}
                         Descartar cambios
                     </button>
-                </>
+                </div>
             ) : (
                 <></>
             )}
             {editMode ? (
                 <>
-                    <RichTextEditor onChange={onBodyChange} initialValue={element.body ?? ''} />
+                    <RichTextEditor
+                        onChange={onBodyChange}
+                        initialValue={element.body ?? ''}
+                        setIsProcessing={setIsProcessing}
+                    />
                 </>
             ) : (
                 <ParagraphElementComponentBodyRenderer appContext={appContext} body={element.body ?? ''} />

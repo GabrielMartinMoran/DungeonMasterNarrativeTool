@@ -130,13 +130,14 @@
     word-wrap: break-word;
     margin-left: 1rem;
     margin-right: 1rem;
+    margin-bottom: 1rem;
 }
 
 .App hr {
     margin: 1px;
     border: 0px;
-    border-top: 1px solid var(--dividersColor);
-    margin: 1rem 1rem 1rem 1rem;
+    border-top: 2px solid var(--dividersColor);
+    margin: 1rem 0rem 1rem 0rem;
 }
 
 .App a {
