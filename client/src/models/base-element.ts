@@ -9,6 +9,10 @@ export class BaseElement {
         PARAGRAPH: 'paragraph',
         CONTAINER: 'container',
         SHOP: 'shop',
+        NPC: 'npc',
+        LOCATION: 'location',
+        CREATURE: 'creature',
+        ITEM: 'item'
     };
 
     constructor(name: string, type: string) {

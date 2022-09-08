@@ -8,7 +8,7 @@ import { RenameIcon } from './icons/RenameIcon';
 import { MoveUpIcon } from './icons/MoveUpIcon';
 import { MoveDownIcon } from './icons/MoveDownIcon';
 import { DeleteIcon } from './icons/DeleteIcon';
-import { ScrollIcon } from './icons/ScrollIcon';
+import { QuillIcon } from './icons/QuillIcon';
 import { FolderIcon } from './icons/FolderIcon';
 import { ShopIcon } from './icons/ShopIcon';
 import { CollapseIcon } from './icons/CollapseIcon';
@@ -16,6 +16,11 @@ import { ExpandIcon } from './icons/ExpandIcon';
 import { AppContext } from '../app-context';
 import { ContainerElement } from '../models/container-element';
 import { Container } from 'react-dom';
+import { CreatureIcon } from './icons/CreatureIcon';
+import { NPCIcon } from './icons/NPCIcon';
+import { LocationIcon } from './icons/LocationIcon';
+import { ItemIcon } from './icons/ItemIcon';
+import { ElmentIconsMapper } from '../utils/element-icons-mapper';
 
 export type ElementListItemProps = {
     appContext: AppContext;
@@ -57,9 +62,13 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
 
     const getIcon = () => {
         const icons: any = {};
-        icons[BaseElement.TYPES.PARAGRAPH] = <ScrollIcon />;
+        icons[BaseElement.TYPES.PARAGRAPH] = <QuillIcon />;
         icons[BaseElement.TYPES.CONTAINER] = <FolderIcon />;
+        icons[BaseElement.TYPES.LOCATION] = <LocationIcon />;
         icons[BaseElement.TYPES.SHOP] = <ShopIcon />;
+        icons[BaseElement.TYPES.NPC] = <NPCIcon />;
+        icons[BaseElement.TYPES.CREATURE] = <CreatureIcon />;
+        icons[BaseElement.TYPES.ITEM] = <ItemIcon />;
         return icons[element.type];
     };
 
@@ -120,7 +129,7 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
                     <button className="flex2 elementListItemName collapseExpandButton" onClick={() => toggleExpand()}>
                         <span className="collapseExpandButtonIcon">{expanded ? <CollapseIcon /> : <ExpandIcon />}</span>
                         <span role="img" aria-label="icon" className="elementListContainerIcon">
-                            {getIcon()}
+                            {ElmentIconsMapper.getIconFromElement(element)}
                         </span>{' '}
                         {element.name}
                     </button>
@@ -132,14 +141,14 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
                                 to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}
                             >
                                 <span role="img" aria-label="icon">
-                                    {getIcon()}
+                                    {ElmentIconsMapper.getIconFromElement(element)}
                                 </span>{' '}
                                 {element.name}
                             </Link>
                         ) : (
                             <span className="flex2 elementListItemLink">
                                 <span role="img" aria-label="icon">
-                                    {getIcon()}{' '}
+                                    {ElmentIconsMapper.getIconFromElement(element)}{' '}
                                 </span>
                                 {element.name}
                             </span>

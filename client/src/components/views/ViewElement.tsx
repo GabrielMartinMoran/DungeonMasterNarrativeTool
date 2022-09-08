@@ -11,6 +11,7 @@ import { BaseElement } from '../../models/base-element';
 import { ShopElement } from '../../models/shop-element';
 import { ParagraphElement } from '../../models/paragraph-element';
 import { NarrativeContext } from '../../models/narrative-context';
+import { ElmentIconsMapper } from '../../utils/element-icons-mapper';
 
 export type ViewElementProps = {
     appContext: AppContext;
@@ -101,12 +102,37 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         navigate(`/narrative-context/${narrativeContextId}`);
     };
 
+    const renderElement = (element: BaseElement) => {
+        if (element.type === BaseElement.TYPES.SHOP) {
+            return (
+                <ShopElementComponent
+                    key={element.id}
+                    appContext={appContext}
+                    element={element as ShopElement}
+                    parentExposedFunctions={childFuntions}
+                    narrativeContextId={narrativeContextId!}
+                />
+            );
+        }
+        return (
+            <ParagraphElementComponent
+                key={element.id}
+                appContext={appContext}
+                element={element as ParagraphElement}
+                parentExposedFunctions={childFuntions}
+                narrativeContextId={narrativeContextId!}
+            />
+        );
+    };
+
     return (
         <div className="ViewElement">
             {element ? (
                 <>
                     <div className="flex viewElementTitleBar">
-                        <h2 className="flex2">{element.name}</h2>
+                        <h2 className="flex2">
+                            {ElmentIconsMapper.getIconFromElement(element)} {element.name}
+                        </h2>
                         <div className="textRight viewElementTitleButtons">
                             {narrativeContext?.isEditable ? (
                                 <>
@@ -126,30 +152,7 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
                             </button>
                         </div>
                     </div>
-                    {
-                        (
-                            {
-                                paragraph: (
-                                    <ParagraphElementComponent
-                                        key={element.id}
-                                        appContext={appContext}
-                                        element={element as ParagraphElement}
-                                        parentExposedFunctions={childFuntions}
-                                        narrativeContextId={narrativeContextId!}
-                                    />
-                                ),
-                                shop: (
-                                    <ShopElementComponent
-                                        key={element.id}
-                                        appContext={appContext}
-                                        element={element as ShopElement}
-                                        parentExposedFunctions={childFuntions}
-                                        narrativeContextId={narrativeContextId!}
-                                    />
-                                ),
-                            } as any
-                        )[element.type]
-                    }
+                    {renderElement(element)}
                 </>
             ) : (
                 <></>

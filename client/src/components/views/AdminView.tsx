@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTag, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { CreateUserModal } from '../CreateUserModal';
 import { User } from '../../models/user';
+import { RenameIcon } from '../icons/RenameIcon';
 
 export type AdminViewProps = {
     appContext: AppContext;
@@ -74,7 +75,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
                 <h1 className="flex1">👥 Usuarios</h1>
                 <div className="AdminViewUsersTitleButtons">
                     <button onClick={() => setShowCreateUserModal(true)}>
-                        <FontAwesomeIcon icon={faUserPlus} /> Crear usuario
+                        <FontAwesomeIcon icon={faUserPlus} color={'#012187'} /> Crear usuario
                     </button>
                 </div>
             </div>
@@ -85,7 +86,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
                     </span>
                     <div>
                         <button onClick={() => changeName(user)}>
-                            <FontAwesomeIcon icon={faTag} /> Cambiar nombre
+                            <RenameIcon /> Cambiar nombre
                         </button>
                         <button onClick={() => changePassword(user)}>
                             <ChangePasswordIcon /> Cambiar contraseña

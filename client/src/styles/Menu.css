@@ -32,7 +32,6 @@ span {
 
 .MenuContainer span:hover {
     color: var(--linksHoverColor);
-    text-decoration: underline;
 }
 
 .MenuContainer h3 {
