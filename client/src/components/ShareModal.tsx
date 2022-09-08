@@ -5,6 +5,8 @@ import { AppContext } from '../app-context';
 import { NarrativeContext } from '../models/narrative-context';
 import { UserIcon } from './icons/UserIcon';
 import { RemoveIcon } from './icons/RemoveIcon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export type ShareModalProps = {
     appContext: AppContext;
@@ -68,7 +70,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ appContext, narrativeCon
                         value={usernameToShare}
                         onChange={onUsernameToShareChange}
                         placeholder="Nombre de usuario con quien compartir"
-                    ></input>
+                    />
                 </div>
                 <div className="ShareModalShareWithBtn">
                     <button onClick={shareNarrativeContext} disabled={!shareBtnEnabled}>
@@ -97,7 +99,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ appContext, narrativeCon
             </div>
             <div className="CloseShareModalContainer">
                 <button className="CloseShareModalBtn" onClick={onClosed}>
-                    Cerrar<span className="tooltip">Cerrar</span>
+                    <FontAwesomeIcon icon={faXmark} /> Cancelar
                 </button>
             </div>
         </div>

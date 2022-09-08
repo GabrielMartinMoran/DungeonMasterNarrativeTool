@@ -4,6 +4,7 @@ import { AppContext } from '../app-context';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHammer, faHouse, faKey, faPalette, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { ChangePasswordIcon } from './icons/ChangePasswordIcon';
 
 export type MenuProps = {
     appContext: AppContext;
@@ -37,13 +38,11 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                 <h3>🪶 Narrative tools</h3>
                 <span className="marginBottom1Rem" />
                 <Link className="marginBottom0_5Rem" to={`/`} onClick={hideMenu}>
-                    <FontAwesomeIcon className="marginRight0_5Rem" icon={faHouse} />
-                    Inicio
+                    <FontAwesomeIcon icon={faHouse} color={'#0086d9'} /> Inicio
                 </Link>
                 {appContext.authenticatedUser.isAdmin() ? (
                     <Link className="marginBottom0_5Rem" to={`/admin`} onClick={hideMenu}>
-                        <FontAwesomeIcon className="marginRight0_5Rem" icon={faHammer} />
-                        Administrar
+                        <FontAwesomeIcon icon={faHammer} color={'#012187'} /> Administrar
                     </Link>
                 ) : null}
                 <span
@@ -53,8 +52,7 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                         hideMenu();
                     }}
                 >
-                    <FontAwesomeIcon className="marginRight0_5Rem" icon={faPalette} />
-                    Cambiar tema
+                    <FontAwesomeIcon icon={faPalette} color={'#d47902'} /> Cambiar tema
                 </span>
                 <span className="marginTop1Rem" />
                 <h3 className="marginBottom1Rem">
@@ -62,12 +60,10 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                 </h3>
                 <span className="marginBottom1Rem" />
                 <Link className="marginBottom0_5Rem" to={`/password`} onClick={hideMenu}>
-                    <FontAwesomeIcon className="marginRight0_5Rem" icon={faKey} />
-                    Cambiar contraseña
+                    <ChangePasswordIcon /> Cambiar contraseña
                 </Link>
                 <Link className="marginBottom0_5Rem" to={`/logout`} onClick={hideMenu}>
-                    <FontAwesomeIcon className="marginRight0_5Rem" icon={faSignOutAlt} />
-                    Cerrar sesión
+                    <FontAwesomeIcon icon={faSignOutAlt} color={'#424242'} /> Cerrar sesión
                 </Link>
             </div>{' '}
         </div>

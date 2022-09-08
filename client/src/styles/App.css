@@ -141,12 +141,11 @@
 }
 
 .App a {
-    text-decoration: underline gray;
+    text-decoration: none;
     color: black;
 }
 
 .App a:hover {
-    text-decoration: underline;
     color: var(--linksHoverColor);
 }
 
