@@ -36,14 +36,18 @@ export class NarrativeContextRepository extends WebApiRepository {
         return this.cache.get(narrativeContextId)!;
     }
 
-    public async save(narrativeContext: NarrativeContext): Promise<void> {
+    public async save(narrativeContext: NarrativeContext): Promise<boolean> {
+        /**
+         * Returns true if a reload is suggested
+         */
         if (this._preventSave) {
             this._onDirtyDBCallback();
-            return;
+            return false;
         }
-        await this._post('/narrative_contexts', narrativeContext.toJson());
+        const result = await this._post('/narrative_contexts', narrativeContext.toJson());
         // We update the cache after saving successfully
         this.cache.set(narrativeContext.narrativeContextId, narrativeContext);
+        return result.reload_suggested;
     }
 
     public async delete(narrativeContextId: string): Promise<void> {

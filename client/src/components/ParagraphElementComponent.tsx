@@ -22,12 +22,10 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     parentExposedFunctions,
 }) => {
     const [editMode, setEditMode] = useState(false);
-    const [canSave, setCanSave] = useState(true);
 
     const edit = () => {
         currentEditorValue = element.body;
         hasChangedAtLeastOneTime = false;
-        setCanSave(true);
         setEditMode(true);
     };
 
@@ -38,8 +36,9 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
         }
         element.body = currentEditorValue;
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        const shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
         setEditMode(false);
+        if (shouldReload) window.location.reload();
     };
 
     const discardChanges = () => {
@@ -55,14 +54,17 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     parentExposedFunctions.edit = edit;
 
     const setIsProcessing = (isProcessing: boolean) => {
-        setCanSave(!isProcessing);
+        // We update using this instead of an state because on mobile refreshing the dom using react
+        //  causes the keyboard to hide
+        const btn = document.querySelector('#saveBtn');
+        if (btn) (btn as any).disabled = isProcessing;
     };
 
     return (
         <div className="ParagraphElement">
             {editMode ? (
                 <div>
-                    <button onClick={save} disabled={!canSave}>
+                    <button id="saveBtn" onClick={save}>
                         <span role="img" aria-label="save">
                             💾
                         </span>{' '}
