@@ -1,0 +1,1 @@
+python -m gunicorn -c src/gunicorn_config.py src.app:app
