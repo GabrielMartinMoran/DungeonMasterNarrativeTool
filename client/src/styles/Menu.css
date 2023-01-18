@@ -21,7 +21,7 @@
 }
 
 .MenuContainer a,
-span {
+.MenuContainer span {
     margin-left: 0.5rem;
     text-decoration: none;
 }

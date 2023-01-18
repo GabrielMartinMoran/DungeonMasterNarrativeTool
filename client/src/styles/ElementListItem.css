@@ -39,3 +39,11 @@
     margin-right: -0.2rem;
     z-index: 10;
 }
+
+.elementListContainerIcon {
+    margin-left: 0.5rem;
+}
+
+.elementListItemIcon {
+    margin-left: 0.5rem;
+}

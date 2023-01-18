@@ -63,3 +63,11 @@
     text-decoration: none !important;
     margin-bottom: 0.2rem;
 }
+
+.ParagraphElementBodyRendererBody a {
+    color: var(--linksHoverColor);
+}
+
+.ParagraphElementBodyRendererBody a:hover {
+    text-decoration: underline;
+}

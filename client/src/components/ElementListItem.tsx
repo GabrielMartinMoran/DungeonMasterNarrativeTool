@@ -140,7 +140,7 @@ export const ElementListItem: React.FC<ElementListItemProps> = ({
                                 className="flex2 elementListItemLink"
                                 to={`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${element.id}`}
                             >
-                                <span role="img" aria-label="icon">
+                                <span role="img" aria-label="icon" className="elementListItemIcon">
                                     {ElmentIconsMapper.getIconFromElement(element)}
                                 </span>{' '}
                                 {element.name}
