@@ -1,16 +1,19 @@
-import base64
+import re
 from hashlib import md5
+from typing import Optional
 
 from imgurpython import ImgurClient
 
 # https://apidocs.imgur.com/
 # https://github.com/Imgur/imgurpython
 from src.config_provider import ConfigProvider
+from src.utils.base64_image_converter import Base64ImageConverter
 
 
 class ImgurRepository:
     _client: ImgurClient = None
     _already_uploaded_cache = dict()
+    _FORMATS_TO_CONVERT_TO_PNG = ['webp']
 
     def __init__(self) -> None:
         if not ImgurRepository._client:
@@ -27,11 +30,23 @@ class ImgurRepository:
     def _get_img_hash(cls, base64_img: str) -> str:
         return md5(base64_img.encode()).hexdigest()
 
-    def _upload_img(self, base64_img: str, config=None, anon=True):
+    @classmethod
+    def _get_image_format(cls, base64_img: str) -> Optional[str]:
+        match = re.search(r'data:image/(\w+);base64,', base64_img)
+        if match and len(match.groups()) > 0:
+            return match.group(1)
+        return None
+
+    @classmethod
+    def _upload_img(cls, base64_img: str, config=None, anon=True):
         if not config:
             config = dict()
+        image_str = re.sub(rf'data:image/(\w+);base64,', '', base64_img)
+        image_format = cls._get_image_format(base64_img)
+        if image_format in cls._FORMATS_TO_CONVERT_TO_PNG:
+            image_str = Base64ImageConverter.to_png(image_str)
         data = {
-            'image': base64_img.replace('data:image/png;base64,', '').encode(),
+            'image': image_str.encode(),
             'type': 'base64',
         }
         data.update({meta: config[meta] for meta in

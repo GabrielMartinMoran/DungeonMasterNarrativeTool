@@ -2899,3 +2899,11 @@
 .se-btn-list {
     margin: 0rem !important;
 }
+
+.EditorContainer a {
+    color: var(--linksHoverColor);
+}
+
+.EditorContainer a:hover {
+    text-decoration: underline;
+}

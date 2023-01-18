@@ -35,10 +35,22 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
             return;
         }
         element.body = currentEditorValue;
+
+        // Disable buttons while saving
+        const saveBtn = document.querySelector('#saveBtn');
+        if (saveBtn) (saveBtn as any).disabled = true;
+        const cancelBtn = document.querySelector('#cancelBtn');
+        if (cancelBtn) (cancelBtn as any).disabled = true;
+
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
         const shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
-        setEditMode(false);
-        if (shouldReload) window.location.reload();
+        if (shouldReload) {
+            window.location.reload();
+        } else {
+            // To prevent blocking the app due to rendering non lightweighted images,
+            // we only remove edit mode if reload is not needed
+            setEditMode(false);
+        }
     };
 
     const discardChanges = () => {
@@ -70,7 +82,7 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
                         </span>{' '}
                         Guardar cambios
                     </button>
-                    <button onClick={discardChanges}>
+                    <button id="cancelBtn" onClick={discardChanges}>
                         <span role="img" aria-label="cancel">
                             ❌
                         </span>{' '}

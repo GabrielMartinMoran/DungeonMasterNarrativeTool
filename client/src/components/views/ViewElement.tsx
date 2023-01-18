@@ -92,16 +92,6 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         childFuntions.edit();
     };
 
-    const deleteElement = async () => {
-        const shouldDelete = window.confirm(`Estas seguro de eliminar el elemento ${element!.name}`);
-        if (!shouldDelete) return;
-        const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
-        const narrativeCategory = narrativeContext.getNarrativeCategory(narrativeCategoryId!);
-        narrativeCategory.removeElement(element!.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext!);
-        navigate(`/narrative-context/${narrativeContextId}`);
-    };
-
     const renderElement = (element: BaseElement) => {
         if (element.type === BaseElement.TYPES.SHOP) {
             return (
