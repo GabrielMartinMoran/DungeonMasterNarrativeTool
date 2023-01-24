@@ -3,6 +3,7 @@ from hashlib import md5
 from typing import Optional
 
 from imgurpython import ImgurClient
+from imgurpython.helpers.error import ImgurClientError
 
 # https://apidocs.imgur.com/
 # https://github.com/Imgur/imgurpython
@@ -38,18 +39,36 @@ class ImgurRepository:
         return None
 
     @classmethod
-    def _upload_img(cls, base64_img: str, config=None, anon=True):
-        if not config:
-            config = dict()
-        image_str = re.sub(rf'data:image/(\w+);base64,', '', base64_img)
-        image_format = cls._get_image_format(base64_img)
-        if image_format in cls._FORMATS_TO_CONVERT_TO_PNG:
-            image_str = Base64ImageConverter.to_png(image_str)
+    def _remove_img_metadata(cls, base64_img: str) -> str:
+        return re.sub(rf'data:image/(\w+);base64,', '', base64_img)
+
+    def _upload_img(self, base64_img: str) -> dict:
+        img_str = self._remove_img_metadata(base64_img)
+        img_format = self._get_image_format(base64_img)
+        if img_format in self._FORMATS_TO_CONVERT_TO_PNG:
+            img_str = Base64ImageConverter.to_png(img_str)
+        try:
+            return self._post_img(img_str)
+        except ImgurClientError as e:
+            # If it fails, try again but converting the image
+            print(f'Failed publishing an image, converting it to jpg: {e}')
+            try:
+                converted_img = Base64ImageConverter.to_jpeg(img_str)
+                return self._post_img(converted_img)
+            except Exception as e:
+                print(f'Failed trying with the jpg converted image, returning the default error one: {e}')
+                # If a second error occurs, return the default error image
+                return {'link': ConfigProvider.DEFAULT_ERROR_IMAGE_URL}
+
+    @classmethod
+    def _post_img(cls, img: str, config: dict = None, anon: bool = True) -> dict:
+        if config is None:
+            _config = dict()
         data = {
-            'image': image_str.encode(),
+            'image': img.encode(),
             'type': 'base64',
         }
-        data.update({meta: config[meta] for meta in
-                     set(ImgurRepository._client.allowed_image_fields).intersection(config.keys())})
+        data.update({meta: _config[meta] for meta in
+                     set(ImgurRepository._client.allowed_image_fields).intersection(_config.keys())})
 
         return ImgurRepository._client.make_request('POST', 'upload', data, anon)

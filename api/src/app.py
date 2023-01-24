@@ -1,10 +1,9 @@
 import functools
 import gzip
-import os
 import json
 from typing import Optional, Tuple
 
-from flask import Flask, request as flask_request, send_from_directory, Response
+from flask import Flask, request as flask_request, send_from_directory, Response, send_file
 from flask_cors import CORS
 from flask_compress import Compress
 from pymodelio.exceptions import ModelValidationException
@@ -12,7 +11,6 @@ from pymodelio.exceptions import ModelValidationException
 from src.database.db_migrator import DBMigrator
 from src.exceptions.element_not_found_exception import ElementNotFoundException
 from src.models.token import Token
-from src.config_provider import ConfigProvider
 from src.services.users.user_role_retriever import UserRoleRetriever
 from src.utils import router
 
@@ -89,9 +87,7 @@ def _route(path: str, http_method: str, auth_required: bool = True, admin_requir
     return outer
 
 
-@app.route('/', defaults={
-    'path': ''
-})
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
     path_dir = os.path.abspath(ConfigProvider.CLIENT_APP_FOLDER)  # path react build
