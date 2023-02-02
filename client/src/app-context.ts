@@ -8,6 +8,7 @@ export class AppContext {
     protected _setUpdatingDBIndicator = (status: boolean) => {};
     protected _repositories: AppContextRepositories;
     protected _authenticatedUser: User | null = null;
+    protected _canOpenSearchBar: boolean = true;
     menuButtonRef: any | null;
 
     constructor() {
@@ -44,7 +45,7 @@ export class AppContext {
 
     triggerEvent(eventName: string) {
         if (eventName === 'open_search') {
-            this.showSearchBar();
+            if (this._canOpenSearchBar) this.showSearchBar();
             return;
         }
         if (eventName === 'close_search') {
@@ -73,5 +74,9 @@ export class AppContext {
 
     public get setUpdatingDBIndicator(): (value: boolean) => void {
         return this._setUpdatingDBIndicator;
+    }
+
+    public set canOpenSearchBar(value: boolean) {
+        this._canOpenSearchBar = value;
     }
 }

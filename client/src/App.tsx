@@ -7,6 +7,7 @@ import {
     Routes,
     Route,
     Navigate,
+    useLocation,
     //Link
 } from 'react-router-dom';
 import { HomeView } from './components/views/HomeView';
@@ -23,6 +24,7 @@ import { Menu } from './components/Menu';
 import { AdminView } from './components/views/AdminView';
 import { THEMES } from './themes';
 import { ChangePasswordView } from './components/views/ChangePasswordView';
+import { LocationChangeDetector } from './components/LocationChangeDetector';
 
 export type AppProps = {
     appContext: AppContext;
@@ -83,6 +85,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
         <div className="App">
             {updatingDB ? <UpdatingDBIndicator /> : <></>}
             <Router>
+                <LocationChangeDetector appContext={appContext} />
                 {userLogged ? (
                     <>
                         <Navbar appContext={appContext} toggleShowMenu={toggleShowMenu} />

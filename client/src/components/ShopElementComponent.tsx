@@ -24,6 +24,7 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
     const childFunctions: any = {};
 
     const edit = () => {
+        appContext.canOpenSearchBar = false;
         setEditMode(true);
     };
 
@@ -35,11 +36,13 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
         element.items = currentEditorItems!;
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
         await appContext.repositories.narrativeContext.save(narrativeContext);
+        appContext.canOpenSearchBar = true;
         setEditMode(false);
     };
 
     const discardChanges = () => {
         currentEditorItems = [];
+        appContext.canOpenSearchBar = true;
         setEditMode(false);
     };
 

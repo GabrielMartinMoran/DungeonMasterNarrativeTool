@@ -26,6 +26,7 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     const edit = () => {
         currentEditorValue = element.body;
         hasChangedAtLeastOneTime = false;
+        appContext.canOpenSearchBar = false;
         setEditMode(true);
     };
 
@@ -44,6 +45,9 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
 
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
         const shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
+
+        appContext.canOpenSearchBar = true;
+
         if (shouldReload) {
             window.location.reload();
         } else {
@@ -54,6 +58,7 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     };
 
     const discardChanges = () => {
+        appContext.canOpenSearchBar = true;
         currentEditorValue = null;
         setEditMode(false);
     };
