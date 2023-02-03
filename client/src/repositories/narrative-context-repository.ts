@@ -47,6 +47,9 @@ export class NarrativeContextRepository extends WebApiRepository {
         const result = await this._post('/narrative_contexts', narrativeContext.toJson());
         // We update the cache after saving successfully
         this.cache.set(narrativeContext.narrativeContextId, narrativeContext);
+        for (const hook of this._afterSaveHooks) {
+            hook();
+        }
         return result.reload_suggested;
     }
 

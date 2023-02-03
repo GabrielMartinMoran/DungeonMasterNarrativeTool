@@ -4,6 +4,7 @@ import { RichTextEditor } from './RichTextEditor';
 import { ParagraphElementComponentBodyRenderer } from './ParagraphElementComponentBodyRenderer';
 import { AppContext } from '../app-context';
 import { ParagraphElement } from '../models/paragraph-element';
+import { DirtyDBError } from '../errors/dirty-db-error';
 
 let currentEditorValue: string | null = null;
 let hasChangedAtLeastOneTime = false;
@@ -44,7 +45,18 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
         if (cancelBtn) (cancelBtn as any).disabled = true;
 
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
-        const shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
+        let shouldReload = false;
+
+        // Catch Dirty DB Errors in case of dirty reads
+        try {
+            shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
+        } catch (err) {
+            if (err instanceof DirtyDBError) {
+                if (cancelBtn) (cancelBtn as any).disabled = false;
+                return;
+            }
+            throw err;
+        }
 
         appContext.canOpenSearchBar = true;
 

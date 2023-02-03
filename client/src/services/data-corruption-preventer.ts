@@ -1,4 +1,5 @@
 import { AppContext } from '../app-context';
+import { DirtyDBError } from '../errors/dirty-db-error';
 
 export class DataCorruptionPreventer {
     _appContext: AppContext;
@@ -23,6 +24,7 @@ export class DataCorruptionPreventer {
     _registerOnDirtyDBCallback() {
         this._appContext.repositories.narrativeContext.registerOnDirtyDBCallback(() => {
             this._onDirtyDB();
+            throw new DirtyDBError('Dirty db');
         });
     }
 
@@ -58,8 +60,7 @@ export class DataCorruptionPreventer {
 
     _onDirtyDB() {
         const shouldReload = window.confirm(
-            'Usted esta trabajando con una version desactualizada de la base de datos local y no podra guardar cambios en esta.' +
-                ' Por favor recargue la aplicación para poder volver a utilizarla con normalidad o haga click en aceptar / ok para hacerlo automáticamente.'
+            "Al parecer se han realizado cambios en otras pestañas, por lo cual, para evitar que estos se pierdan por favor recarga la aplicación para poder volver a utilizarla con normalidad o haz click en 'Ok' para hacerlo automáticamente."
         );
         if (shouldReload) window.location.reload();
     }
