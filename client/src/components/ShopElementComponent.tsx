@@ -4,6 +4,7 @@ import { ShopTableEditor } from './ShopTableEditor';
 import { AppContext } from '../app-context';
 import { ShopElement } from '../models/shop-element';
 import { ShopItem } from '../models/shop-item';
+import { DirtyDBError } from '../errors/dirty-db-error';
 
 export type ShopElementComponentProps = {
     appContext: AppContext;
@@ -34,8 +35,28 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
             return;
         }
         element.items = currentEditorItems!;
+
+        // Disable buttons while saving
+        const addItemBtn = document.querySelector('#addItemBtn');
+        if (addItemBtn) (addItemBtn as any).disabled = true;
+        const saveBtn = document.querySelector('#saveBtn');
+        if (saveBtn) (saveBtn as any).disabled = true;
+        const cancelBtn = document.querySelector('#cancelBtn');
+        if (cancelBtn) (cancelBtn as any).disabled = true;
+
         const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+
+        // Catch Dirty DB Errors in case of dirty reads
+        try {
+            await appContext.repositories.narrativeContext.save(narrativeContext);
+        } catch (err) {
+            if (err instanceof DirtyDBError) {
+                if (cancelBtn) (cancelBtn as any).disabled = false;
+                return;
+            }
+            throw err;
+        }
+
         appContext.canOpenSearchBar = true;
         setEditMode(false);
     };
@@ -61,19 +82,19 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
         <div className="ParagraphElement">
             {editMode ? (
                 <>
-                    <button onClick={addItem}>
+                    <button id="addItemBtn" onClick={addItem}>
                         <span role="img" aria-label="plus">
                             ➕
                         </span>{' '}
                         Agregar objeto
                     </button>
-                    <button onClick={save}>
+                    <button id="saveBtn" onClick={save}>
                         <span role="img" aria-label="save">
                             💾
                         </span>{' '}
                         Guardar cambios
                     </button>
-                    <button onClick={discardChanges}>
+                    <button id="cancelBtn" onClick={discardChanges}>
                         <span role="img" aria-label="cancel">
                             ❌
                         </span>{' '}
