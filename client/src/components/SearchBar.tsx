@@ -6,6 +6,7 @@ import { BaseElement } from '../models/base-element';
 import { NarrativeContext } from '../models/narrative-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { ElmentIconsMapper } from '../utils/element-icons-mapper';
 
 let _searchResults: any[] = [];
 let _resultIndex = -1;
@@ -136,6 +137,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
                         id={`searchResult_${i}`}
                         key={`searchResult_${i}`}
                     >
+                        <span className='searchResultsElementIcon'>
+                        {ElmentIconsMapper.getIconFromElement(element)}
+                        </span>
                         <Link to={generateElementLink(element)} onClick={() => appContext.hideSearchBar()}>
                             {element.name}
                         </Link>

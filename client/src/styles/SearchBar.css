@@ -41,3 +41,7 @@
     max-height: 70vh;
     overflow-y: scroll;
 }
+
+.SearchBar .searchResultsElementIcon {
+    margin-right: 0.25rem;
+}
