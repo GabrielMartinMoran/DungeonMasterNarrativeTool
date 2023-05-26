@@ -101,6 +101,14 @@
     margin-top: 13px;
 }
 
+.App pre + .se-image-container,
+.App h2 + .se-image-container,
+.App h3 + .se-image-container,
+.App h4 + .se-image-container,
+.App h5 + .se-image-container {
+    margin-top: 13px;
+}
+
 .App p,
 .App p code {
     font-family: var(--fontFamily);
