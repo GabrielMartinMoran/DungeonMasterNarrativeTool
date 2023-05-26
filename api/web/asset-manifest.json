@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.fa544f86.css",
+    "main.css": "/static/css/main.5a0ea752.css",
     "main.js": "/static/js/main.c694fc22.js",
     "static/media/Mr Eaves Small Caps.woff2": "/static/media/Mr Eaves Small Caps.7618853cc26e636d5da0.woff2",
     "static/media/Scaly Sans.woff2": "/static/media/Scaly Sans.dec3d8e1bea88db18166.woff2",
@@ -10,11 +10,11 @@
     "static/media/Scaly Sans Caps.woff2": "/static/media/Scaly Sans Caps.0cb3d73216dd9a3252e4.woff2",
     "static/media/Bookinsanity.woff2": "/static/media/Bookinsanity.0c8c01dd9ce1523d1626.woff2",
     "index.html": "/index.html",
-    "main.fa544f86.css.map": "/static/css/main.fa544f86.css.map",
+    "main.5a0ea752.css.map": "/static/css/main.5a0ea752.css.map",
     "main.c694fc22.js.map": "/static/js/main.c694fc22.js.map"
   },
   "entrypoints": [
-    "static/css/main.fa544f86.css",
+    "static/css/main.5a0ea752.css",
     "static/js/main.c694fc22.js"
   ]
 }
