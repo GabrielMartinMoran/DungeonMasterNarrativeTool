@@ -51,7 +51,7 @@ def main() -> None:
     print(config)
 
     # patch_config()
-    # app.run(False, ConfigProvider.APP_PORT)
+    app.run(False, ConfigProvider.APP_PORT)
 
 
 if __name__ == '__main__':

@@ -20,6 +20,7 @@ export type ViewNarrativeContextProps = {
 export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appContext }) => {
     const navigate = useNavigate();
     const { narrativeContextId } = useParams();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const [narrativeContextCategories, setNarrativeContextCategories] = useState<NarrativeCategory[]>([]);
     const [shareModalVisible, setShareModalVisible] = useState(false);
@@ -32,6 +33,7 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
             setNarrativeContextCategories(obtainedNarrativeContext.narrativeCategories);
             appContext.setBackButtonUrl('/');
             appContext.setForwardButtonUrl(null);
+            setIsLoading(false);
         };
 
         init();
@@ -173,8 +175,10 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
                         />
                     ))
                 ) : (
-                    <div className='EmptyNarrativeContextText'>
-                        {narrativeContext?.isEditable
+                    <div className="EmptyNarrativeContextText">
+                        {isLoading
+                            ? 'Cargando el contexto narrativo...'
+                            : narrativeContext?.isEditable
                             ? 'Todavía no has creado ninguna categoría para este contexto narrativo...'
                             : 'Parece que este contexto narrativo esta vacío!'}
                     </div>

@@ -15,6 +15,7 @@ export type HomeViewProps = {
 export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
     const navigate = useNavigate();
 
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [narrativeContexts, setNarrativeContexts] = useState<NarrativeContext[]>([]);
     const [sharedNarrativeContexts, setSharedNarrativeContexts] = useState<NarrativeContext[]>([]);
 
@@ -26,6 +27,8 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
 
             setNarrativeContexts(await appContext.repositories.narrativeContext.list());
             setSharedNarrativeContexts(await appContext.repositories.narrativeContext.listShared());
+
+            setIsLoading(false);
         };
         init();
     }, []);
@@ -98,7 +101,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
                     ))}
                 </ul>
             ) : (
-                <div className="HomeNoContentText">Todavía no has creado ninguna campaña</div>
+                <div className="HomeNoContentText">
+                    {isLoading ? 'Cargando tus campañas' : 'Todavía no has creado ninguna campaña'}
+                </div>
             )}
             <h3>
                 <span role="img" aria-label="world">
@@ -115,7 +120,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
                     ))}
                 </ul>
             ) : (
-                <div className="HomeNoContentText">Todavía no has creado ningun mundo</div>
+                <div className="HomeNoContentText">
+                    {isLoading ? 'Cargando tus mundos' : 'Todavía no has creado ningun mundo'}
+                </div>
             )}
             <h2>👥 Contenido compartido contigo</h2>
             <h3>
@@ -135,7 +142,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
                     ))}
                 </ul>
             ) : (
-                <div className="HomeNoContentText">Nadie esta compartiendote una campaña</div>
+                <div className="HomeNoContentText">
+                    {isLoading ? 'Cargando las campañas que te compatieron' : 'Nadie esta compartiendote una campaña'}
+                </div>
             )}
             <h3>
                 <span role="img" aria-label="world">
@@ -154,7 +163,9 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
                     ))}
                 </ul>
             ) : (
-                <div className="HomeNoContentText">Nadie esta compartiendote un mundo</div>
+                <div className="HomeNoContentText">
+                    {isLoading ? 'Cargando los mundos que te compatieron' : 'Nadie esta compartiendote un mundo'}
+                </div>
             )}
 
             <h2>

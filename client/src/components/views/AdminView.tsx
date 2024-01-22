@@ -34,7 +34,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
     };
 
     const changeName = async (user: User) => {
-        const name = window.prompt(`Ingresa la nueva contraseña para el usuario ${user.name} (${user.username})`);
+        const name = window.prompt(`Ingresa el nuevo nombre para el usuario ${user.name} (${user.username})`);
         if (!name) return;
         await appContext.repositories.user.changeName(user.username, name);
         setUsers(await getUsers());

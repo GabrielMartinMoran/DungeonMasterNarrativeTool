@@ -112,6 +112,7 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
             {editMode ? (
                 <>
                     <RichTextEditor
+                        appContext={appContext}
                         onChange={onBodyChange}
                         initialValue={element.body ?? ''}
                         setIsProcessing={setIsProcessing}

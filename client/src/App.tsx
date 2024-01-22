@@ -8,6 +8,7 @@ import {
     Route,
     Navigate,
     useLocation,
+    useNavigate,
     //Link
 } from 'react-router-dom';
 import { HomeView } from './components/views/HomeView';
@@ -17,7 +18,7 @@ import { Navbar } from './components/Navbar';
 import { LoginView } from './components/views/LoginView';
 import { AppContext } from './app-context';
 import { UpdatingDBIndicator } from './components/UpdatingDBIndicator';
-import { SearchBar } from './components/SearchBar';
+import { SearchBar } from './components/search/SearchBar';
 import { CreateNarrativeContext } from './components/views/CreateNarrativeContext';
 import { LogoutView } from './components/views/LogoutView';
 import { Menu } from './components/Menu';
@@ -25,6 +26,8 @@ import { AdminView } from './components/views/AdminView';
 import { THEMES } from './themes';
 import { ChangePasswordView } from './components/views/ChangePasswordView';
 import { LocationChangeDetector } from './components/LocationChangeDetector';
+import { NavigationSearchModal } from './components/search/NavigationSearchModal';
+import { useShowNavigationSearchModalStore } from './global-stores/navigation-search-modal-store';
 
 export type AppProps = {
     appContext: AppContext;
@@ -34,7 +37,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
     const CHECK_HEALTH_INTERVAL_MS = 5 * 60 * 1000; // Once each 5 minutes
     const [userLogged] = useState(appContext.repositories.auth.isAuthenticated());
     const [updatingDB, setUpdatingDB] = useState(false);
-    const [searchBarDisplayed, setSearchBarDisplayed] = useState(false);
+    const [navigationSearchModalDisplayed, setSearchBarDisplayed] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const [currentThemeName, setCurrentThemeName] = useState<string>(localStorage.getItem('theme') ?? 'light');
     const [healthInterval, setHealthInterval] = useState<NodeJS.Timer | null>(null);
@@ -89,7 +92,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
                 {userLogged ? (
                     <>
                         <Navbar appContext={appContext} toggleShowMenu={toggleShowMenu} />
-                        {searchBarDisplayed ? <SearchBar appContext={appContext} /> : <></>}
+                        {navigationSearchModalDisplayed ? <NavigationSearchModal appContext={appContext} /> : <></>}
                     </>
                 ) : null}
                 <div className="AppContainer">

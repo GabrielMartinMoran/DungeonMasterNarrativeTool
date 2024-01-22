@@ -1,6 +1,6 @@
 import '../../styles/ViewElement.css';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { LegacyRef, Ref, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ParagraphElementComponent } from '../ParagraphElementComponent';
 import { ShopElementComponent } from '../ShopElementComponent';
 import { RenameIcon } from '../icons/RenameIcon';
@@ -23,6 +23,7 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     const [element, setElement] = useState<BaseElement | null>(null);
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const childFuntions: any = {};
+    const ref = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const setNavigationButtons = async () => {
@@ -67,6 +68,39 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         elementId,
     ]);
 
+    useEffect(() => {
+        const anchorClickListener = (e: any) => {
+            if (!e?.target) return;
+            const url = e.target.getAttribute('href');
+            // If it starts with '/' we consider it a local url so we use the internal router
+            if (url.startsWith('/')) {
+                e.preventDefault();
+                navigate(url);
+            } else if (url.startsWith(window.location.origin)) {
+                // Remove origin for full links but to the same origin
+                e.preventDefault();
+                const updatedURL = url.replace(window.location.origin, '');
+                navigate(updatedURL);
+            }
+        };
+
+        // We wait until the component is rendered
+        setTimeout(() => {
+            // Handle all a redirects that start with "/" (because by default anchors don't work
+            // well withreact-router-dom and forces a page refresh)
+            ref.current?.querySelectorAll('a').forEach((node: Element) => {
+                node.addEventListener('click', anchorClickListener);
+                //console.log(node);
+            });
+        }, 0);
+
+        return () => {
+            ref.current?.querySelectorAll('a').forEach((node: Element) => {
+                node.removeEventListener('click', anchorClickListener);
+            });
+        };
+    }, [element]);
+
     const copyRelativeLink = () => {
         const relLink = `${window.location.origin}/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${elementId}`;
         navigator.clipboard.writeText(relLink);
@@ -78,10 +112,10 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
             const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
             const obtainedElement = narrativeContext
                 .getNarrativeCategory(narrativeCategoryId!)
-                .findElementAnywhere(elementId!);
+                .findElementAnywhere(elementId!)!;
             obtainedElement.name = name;
             await appContext.repositories.narrativeContext.save(narrativeContext!);
-            setElement({ ...obtainedElement });
+            setElement(null);
             setTimeout(() => {
                 setElement(obtainedElement);
             }, 0);
@@ -116,7 +150,7 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     };
 
     return (
-        <div className="ViewElement">
+        <div ref={ref} className="ViewElement">
             {element ? (
                 <>
                     <div className="flex viewElementTitleBar">

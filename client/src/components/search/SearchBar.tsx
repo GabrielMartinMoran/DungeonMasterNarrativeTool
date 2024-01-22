@@ -1,26 +1,31 @@
-import '../styles/SearchBar.css';
+import '../../styles/search/SearchBar.css';
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { AppContext } from '../app-context';
-import { BaseElement } from '../models/base-element';
-import { NarrativeContext } from '../models/narrative-context';
+import { AppContext } from '../../app-context';
+import { BaseElement } from '../../models/base-element';
+import { NarrativeContext } from '../../models/narrative-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ElmentIconsMapper } from '../utils/element-icons-mapper';
+import { ElmentIconsMapper } from '../../utils/element-icons-mapper';
 
 let _searchResults: any[] = [];
 let _resultIndex = -1;
 
 export type SearchBarProps = {
-    appContext: AppContext;
+    narrativeContext: NarrativeContext;
+    onSubmit: (element: BaseElement) => void;
+    onCancel: () => void;
+    listItemRenderer: (element: BaseElement) => JSX.Element;
 };
 
-export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
-    const navigate = useNavigate();
-
+export const SearchBar: React.FC<SearchBarProps> = ({
+    narrativeContext,
+    onSubmit,
+    onCancel,
+    listItemRenderer = (element: BaseElement) => element.name,
+}) => {
     const [searchResults, setSearchResults] = useState<BaseElement[]>([]);
     const [resultIndex, setResultIndex] = useState(-1);
-    const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
 
     const moveIndexUp = () => {
         if (_searchResults.length === 0) {
@@ -48,16 +53,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
         setResultIndex(_resultIndex);
     };
 
-    const generateElementLink = (element: BaseElement): string => {
-        if (!narrativeContext) return '';
-        const narrativeCategory = narrativeContext.getNarrativeCategoryByElementId(element.id);
-        return `/narrative-context/${appContext.getNarrativeContextId()}/${narrativeCategory!.id}/${element.id}`;
-    };
-
-    const navigateToElement = () => {
+    const onEnterKey = () => {
         if (_resultIndex === -1) return;
-        navigate(generateElementLink(_searchResults[_resultIndex]));
-        appContext.hideSearchBar();
+        onSubmit(_searchResults[_resultIndex]);
     };
 
     const moveIndex = (event: any) => {
@@ -75,7 +73,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
         }
         if (event.key === 'Enter') {
             event.preventDefault();
-            navigateToElement();
+            onEnterKey();
             return;
         }
     };
@@ -89,19 +87,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
 
     useEffect(() => {
         const init = async () => {
-            setNarrativeContext(
-                await appContext.repositories.narrativeContext.get(appContext.getNarrativeContextId()!)
-            );
-            // Anything in here is fired on component mount.
             document.addEventListener('keydown', moveIndex);
             search('');
         };
         init();
         return () => {
-            // Anything in here is fired on component unmount.
             document.removeEventListener('keydown', moveIndex);
         };
-    }, [narrativeContext]);
+    }, []);
 
     const search = (term: string) => {
         if (narrativeContext) {
@@ -126,7 +119,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
                     placeholder="Ingrese el término a buscar"
                     className="searchBarInput"
                 />
-                <button onClick={appContext.hideSearchBar}>
+                <button onClick={() => onCancel()}>
                     <FontAwesomeIcon icon={faXmark} /> Cerrar
                 </button>
             </div>
@@ -137,12 +130,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({ appContext }) => {
                         id={`searchResult_${i}`}
                         key={`searchResult_${i}`}
                     >
-                        <span className='searchResultsElementIcon'>
-                        {ElmentIconsMapper.getIconFromElement(element)}
+                        <span className="searchResultsElementIcon">
+                            {ElmentIconsMapper.getIconFromElement(element)}
                         </span>
-                        <Link to={generateElementLink(element)} onClick={() => appContext.hideSearchBar()}>
-                            {element.name}
-                        </Link>
+                        {listItemRenderer(element)}
                     </div>
                 ))}
             </div>
