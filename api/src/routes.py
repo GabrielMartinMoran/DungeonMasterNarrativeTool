@@ -7,9 +7,11 @@ from src.exceptions.user_already_exists_exception import UserAlreadyExistsExcept
 from src.models.narrative_context import NarrativeContext
 from src.models.token import Token
 from src.models.user import User
+from src.repositories.changelog_repository import ChangelogRepository
 from src.repositories.imgur_repository import ImgurRepository
 from src.repositories.narrative_context_repository import NarrativeContextRepository
 from src.repositories.user_repository import UserRepository
+from src.services.changelog_retriever import ChangelogRetriever
 from src.services.narrative_contexts.narrative_context_modifier import NarrativeContextModifier
 from src.services.dnd_5e_data_updater import DnD5EDataUpdater
 from src.services.narrative_contexts.narrative_context_remover import NarrativeContextRemover
@@ -183,3 +185,9 @@ def delete_user(request: Request, username: str) -> Response:
         }), 400
     service.delete(username)
     return jsonify({})
+
+
+@route('/api/changelog', http_methods.GET)
+def get_changelog(request: Request) -> Response:
+    service = ChangelogRetriever(ChangelogRepository())
+    return jsonify({'changelog': service.get()})

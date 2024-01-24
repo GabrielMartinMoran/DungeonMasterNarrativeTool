@@ -24,6 +24,9 @@ import { AuthRepository } from './repositories/auth-repository';
 import { HealthRepository } from './repositories/health-repository';
 import { useNavigationSearchModalVisibleStore } from './hooks/stores/use-navigation-search-modal-visible-store';
 import { KeyboardShortcursHandler } from './components/handlers/KeyboardShortcutsHandler';
+import { useDiceTrayModalVisibleStore } from './hooks/stores/use-dice-tray-modal-visible-store';
+import { DiceTrayModal } from './components/DiceTrayModal';
+import { ChangelogView } from './components/views/ChangelogView';
 
 export type AppProps = {
     appContext: AppContext;
@@ -40,6 +43,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
     const [healthInterval, setHealthInterval] = useState<NodeJS.Timer | null>(null);
 
     const { navigationSearchModalVisible } = useNavigationSearchModalVisibleStore();
+    const { diceTrayModalVisible } = useDiceTrayModalVisibleStore();
 
     const { configureLoadingIndicatorCallback } = useLoadingIndicator();
 
@@ -93,6 +97,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
                     <>
                         <Navbar appContext={appContext} toggleShowMenu={toggleShowMenu} />
                         {navigationSearchModalVisible ? <NavigationSearchModal appContext={appContext} /> : null}
+                        {diceTrayModalVisible ? <DiceTrayModal /> : null}
                     </>
                 ) : null}
                 <div className="AppContainer">
@@ -118,6 +123,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
                                     <Route path="/password" element={<ChangePasswordView appContext={appContext} />} />
                                     <Route path="/admin" element={<AdminView appContext={appContext} />} />
                                     <Route path="/logout" element={<LogoutView appContext={appContext} />} />
+                                    <Route path="/changelog" element={<ChangelogView appContext={appContext} />} />
                                     <Route path="/" element={<HomeView appContext={appContext} />} />
                                     <Route path="*" element={<Navigate to="/" />} />
                                 </>

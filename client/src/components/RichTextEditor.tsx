@@ -6,7 +6,7 @@ import { SunEditorOptions } from 'suneditor/src/options';
 import { AddReferenceSearchModal } from './search/AddReferenceSearchModal';
 import { AppContext } from '../app-context';
 import { AddReferenceSearchModalResult } from '../types/add-reference-search-modal-result';
-import { useAddReferenceSearchModalVisibleStore } from '../hooks/stores/use-add-reference-search-modal-visible-store copy';
+import { useAddReferenceSearchModalVisibleStore } from '../hooks/stores/use-add-reference-search-modal-visible-store';
 
 export type RichTextEditorProps = {
     appContext: AppContext;

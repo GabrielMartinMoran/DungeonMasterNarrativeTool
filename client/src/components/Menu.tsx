@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AppContext } from '../app-context';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHammer, faHouse, faKey, faPalette, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHammer, faHouse, faKey, faList, faPalette, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { ChangePasswordIcon } from './icons/ChangePasswordIcon';
 
 export type MenuProps = {
@@ -54,6 +54,9 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                 >
                     <FontAwesomeIcon icon={faPalette} color={'#d47902'} /> Cambiar tema
                 </span>
+                <Link className="marginBottom0_5Rem" to={`/changelog`} onClick={hideMenu}>
+                    <FontAwesomeIcon icon={faList} color={'#363636'} /> Historial de cambios
+                </Link>
                 <span className="marginTop1Rem" />
                 <h3 className="marginBottom1Rem">
                     {appContext.authenticatedUser.isAdmin() ? '🧙🏼‍♂️' : '👤'} {appContext.authenticatedUser.name}

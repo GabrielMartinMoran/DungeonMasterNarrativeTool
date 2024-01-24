@@ -17,16 +17,10 @@ export type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) => {
-    //const [backButtonURL, setBackButtonUrl] = useState<string | null>('/');
-    //const [forwardButtonURL, setForwardButtonUrl] = useState<string | null>('/');
-
     const { backButtonURL, forwardButtonURL } = useNavigationButtonsURLStore();
-
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
-    const navigate = useNavigate();
     const menuButtonRef = useRef(null);
     const { configureSetNarrativeContextCallback } = useNarrativeContext();
-
     const narrativeContextRepository = useRepository(NarrativeContextRepository);
 
     useEffect(() => {
@@ -44,18 +38,6 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) =>
         setNarrativeContext(obtainedNarrativeContext);
     };
 
-    const navigateToPreviousElement = () => {
-        if (!backButtonURL) return;
-        navigate(backButtonURL);
-    };
-
-    const navigateToNextElement = () => {
-        if (!forwardButtonURL) return;
-        navigate(forwardButtonURL);
-    };
-
-    appContext.navigateToPreviousElement = navigateToPreviousElement;
-    appContext.navigateToNextElement = navigateToNextElement;
     configureSetNarrativeContextCallback(setNarrativeContextById);
 
     return (

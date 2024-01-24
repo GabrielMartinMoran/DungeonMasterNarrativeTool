@@ -71,3 +71,8 @@
 .ParagraphElementBodyRendererBody a:hover {
     text-decoration: underline;
 }
+
+
+.DiceExpressionButton {
+    min-width: max-content;
+}

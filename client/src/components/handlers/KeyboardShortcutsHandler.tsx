@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigationSearchModalVisibleStore } from '../../hooks/stores/use-navigation-search-modal-visible-store';
-import { useAddReferenceSearchModalVisibleStore } from '../../hooks/stores/use-add-reference-search-modal-visible-store copy';
+import { useAddReferenceSearchModalVisibleStore } from '../../hooks/stores/use-add-reference-search-modal-visible-store';
 
 export const KeyboardShortcursHandler: React.FC = () => {
     const pressedKeys: string[] = [];
@@ -41,22 +41,6 @@ export const KeyboardShortcursHandler: React.FC = () => {
                 setAddReferenceSearchModalVisible(false);
                 return;
             }
-
-            /*
-            // Navigate to previous element
-            if (this._keyPressed('Alt') && event.key === 'ArrowLeft') {
-                event.preventDefault();
-                this._appContext.navigateToPreviousElement();
-                return;
-            }
-            
-            // Navigate to next element
-            if (this._keyPressed('Alt') && event.key === 'ArrowRight') {
-                event.preventDefault();
-                this._appContext.navigateToNextElement();
-                return;
-            }
-            */
         },
         keyup: (event: KeyboardEvent) => {
             tryRemovePressedKey(event.key);

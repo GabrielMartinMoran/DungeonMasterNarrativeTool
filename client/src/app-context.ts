@@ -9,11 +9,6 @@ export class AppContext {
     protected _canOpenSearchBar: boolean = true;
     menuButtonRef: any | null;
 
-    // To be overrided
-    navigateToPreviousElement() {}
-    // To be overrided
-    navigateToNextElement() {}
-
     public async pullAuthenticatedUserInfo() {
         this._authenticatedUser = await getOrInstantiateRepository(AuthRepository).getAuthenticatedUser();
     }
