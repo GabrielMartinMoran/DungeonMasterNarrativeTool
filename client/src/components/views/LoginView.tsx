@@ -4,6 +4,9 @@ import { AppContext } from '../../app-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { ConnectionError } from '../../errors/connection-error';
+import { useRepository } from '../../hooks/use-repository';
+import { AuthRepository } from '../../repositories/auth-repository';
+import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
 
 export type LoginViewProps = {
     appContext: AppContext;
@@ -14,15 +17,17 @@ export const LoginView: React.FC<LoginViewProps> = ({ appContext }) => {
     const [password, setPassword] = useState<string>('');
     const [loginBtnEnabled, setLoginBtnEnabled] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const authRepository = useRepository(AuthRepository);
+    const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
 
     useEffect(() => {
-        appContext.setBackButtonUrl(null);
-        appContext.setForwardButtonUrl(null);
-    }, [appContext]);
+        setBackButtonURL(null);
+        setForwardButtonURL(null);
+    }, []);
 
     const login = async () => {
         try {
-            await appContext.repositories.auth.login({
+            await authRepository.login({
                 username,
                 password,
             });

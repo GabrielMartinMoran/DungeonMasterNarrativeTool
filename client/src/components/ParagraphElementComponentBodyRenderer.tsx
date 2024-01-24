@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { CharacterStatBlock } from './CharacterStatBlock';
 import ReactDOMServer from 'react-dom/server';
 import { AppContext } from '../app-context';
+import { useRepository } from '../hooks/use-repository';
+import { DnD5eCharactersRepository } from '../repositories/dnd5e-characters-repository';
 
 export type ParagraphElementComponentBodyRendererProps = {
     appContext: AppContext;
@@ -16,6 +18,7 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
 }) => {
     const [renderedBody, setRenderedBody] = useState<string | undefined>('');
     const [docSections, setDocSections] = useState<any[]>([]);
+    const dnd5eCharactersRepository = useRepository(DnD5eCharactersRepository);
 
     useEffect(() => {
         const _renderedBody = renderBody();
@@ -24,7 +27,7 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
     }, []);
 
     const getCharacter = async (characterId: string) => {
-        const character = await appContext.repositories.dnd5eCharacters.getCharacter(characterId);
+        const character = await dnd5eCharactersRepository.getCharacter(characterId);
         document.getElementById(characterId)!.innerHTML = ReactDOMServer.renderToString(
             <CharacterStatBlock character={character} />
         );

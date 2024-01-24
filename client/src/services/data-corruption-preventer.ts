@@ -1,5 +1,7 @@
 import { AppContext } from '../app-context';
 import { DirtyDBError } from '../errors/dirty-db-error';
+import { getOrInstantiateRepository } from '../hooks/use-repository';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
 
 export class DataCorruptionPreventer {
     _appContext: AppContext;
@@ -16,13 +18,13 @@ export class DataCorruptionPreventer {
     }
 
     _registerAfterSaveHook() {
-        this._appContext.repositories.narrativeContext.registerAfterSaveHook(() => {
+        getOrInstantiateRepository(NarrativeContextRepository).registerAfterSaveHook(() => {
             this._updateLastSaveInfo();
         });
     }
 
     _registerOnDirtyDBCallback() {
-        this._appContext.repositories.narrativeContext.registerOnDirtyDBCallback(() => {
+        getOrInstantiateRepository(NarrativeContextRepository).registerOnDirtyDBCallback(() => {
             this._onDirtyDB();
             throw new DirtyDBError('Dirty db');
         });
@@ -51,7 +53,7 @@ export class DataCorruptionPreventer {
     start() {
         this._interval = setInterval(() => {
             if (this._isWorkingDirty()) {
-                this._appContext.repositories.narrativeContext.enableSavingPrevention();
+                getOrInstantiateRepository(NarrativeContextRepository).enableSavingPrevention();
                 clearInterval(this._interval!);
                 this._onDirtyDB();
             }

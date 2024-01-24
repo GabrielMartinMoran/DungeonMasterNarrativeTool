@@ -9,6 +9,9 @@ import { faTag, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import { CreateUserModal } from '../CreateUserModal';
 import { User } from '../../models/user';
 import { RenameIcon } from '../icons/RenameIcon';
+import { useRepository } from '../../hooks/use-repository';
+import { AuthRepository } from '../../repositories/auth-repository';
+import { UserRepository } from '../../repositories/user-repository';
 
 export type AdminViewProps = {
     appContext: AppContext;
@@ -17,6 +20,8 @@ export type AdminViewProps = {
 export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
     const [users, setUsers] = useState<User[]>([]);
     const [showCreateUserModal, setShowCreateUserModal] = useState(false);
+    const authRepository = useRepository(AuthRepository);
+    const userRepository = useRepository(UserRepository);
 
     useEffect(() => {
         const init = async () => {
@@ -26,17 +31,15 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
     }, []);
 
     const getUsers = async () => {
-        const allUsers = await appContext.repositories.user.list();
+        const allUsers = await userRepository.list();
         // We use getAuthenticatedUsername because it can't be null if the user is logged
-        return allUsers.filter(
-            (user: User) => user.username !== appContext.repositories.auth.getAuthenticatedUsername()
-        );
+        return allUsers.filter((user: User) => user.username !== authRepository.getAuthenticatedUsername());
     };
 
     const changeName = async (user: User) => {
         const name = window.prompt(`Ingresa el nuevo nombre para el usuario ${user.name} (${user.username})`);
         if (!name) return;
-        await appContext.repositories.user.changeName(user.username, name);
+        await userRepository.changeName(user.username, name);
         setUsers(await getUsers());
         alert(`El nombre del usuario ${user.username} se ha cambiado correctamente a ${name}`);
     };
@@ -44,7 +47,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
     const changePassword = async (user: User) => {
         const password = window.prompt(`Ingresa el nuevo nombre para el usuario ${user.name} (${user.username})`);
         if (!password) return;
-        await appContext.repositories.user.changePassword(user.username, password);
+        await userRepository.changePassword(user.username, password);
         alert(`La contraseña del usuario ${user.name} (${user.username}) se ha cambiado correctamente`);
     };
 
@@ -57,7 +60,7 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
             `Estas seguro que deseas eliminar el usuario ${user.name} (${user.username})`
         );
         if (!shouldDelete) return;
-        await appContext.repositories.user.delete(user.username);
+        await userRepository.delete(user.username);
         setUsers(await getUsers());
         alert(`El usuario ${user.name} (${user.username}) ha sido eliminado correctamente`);
     };

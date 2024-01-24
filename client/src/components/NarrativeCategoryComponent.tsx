@@ -11,6 +11,8 @@ import { AppContext } from '../app-context';
 import { NarrativeContext } from '../models/narrative-context';
 import { NarrativeCategory } from '../models/narrative-category';
 import { BaseElement } from '../models/base-element';
+import { useRepository } from '../hooks/use-repository';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
 
 export type NarrativeCategoryComponentProps = {
     appContext: AppContext;
@@ -30,11 +32,12 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
     moveCategoryDown,
 }) => {
     const [elementsState, setElementsState] = useState(narrativeCategory.elements);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
 
     const onChange = async () => {
         // As elements are cloned, we assign them to the narrative category before saving
         narrativeCategory.elements = elementsState;
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         setElementsState([...narrativeCategory.elements]);
         //setTimeout(() => setElementsState(narrativeCategory.elements), 0);
     };
@@ -46,7 +49,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         // As elements are cloned, we assign them to the narrative category before saving
         narrativeCategory.elements = elementsState;
         narrativeCategory.addElement(newElement);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onChange();
     };
 
@@ -56,7 +59,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         // As elements are cloned, we assign them to the narrative category before saving
         narrativeCategory.elements = elementsState;
         narrativeCategory.removeElement(element.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onChange();
     };
 
@@ -64,7 +67,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         // As elements are cloned, we assign them to the narrative category before saving
         narrativeCategory.elements = elementsState;
         narrativeCategory.moveElementUp(element.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onChange();
     };
 
@@ -72,7 +75,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         // As elements are cloned, we assign them to the narrative category before saving
         narrativeCategory.elements = elementsState;
         narrativeCategory.moveElementDown(element.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onChange();
     };
 
@@ -80,7 +83,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element.name);
         if (!name) return;
         element.name = name;
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onCategoryChange();
     };
 
@@ -88,7 +91,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         const shouldDelete = window.confirm(`Estas seguro de eliminar la categoría ${narrativeCategory.name}`);
         if (!shouldDelete) return;
         narrativeContext.removeNarrativeCategory(narrativeCategory.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onCategoryChange();
     };
 
@@ -96,7 +99,7 @@ export const NarrativeCategoryComponent: React.FC<NarrativeCategoryComponentProp
         const name = window.prompt('Ingresa el nuevo nombre de la categoría', narrativeCategory.name);
         if (!name) return;
         narrativeCategory.name = name;
-        await appContext.repositories.narrativeContext.save(narrativeContext);
+        await narrativeContextRepository.save(narrativeContext);
         onCategoryChange();
     };
 

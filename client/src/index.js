@@ -5,6 +5,8 @@ import { App } from './App';
 import { AppContext } from './app-context';
 import { DataCorruptionPreventer } from './services/data-corruption-preventer';
 import { KeyboardShortcutsHandler } from './utils/keyboard-shorcuts-handler';
+import { getOrInstantiateRepository } from './hooks/use-repository';
+import { AuthRepository } from './repositories/auth-repository';
 
 const appContext = new AppContext();
 const dataCorruptionPreventer = new DataCorruptionPreventer(appContext);
@@ -30,11 +32,11 @@ const start = async () => {
     }
 };
 
-appContext.repositories.auth.onLogin = () => {
+getOrInstantiateRepository(AuthRepository).onLogin = () => {
     window.location.assign('/');
 };
 
-appContext.repositories.auth.onLogout = () => {
+getOrInstantiateRepository(AuthRepository).onLogout = () => {
     window.location.assign('/login');
 };
 

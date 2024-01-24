@@ -1,8 +1,9 @@
 import { Database } from '../models/database';
 import { NarrativeContext } from '../models/narrative-context';
 import { DBSyncRepository } from './db-sync-repository';
+import { Repository } from './repository';
 
-export class DBRepository {
+export class DBRepository implements Repository {
     static _DB_KEY: string = 'db';
     static _db: Database;
     static _afterSaveHooks: (() => void)[] = [];

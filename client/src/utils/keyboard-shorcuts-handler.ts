@@ -38,6 +38,7 @@ export class KeyboardShortcutsHandler {
 
             if (event.key === 'Escape') {
                 this._appContext.triggerEvent('close_search');
+                this._appContext.triggerEvent('close_add_reference');
                 return;
             }
 

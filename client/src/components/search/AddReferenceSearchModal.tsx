@@ -1,11 +1,13 @@
 import '../../styles/search/SearchModal.css';
-import { Link, useNavigate } from 'react-router-dom';
 import { AppContext } from '../../app-context';
 import { BaseElement } from '../../models/base-element';
 import { useEffect, useState } from 'react';
 import { NarrativeContext } from '../../models/narrative-context';
 import { SearchBar } from './SearchBar';
 import { AddReferenceSearchModalResult } from '../../types/add-reference-search-modal-result';
+import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
+import { useRepository } from '../../hooks/use-repository';
+import { useNarrativeContext } from '../../hooks/use-narrative-context';
 
 export type AddReferenceSearchModalProps = {
     appContext: AppContext;
@@ -15,12 +17,12 @@ export type AddReferenceSearchModalProps = {
 
 export const AddReferenceSearchModal: React.FC<AddReferenceSearchModalProps> = ({ appContext, onSubmit, onCancel }) => {
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
+    const { getNarrativeContextId } = useNarrativeContext();
 
     useEffect(() => {
         const init = async () => {
-            setNarrativeContext(
-                await appContext.repositories.narrativeContext.get(appContext.getNarrativeContextId()!)
-            );
+            setNarrativeContext(await narrativeContextRepository.get(getNarrativeContextId()!));
         };
         init();
     }, [narrativeContext]);
@@ -28,7 +30,7 @@ export const AddReferenceSearchModal: React.FC<AddReferenceSearchModalProps> = (
     const generateElementLink = (element: BaseElement): string => {
         if (!narrativeContext) return '';
         const narrativeCategory = narrativeContext.getNarrativeCategoryByElementId(element.id);
-        return `/narrative-context/${appContext.getNarrativeContextId()}/${narrativeCategory!.id}/${element.id}`;
+        return `/narrative-context/${getNarrativeContextId()}/${narrativeCategory!.id}/${element.id}`;
     };
 
     const addElementReference = (element: BaseElement) => {

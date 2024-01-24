@@ -1,14 +1,10 @@
 import { WEB_API_URL } from '../config';
 import { ConnectionError } from '../errors/connection-error';
+import { loadingIndicatorCallback } from '../hooks/use-loading-indicator';
+import { Repository } from './repository';
 const Pako = require('pako');
 
-export class WebApiRepository {
-    protected updatingDBIndicatorSetter = (status: boolean) => {};
-
-    public configureUpdatingDBIndicator(setter: (status: boolean) => void) {
-        this.updatingDBIndicatorSetter = setter;
-    }
-
+export class WebApiRepository implements Repository {
     protected _get_token() {
         return localStorage.getItem('token');
     }
@@ -123,6 +119,6 @@ export class WebApiRepository {
     }
 
     private setUpdatingIndicator(status: boolean) {
-        this.updatingDBIndicatorSetter(status);
+        loadingIndicatorCallback(status);
     }
 }

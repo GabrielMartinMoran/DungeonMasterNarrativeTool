@@ -11,7 +11,10 @@ import { NarrativeContext } from '../../models/narrative-context';
 import { AppContext } from '../../app-context';
 import { ShareModal } from '../ShareModal';
 import { ShareIcon } from '../icons/ShareIcon';
-import { NarrativeContextFactory } from '../../factories/narrative-context-factory';
+import { useRepository } from '../../hooks/use-repository';
+import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
+import { useNarrativeContext } from '../../hooks/use-narrative-context';
+import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
 
 export type ViewNarrativeContextProps = {
     appContext: AppContext;
@@ -24,28 +27,31 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const [narrativeContextCategories, setNarrativeContextCategories] = useState<NarrativeCategory[]>([]);
     const [shareModalVisible, setShareModalVisible] = useState(false);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
+    const { setNarrativeContextById } = useNarrativeContext();
+    const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
 
     useEffect(() => {
         const init = async () => {
-            await appContext.setNarrativeContextById(narrativeContextId!);
-            const obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            await setNarrativeContextById(narrativeContextId!);
+            const obtainedNarrativeContext = await narrativeContextRepository.get(narrativeContextId!);
             setNarrativeContext(obtainedNarrativeContext);
             setNarrativeContextCategories(obtainedNarrativeContext.narrativeCategories);
-            appContext.setBackButtonUrl('/');
-            appContext.setForwardButtonUrl(null);
+            setBackButtonURL('/');
+            setForwardButtonURL(null);
             setIsLoading(false);
         };
 
         init();
-    }, []);
+    }, [narrativeContext]);
 
     const addNarrativeCategory = async () => {
         const categoryName = window.prompt('Ingresa nombre de la categoría');
         if (categoryName) {
             const category = new NarrativeCategory(categoryName);
-            const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            const narrativeContext = await narrativeContextRepository.get(narrativeContextId!);
             narrativeContext.addNarrativeCategory(category);
-            await appContext.repositories.narrativeContext.save(narrativeContext!);
+            await narrativeContextRepository.save(narrativeContext!);
             setNarrativeContextCategories([...narrativeContext.narrativeCategories]);
         }
     };
@@ -57,7 +63,7 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
             }`
         );
         if (!shouldDelete) return;
-        await appContext.repositories.narrativeContext.delete(narrativeContextId!);
+        await narrativeContextRepository.delete(narrativeContextId!);
         navigate('/');
     };
 
@@ -68,12 +74,12 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
         );
         if (!name) return;
         narrativeContext!.name = name;
-        await appContext.repositories.narrativeContext.save(narrativeContext!);
+        await narrativeContextRepository.save(narrativeContext!);
         setNarrativeContext(NarrativeContext.fromJson(narrativeContext!.toJson()));
-        await appContext.setNarrativeContextById(null);
+        await setNarrativeContextById(null);
         setTimeout(async () => {
             setNarrativeContext(narrativeContext);
-            await appContext.setNarrativeContextById(narrativeContextId!);
+            await setNarrativeContextById(narrativeContextId!);
         }, 0);
     };
 
@@ -83,13 +89,13 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
 
     const moveCategoryUp = async (category: NarrativeCategory) => {
         narrativeContext!.moveNarrativeCategoryUp(category.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext!);
+        await narrativeContextRepository.save(narrativeContext!);
         setNarrativeContextCategories([...narrativeContext!.narrativeCategories]);
     };
 
     const moveCategoryDown = async (category: NarrativeCategory) => {
         narrativeContext!.moveNarrativeCategoryDown(category.id);
-        await appContext.repositories.narrativeContext.save(narrativeContext!);
+        await narrativeContextRepository.save(narrativeContext!);
         setNarrativeContextCategories([...narrativeContext!.narrativeCategories]);
     };
 

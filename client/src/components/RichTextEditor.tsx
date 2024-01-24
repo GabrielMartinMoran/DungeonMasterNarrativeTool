@@ -1,5 +1,5 @@
 import '../styles/RichTextEditor.css';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SunEditor from 'suneditor-react';
 import SunEditorCore from 'suneditor/src/lib/core';
 import { SunEditorOptions } from 'suneditor/src/options';
@@ -54,6 +54,17 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             },
         ],
     } as SunEditorOptions;
+
+    useEffect(() => {
+        appContext.hideAddReferenceSearchModal = () => {
+            setAddReferenceModalVisible(false);
+            editor?.current?.core.focus();
+        };
+
+        return () => {
+            appContext.hideAddReferenceSearchModal = () => {};
+        };
+    });
 
     const editor = useRef<SunEditorCore>();
 

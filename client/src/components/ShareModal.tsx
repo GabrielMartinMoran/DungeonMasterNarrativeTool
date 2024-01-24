@@ -7,6 +7,8 @@ import { UserIcon } from './icons/UserIcon';
 import { RemoveIcon } from './icons/RemoveIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
+import { useRepository } from '../hooks/use-repository';
 
 export type ShareModalProps = {
     appContext: AppContext;
@@ -19,32 +21,27 @@ export const ShareModal: React.FC<ShareModalProps> = ({ appContext, narrativeCon
     const [usernameToShare, setUsernameToShare] = useState('');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [shareBtnEnabled, setShareBtnEnabled] = useState(false);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
 
     useEffect(() => {
         const init = async () => {
-            const usernames = await appContext.repositories.narrativeContext.getSharedUsernames(
-                narrativeContext.narrativeContextId
-            );
+            const usernames = await narrativeContextRepository.getSharedUsernames(narrativeContext.narrativeContextId);
             setSharedUsernames(usernames);
         };
         init();
     }, []);
 
     const shareNarrativeContext = async () => {
-        await appContext.repositories.narrativeContext.share(usernameToShare, narrativeContext.narrativeContextId);
+        await narrativeContextRepository.share(usernameToShare, narrativeContext.narrativeContextId);
         setUsernameToShare('');
         setShareBtnEnabled(false);
-        const usernames = await appContext.repositories.narrativeContext.getSharedUsernames(
-            narrativeContext.narrativeContextId
-        );
+        const usernames = await narrativeContextRepository.getSharedUsernames(narrativeContext.narrativeContextId);
         setSharedUsernames(usernames);
     };
 
     const unshareNarrativeContext = async (username: string) => {
-        await appContext.repositories.narrativeContext.unshare(username, narrativeContext.narrativeContextId);
-        const usernames = await appContext.repositories.narrativeContext.getSharedUsernames(
-            narrativeContext.narrativeContextId
-        );
+        await narrativeContextRepository.unshare(username, narrativeContext.narrativeContextId);
+        const usernames = await narrativeContextRepository.getSharedUsernames(narrativeContext.narrativeContextId);
         setSharedUsernames(usernames);
     };
 

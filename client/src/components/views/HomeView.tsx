@@ -7,6 +7,10 @@ import { ImportNarrativeContextIcon } from '../icons/ImportNarrativeContextIcon'
 import { NarrativeContextImporter } from '../../utils/narrative-context-importer';
 import { AppContext } from '../../app-context';
 import { NarrativeContext } from '../../models/narrative-context';
+import { useRepository } from '../../hooks/use-repository';
+import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
+import { useNarrativeContext } from '../../hooks/use-narrative-context';
+import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
 
 export type HomeViewProps = {
     appContext: AppContext;
@@ -18,15 +22,19 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [narrativeContexts, setNarrativeContexts] = useState<NarrativeContext[]>([]);
     const [sharedNarrativeContexts, setSharedNarrativeContexts] = useState<NarrativeContext[]>([]);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
+    const { setNarrativeContextById } = useNarrativeContext();
+    const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
 
     useEffect(() => {
         const init = async () => {
-            appContext.setNarrativeContextById(null);
-            appContext.setBackButtonUrl(null);
-            appContext.setForwardButtonUrl(null);
+            setNarrativeContextById(null);
+            setBackButtonURL(null);
+            setForwardButtonURL(null);
 
-            setNarrativeContexts(await appContext.repositories.narrativeContext.list());
-            setSharedNarrativeContexts(await appContext.repositories.narrativeContext.listShared());
+            setNarrativeContexts(await narrativeContextRepository.list());
+
+            setSharedNarrativeContexts(await narrativeContextRepository.listShared());
 
             setIsLoading(false);
         };
@@ -43,7 +51,7 @@ export const HomeView: React.FC<HomeViewProps> = ({ appContext }) => {
         reader.onload = async (e) => {
             const json = e.target!.result;
             await NarrativeContextImporter.importFromJson(json, appContext);
-            setNarrativeContexts(await appContext.repositories.narrativeContext.list());
+            setNarrativeContexts(await narrativeContextRepository.list());
             (document.getElementById('narrativeContextFileSelector')! as any).value = null;
         };
         reader.readAsText(e.target.files[0]);

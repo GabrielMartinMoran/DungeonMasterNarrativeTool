@@ -5,12 +5,14 @@ import { UserIcon } from './icons/UserIcon';
 import { LogoutIcon } from './icons/LogoutIcon';
 import { ChangePasswordIcon } from './icons/ChangePasswordIcon';
 import { AppContext } from '../app-context';
+import { useRepository } from '../hooks/use-repository';
 
 export type SessionMenuButtonProps = {
     appContext: AppContext;
 };
 
 export const SessionMenuButton: React.FC<SessionMenuButtonProps> = ({ appContext }) => {
+    const authRepository = useRepository(AuthRepository);
     const dropdownBody: any | null = useRef();
 
     const showDropdown = () => {
@@ -18,7 +20,7 @@ export const SessionMenuButton: React.FC<SessionMenuButtonProps> = ({ appContext
     };
 
     const logout = () => {
-        appContext.repositories.auth.logout();
+        authRepository.logout();
     };
 
     const changePassword = () => {

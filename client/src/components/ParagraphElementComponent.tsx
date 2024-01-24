@@ -5,6 +5,8 @@ import { ParagraphElementComponentBodyRenderer } from './ParagraphElementCompone
 import { AppContext } from '../app-context';
 import { ParagraphElement } from '../models/paragraph-element';
 import { DirtyDBError } from '../errors/dirty-db-error';
+import { useRepository } from '../hooks/use-repository';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
 
 let currentEditorValue: string | null = null;
 let hasChangedAtLeastOneTime = false;
@@ -23,6 +25,7 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
     parentExposedFunctions,
 }) => {
     const [editMode, setEditMode] = useState(false);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
 
     const edit = () => {
         currentEditorValue = element.body;
@@ -44,12 +47,12 @@ export const ParagraphElementComponent: React.FC<ParagraphElementComponentProps>
         const cancelBtn = document.querySelector('#cancelBtn');
         if (cancelBtn) (cancelBtn as any).disabled = true;
 
-        const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
+        const narrativeContext = await narrativeContextRepository.get(narrativeContextId);
         let shouldReload = false;
 
         // Catch Dirty DB Errors in case of dirty reads
         try {
-            shouldReload = await appContext.repositories.narrativeContext.save(narrativeContext);
+            shouldReload = await narrativeContextRepository.save(narrativeContext);
         } catch (err) {
             if (err instanceof DirtyDBError) {
                 if (cancelBtn) (cancelBtn as any).disabled = false;

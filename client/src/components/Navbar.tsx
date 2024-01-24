@@ -1,14 +1,15 @@
 import '../styles/Navbar.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { SessionMenuButton } from './SessionMenuButton';
-import { AuthRepository } from '../repositories/auth-repository';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faDiceD20 } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../app-context';
 import { NarrativeContext } from '../models/narrative-context';
 import { MenuIcon } from './icons/MenuIcon';
-import logo from '../assets/img/logo.png';
+import { useRepository } from '../hooks/use-repository';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
+import { useNarrativeContext } from '../hooks/use-narrative-context';
+import { useNavigationButtonsURLStore } from '../hooks/stores/use-navigation-buttons-url-store';
 
 export type NavbarProps = {
     appContext: AppContext;
@@ -16,42 +17,46 @@ export type NavbarProps = {
 };
 
 export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) => {
-    const [backButtonUrl, setBackButtonUrl] = useState('/');
-    const [forwardButtonUrl, setForwardButtonUrl] = useState('/');
+    //const [backButtonURL, setBackButtonUrl] = useState<string | null>('/');
+    //const [forwardButtonURL, setForwardButtonUrl] = useState<string | null>('/');
+
+    const { backButtonURL, forwardButtonURL } = useNavigationButtonsURLStore();
+
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const navigate = useNavigate();
     const menuButtonRef = useRef(null);
+    const { configureSetNarrativeContextCallback } = useNarrativeContext();
+
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
 
     useEffect(() => {
         appContext.menuButtonRef = menuButtonRef;
         return () => {
             appContext.menuButtonRef = null;
         };
-    }, []);
+    }, [narrativeContext]);
 
-    const setNarrativeContextById = async (narrativeContextId: string) => {
+    const setNarrativeContextById = async (narrativeContextId: string | null) => {
         let obtainedNarrativeContext = null;
         if (narrativeContextId) {
-            obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId);
+            obtainedNarrativeContext = await narrativeContextRepository.get(narrativeContextId);
         }
         setNarrativeContext(obtainedNarrativeContext);
     };
 
     const navigateToPreviousElement = () => {
-        if (!backButtonUrl) return;
-        navigate(backButtonUrl);
+        if (!backButtonURL) return;
+        navigate(backButtonURL);
     };
 
     const navigateToNextElement = () => {
-        if (!forwardButtonUrl) return;
-        navigate(forwardButtonUrl);
+        if (!forwardButtonURL) return;
+        navigate(forwardButtonURL);
     };
 
-    (appContext as any).setBackButtonUrl = setBackButtonUrl;
-    (appContext as any).setForwardButtonUrl = setForwardButtonUrl;
-    appContext._setNarrativeContextById = setNarrativeContextById;
     appContext.navigateToPreviousElement = navigateToPreviousElement;
     appContext.navigateToNextElement = navigateToNextElement;
+    configureSetNarrativeContextCallback(setNarrativeContextById);
 
     return (
         <div className="Navbar">
@@ -80,18 +85,18 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) =>
                     )}
                 </div>
                 <div className="flex2 textRight" id="nabvarNavigationIcons">
-                    <span className={`iconButton ${backButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'}`}>
-                        {backButtonUrl ? (
-                            <Link to={backButtonUrl}>
+                    <span className={`iconButton ${backButtonURL ? 'iconButtonActive' : 'iconButtonInactive'}`}>
+                        {backButtonURL ? (
+                            <Link to={backButtonURL}>
                                 <FontAwesomeIcon icon={faAngleLeft} />
                             </Link>
                         ) : (
                             <FontAwesomeIcon icon={faAngleLeft} className="inactiveLink" />
                         )}
                     </span>
-                    <span className={`iconButton ${forwardButtonUrl ? 'iconButtonActive' : 'iconButtonInactive'}`}>
-                        {forwardButtonUrl ? (
-                            <Link to={forwardButtonUrl}>
+                    <span className={`iconButton ${forwardButtonURL ? 'iconButtonActive' : 'iconButtonInactive'}`}>
+                        {forwardButtonURL ? (
+                            <Link to={forwardButtonURL}>
                                 <FontAwesomeIcon icon={faAngleRight} />
                             </Link>
                         ) : (
