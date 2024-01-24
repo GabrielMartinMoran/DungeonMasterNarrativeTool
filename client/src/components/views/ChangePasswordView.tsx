@@ -5,6 +5,9 @@ import { ChangePasswordIcon } from '../icons/ChangePasswordIcon';
 import { faArrowLeft, faKey } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { AuthRepository } from '../../repositories/auth-repository';
+import { useRepository } from '../../hooks/use-repository';
+import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
 
 export type ChangePasswordViewProps = {
     appContext: AppContext;
@@ -16,10 +19,12 @@ export const ChangePasswordView: React.FC<ChangePasswordViewProps> = ({ appConte
     const [changePasswordBtnEnabled, setChangePasswordBtnEnabled] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const navigate = useNavigate();
+    const authRepository = useRepository(AuthRepository);
+    const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
 
     useEffect(() => {
-        appContext.setBackButtonUrl(null);
-        appContext.setForwardButtonUrl(null);
+        setBackButtonURL(null);
+        setForwardButtonURL(null);
     }, []);
 
     const onPasswordChange = (event: any) => {
@@ -46,7 +51,7 @@ export const ChangePasswordView: React.FC<ChangePasswordViewProps> = ({ appConte
 
     const changePassword = async () => {
         try {
-            await appContext.repositories.auth.changePassword(password);
+            await authRepository.changePassword(password);
             alert('Tu contraseña ha sido cambiada correctamente');
             navigate('/');
         } catch {

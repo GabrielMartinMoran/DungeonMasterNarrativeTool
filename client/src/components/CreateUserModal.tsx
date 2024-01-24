@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { AppContext } from '../app-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useRepository } from '../hooks/use-repository';
+import { UserRepository } from '../repositories/user-repository';
 
 export type CreateUserModalProps = {
     appContext: AppContext;
@@ -27,9 +29,10 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({ appContext, on
     const [password, setPassword] = useState('');
     const [role, setRole] = useState('commoner');
     const [createBtnEnabled, setCreateBtnEnabled] = useState(false);
+    const userRepository = useRepository(UserRepository);
 
     const createUser = async () => {
-        await appContext.repositories.user.create(username, name, password, role);
+        await userRepository.create(username, name, password, role);
         await onUserCreated();
         onClosed();
     };

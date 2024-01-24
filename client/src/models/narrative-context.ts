@@ -88,6 +88,14 @@ export class NarrativeContext {
         return null;
     }
 
+    getElementById(elementId: string): BaseElement | null {
+        for (const category of this.narrativeCategories) {
+            const element = category.findElementAnywhere(elementId);
+            if (element) return element;
+        }
+        return null;
+    }
+
     isOnlyReference(): boolean {
         return this.isReference;
     }

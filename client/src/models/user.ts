@@ -10,7 +10,7 @@ export class User {
     }
 
     public isAdmin(): boolean {
-        return this.role == 'admin';
+        return this.role === 'admin';
     }
 
     public get name(): string {

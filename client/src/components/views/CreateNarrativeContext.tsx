@@ -6,6 +6,9 @@ import { NarrativeContextFactory } from '../../factories/narrative-context-facto
 import { NarrativeContext } from '../../models/narrative-context';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBook } from '@fortawesome/free-solid-svg-icons';
+import { useRepository } from '../../hooks/use-repository';
+import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
+import { useNarrativeContext } from '../../hooks/use-narrative-context';
 
 export type CreateNarrativeContextProps = {
     appContext: AppContext;
@@ -16,17 +19,20 @@ export const CreateNarrativeContext: React.FC<CreateNarrativeContextProps> = ({ 
 
     const [name, setName] = useState<string>('');
     const [type, setType] = useState<string>(NarrativeContext.TYPES[0].type);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
+
+    const { setNarrativeContextById } = useNarrativeContext();
 
     useEffect(() => {
         const init = async () => {
-            await appContext.setNarrativeContextById(null);
+            await setNarrativeContextById(null);
         };
         init();
     }, [appContext]);
 
     const create = async () => {
         const narrativeContext = NarrativeContextFactory.create(appContext, type, name);
-        await appContext.repositories.narrativeContext.save(narrativeContext!);
+        await narrativeContextRepository.save(narrativeContext!);
         navigate('/');
     };
 
@@ -34,7 +40,7 @@ export const CreateNarrativeContext: React.FC<CreateNarrativeContextProps> = ({ 
         <div className="CreateNarrativeContext" onSubmit={(e) => e.preventDefault()}>
             <form className="CreateNarrativeContextContainer">
                 <h3>Crear contexto narrativo</h3>
-                <input type="text" placeholder="Nombre" onChange={(event) => setName(event.target.value)} autoFocus/>
+                <input type="text" placeholder="Nombre" onChange={(event) => setName(event.target.value)} autoFocus />
                 <select onChange={(event) => setType(event.target.value)}>
                     {NarrativeContext.TYPES.map((x) => (
                         <option key={x.type} value={x.type}>

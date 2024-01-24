@@ -1,5 +1,7 @@
 import { AppContext } from '../app-context';
+import { getOrInstantiateRepository } from '../hooks/use-repository';
 import { NarrativeContext } from '../models/narrative-context';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
 
 export class NarrativeContextImporter {
     static async importFromJson(narrativeContextJson: any, appContext: AppContext) {
@@ -15,7 +17,7 @@ export class NarrativeContextImporter {
             );
             return;
         }
-        appContext.repositories.narrativeContext.save(narrativeContext);
+        getOrInstantiateRepository(NarrativeContextRepository).save(narrativeContext);
         alert('La importación fue realizada con éxito!');
     }
 }

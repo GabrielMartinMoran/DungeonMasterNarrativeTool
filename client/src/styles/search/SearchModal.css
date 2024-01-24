@@ -1,0 +1,13 @@
+.SearchModal {
+    background-color: var(--bodyBackgroundColor);
+    background-image: var(--backgroundImage);
+    border: 1px solid var(--titlesColor);
+    position: fixed;
+    z-index: 5;
+    top: 25%;
+    width: 75%;
+    margin-top: -100px;
+    /* Negative half of height. */
+    left: 12.5%;
+    /* Negative half of width. */
+}

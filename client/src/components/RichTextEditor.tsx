@@ -1,15 +1,43 @@
 import '../styles/RichTextEditor.css';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import SunEditor from 'suneditor-react';
-import SetOptions from 'suneditor-react/dist/types/SetOptions';
+import SunEditorCore from 'suneditor/src/lib/core';
+import { SunEditorOptions } from 'suneditor/src/options';
+import { AddReferenceSearchModal } from './search/AddReferenceSearchModal';
+import { AppContext } from '../app-context';
+import { AddReferenceSearchModalResult } from '../types/add-reference-search-modal-result';
+import { useAddReferenceSearchModalVisibleStore } from '../hooks/stores/use-add-reference-search-modal-visible-store';
 
 export type RichTextEditorProps = {
+    appContext: AppContext;
     onChange: (value: string) => void;
     setIsProcessing: (isProcessing: boolean) => void;
     initialValue: string;
 };
 
-export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsProcessing, initialValue }) => {
+export const RichTextEditor: React.FC<RichTextEditorProps> = ({
+    appContext,
+    onChange,
+    setIsProcessing,
+    initialValue,
+}) => {
+    const { addReferenceSearchModalVisible, setAddReferenceSearchModalVisible } =
+        useAddReferenceSearchModalVisibleStore();
+    const editor = useRef<SunEditorCore>();
+
+    useEffect(() => {
+        const addReferenceModalUnsubscriber = useAddReferenceSearchModalVisibleStore.subscribe((state) => {
+            if (!state.addReferenceSearchModalVisible) {
+                // When the add reference search modal is closed, focus on the pointer again
+                editor?.current?.core.focus();
+            }
+        });
+
+        return () => {
+            addReferenceModalUnsubscriber();
+        };
+    }, []);
+
     const editorOptions = {
         buttonList: [
             ['formatBlock', 'bold', 'underline', 'italic', 'strike'],
@@ -41,9 +69,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsP
                 name: 'Notas del director de juego',
             },
         ],
-    } as SetOptions;
-
-    const editor = useRef();
+    } as SunEditorOptions;
 
     const getSunEditorInstance = (sunEditor: any) => {
         editor.current = sunEditor;
@@ -51,6 +77,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsP
 
     const handleInput = (event: any) => {
         setIsProcessing(true);
+        if (editor && editor.current && event?.inputType === 'insertText' && event?.data === '@') {
+            setAddReferenceSearchModalVisible(true);
+        }
     };
 
     const handleChange = (event: string) => {
@@ -65,6 +94,23 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsP
         return '73vh';
     };
 
+    const onReferenceAdded = async (result: AddReferenceSearchModalResult) => {
+        setAddReferenceSearchModalVisible(false);
+        if (!editor || !editor.current) return;
+        const element = editor.current.util.createElement('a');
+        element.setAttribute('href', result.link);
+        element.innerHTML = result.name;
+        // Remove the @ with the undo
+        editor.current.core.history.undo();
+        editor.current.core.insertNode(element, undefined, true);
+        editor.current.core.history.push(false);
+    };
+
+    const onReferenceModalCancel = () => {
+        setAddReferenceSearchModalVisible(false);
+        editor?.current?.core.focus();
+    };
+
     return (
         <div className="EditorContainer">
             <SunEditor
@@ -76,6 +122,13 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ onChange, setIsP
                 getSunEditorInstance={getSunEditorInstance}
                 setOptions={editorOptions}
             />
+            {addReferenceSearchModalVisible ? (
+                <AddReferenceSearchModal
+                    appContext={appContext}
+                    onSubmit={onReferenceAdded}
+                    onCancel={onReferenceModalCancel}
+                />
+            ) : null}
         </div>
     );
 };

@@ -19,7 +19,7 @@ export class NarrativeCategory {
         return this.elements.find((x) => x.id === elementId)!;
     }
 
-    findElementAnywhere(elementId: string) {
+    findElementAnywhere(elementId: string): BaseElement | null {
         for (const element of this.elements) {
             if (element.id === elementId) return element;
             if ((element as any).findInChild) {

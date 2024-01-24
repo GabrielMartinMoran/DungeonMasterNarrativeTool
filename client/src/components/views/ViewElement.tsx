@@ -1,6 +1,6 @@
 import '../../styles/ViewElement.css';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { LegacyRef, Ref, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ParagraphElementComponent } from '../ParagraphElementComponent';
 import { ShopElementComponent } from '../ShopElementComponent';
 import { RenameIcon } from '../icons/RenameIcon';
@@ -12,6 +12,10 @@ import { ShopElement } from '../../models/shop-element';
 import { ParagraphElement } from '../../models/paragraph-element';
 import { NarrativeContext } from '../../models/narrative-context';
 import { ElmentIconsMapper } from '../../utils/element-icons-mapper';
+import { useRepository } from '../../hooks/use-repository';
+import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
+import { useNarrativeContext } from '../../hooks/use-narrative-context';
+import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
 
 export type ViewElementProps = {
     appContext: AppContext;
@@ -22,35 +26,37 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     const { narrativeContextId, narrativeCategoryId, elementId } = useParams();
     const [element, setElement] = useState<BaseElement | null>(null);
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
     const childFuntions: any = {};
+    const ref = useRef<HTMLDivElement | null>(null);
+    const { setNarrativeContextById } = useNarrativeContext();
+    const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
 
     useEffect(() => {
         const setNavigationButtons = async () => {
-            const _narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            const _narrativeContext = await narrativeContextRepository.get(narrativeContextId!);
             setNarrativeContext(_narrativeContext);
             const narrativeCategory = _narrativeContext.getNarrativeCategory(narrativeCategoryId!);
             const prevElement = narrativeCategory.getPrevElement(elementId!);
             const nextElement = narrativeCategory.getNextElement(elementId!);
             if (prevElement) {
-                appContext.setBackButtonUrl(
-                    `/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${prevElement.id}`
-                );
+                setBackButtonURL(`/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${prevElement.id}`);
             } else {
-                appContext.setBackButtonUrl(`/narrative-context/${narrativeContextId}`);
+                setBackButtonURL(`/narrative-context/${narrativeContextId}`);
             }
             if (nextElement) {
-                appContext.setForwardButtonUrl(
+                setForwardButtonURL(
                     `/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${nextElement.id}`
                 );
             } else {
-                appContext.setForwardButtonUrl(null);
+                setForwardButtonURL(null);
             }
         };
 
         const init = async () => {
-            await appContext.setNarrativeContextById(narrativeContextId!);
+            await setNarrativeContextById(narrativeContextId!);
 
-            const obtainedNarrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            const obtainedNarrativeContext = await narrativeContextRepository.get(narrativeContextId!);
 
             const obtainedElement = obtainedNarrativeContext
                 .getNarrativeCategory(narrativeCategoryId!)
@@ -67,6 +73,39 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
         elementId,
     ]);
 
+    useEffect(() => {
+        const anchorClickListener = (e: any) => {
+            if (!e?.target) return;
+            const url = e.target.getAttribute('href');
+            // If it starts with '/' we consider it a local url so we use the internal router
+            if (url.startsWith('/')) {
+                e.preventDefault();
+                navigate(url);
+            } else if (url.startsWith(window.location.origin)) {
+                // Remove origin for full links but to the same origin
+                e.preventDefault();
+                const updatedURL = url.replace(window.location.origin, '');
+                navigate(updatedURL);
+            }
+        };
+
+        // We wait until the component is rendered
+        setTimeout(() => {
+            // Handle all a redirects that start with "/" (because by default anchors don't work
+            // well withreact-router-dom and forces a page refresh)
+            ref.current?.querySelectorAll('a').forEach((node: Element) => {
+                node.addEventListener('click', anchorClickListener);
+                //console.log(node);
+            });
+        }, 0);
+
+        return () => {
+            ref.current?.querySelectorAll('a').forEach((node: Element) => {
+                node.removeEventListener('click', anchorClickListener);
+            });
+        };
+    }, [element]);
+
     const copyRelativeLink = () => {
         const relLink = `${window.location.origin}/narrative-context/${narrativeContextId}/${narrativeCategoryId}/${elementId}`;
         navigator.clipboard.writeText(relLink);
@@ -75,13 +114,13 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     const editName = async () => {
         const name = window.prompt('Ingresa el nuevo nombre del elemento', element!.name);
         if (name) {
-            const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+            const narrativeContext = await narrativeContextRepository.get(narrativeContextId!);
             const obtainedElement = narrativeContext
                 .getNarrativeCategory(narrativeCategoryId!)
-                .findElementAnywhere(elementId!);
+                .findElementAnywhere(elementId!)!;
             obtainedElement.name = name;
-            await appContext.repositories.narrativeContext.save(narrativeContext!);
-            setElement({ ...obtainedElement });
+            await narrativeContextRepository.save(narrativeContext!);
+            setElement(null);
             setTimeout(() => {
                 setElement(obtainedElement);
             }, 0);
@@ -116,7 +155,7 @@ export const ViewElement: React.FC<ViewElementProps> = ({ appContext }) => {
     };
 
     return (
-        <div className="ViewElement">
+        <div ref={ref} className="ViewElement">
             {element ? (
                 <>
                     <div className="flex viewElementTitleBar">

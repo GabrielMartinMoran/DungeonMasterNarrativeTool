@@ -5,6 +5,8 @@ import { AppContext } from '../app-context';
 import { ShopElement } from '../models/shop-element';
 import { ShopItem } from '../models/shop-item';
 import { DirtyDBError } from '../errors/dirty-db-error';
+import { useRepository } from '../hooks/use-repository';
+import { NarrativeContextRepository } from '../repositories/narrative-context-repository';
 
 export type ShopElementComponentProps = {
     appContext: AppContext;
@@ -20,6 +22,8 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
     parentExposedFunctions,
 }) => {
     const [editMode, setEditMode] = useState(false);
+    const narrativeContextRepository = useRepository(NarrativeContextRepository);
+
     let currentEditorItems: ShopItem[] | null = null;
     let hasChangedAtLeastOneTime = false;
     const childFunctions: any = {};
@@ -44,11 +48,11 @@ export const ShopElementComponent: React.FC<ShopElementComponentProps> = ({
         const cancelBtn = document.querySelector('#cancelBtn');
         if (cancelBtn) (cancelBtn as any).disabled = true;
 
-        const narrativeContext = await appContext.repositories.narrativeContext.get(narrativeContextId!);
+        const narrativeContext = await narrativeContextRepository.get(narrativeContextId!);
 
         // Catch Dirty DB Errors in case of dirty reads
         try {
-            await appContext.repositories.narrativeContext.save(narrativeContext);
+            await narrativeContextRepository.save(narrativeContext);
         } catch (err) {
             if (err instanceof DirtyDBError) {
                 if (cancelBtn) (cancelBtn as any).disabled = false;

@@ -27,3 +27,6 @@ class ConfigProvider:
     ADMIN_ROLE = 'admin'
 
     DEFAULT_ERROR_IMAGE_URL = os.environ.get('DEFAULT_ERROR_IMAGE_URL', 'https://i.imgur.com/VBygx4F.png')
+
+    CHANGELOG_PATH = 'changelog.md'
+    RELOAD_CHANGELOG_ON_EACH_REQUEST = os.environ.get('RELOAD_CHANGELOG_ON_EACH_REQUEST', 'false').lower() == 'true'
