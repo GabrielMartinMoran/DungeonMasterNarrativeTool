@@ -35,7 +35,6 @@ export const AddReferenceSearchModal: React.FC<AddReferenceSearchModalProps> = (
 
     const addElementReference = (element: BaseElement) => {
         const link = generateElementLink(element);
-        appContext.hideSearchBar();
         onSubmit({
             name: element.name,
             link: link,

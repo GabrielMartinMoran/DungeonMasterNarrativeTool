@@ -4,13 +4,11 @@ import ReactDOM from 'react-dom/client';
 import { App } from './App';
 import { AppContext } from './app-context';
 import { DataCorruptionPreventer } from './services/data-corruption-preventer';
-import { KeyboardShortcutsHandler } from './utils/keyboard-shorcuts-handler';
 import { getOrInstantiateRepository } from './hooks/use-repository';
 import { AuthRepository } from './repositories/auth-repository';
 
 const appContext = new AppContext();
 const dataCorruptionPreventer = new DataCorruptionPreventer(appContext);
-const keyboardShortcutsHandler = new KeyboardShortcutsHandler(appContext);
 
 const renderApp = () => {
     const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -25,7 +23,6 @@ const renderApp = () => {
 const start = async () => {
     try {
         dataCorruptionPreventer.start();
-        keyboardShortcutsHandler.registerKeyboardShortcuts();
         renderApp();
     } catch {
         alert('Ha ocurrido un error al sincronizar con el servidor, por favor refresca la página!');

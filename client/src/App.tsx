@@ -22,6 +22,8 @@ import { useLoadingIndicator } from './hooks/use-loading-indicator';
 import { useRepository } from './hooks/use-repository';
 import { AuthRepository } from './repositories/auth-repository';
 import { HealthRepository } from './repositories/health-repository';
+import { useNavigationSearchModalVisibleStore } from './hooks/stores/use-navigation-search-modal-visible-store';
+import { KeyboardShortcursHandler } from './components/handlers/KeyboardShortcutsHandler';
 
 export type AppProps = {
     appContext: AppContext;
@@ -33,17 +35,15 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
     const healthRepository = useRepository(HealthRepository);
     const [userLogged] = useState(authRepository.isAuthenticated());
     const [loadingIndicatorVisible, setLoadingIndicatorVisible] = useState(false);
-    const [navigationSearchModalDisplayed, setNavigationSearchModalDisplayed] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     const [currentThemeName, setCurrentThemeName] = useState<string>(localStorage.getItem('theme') ?? 'light');
     const [healthInterval, setHealthInterval] = useState<NodeJS.Timer | null>(null);
 
+    const { navigationSearchModalVisible } = useNavigationSearchModalVisibleStore();
+
     const { configureLoadingIndicatorCallback } = useLoadingIndicator();
 
     configureLoadingIndicatorCallback(setLoadingIndicatorVisible);
-
-    appContext.showSearchBar = () => setNavigationSearchModalDisplayed(true);
-    appContext.hideSearchBar = () => setNavigationSearchModalDisplayed(false);
 
     const applyTheme = (theme: any) => {
         for (const [prop, value] of Object.entries(theme)) {
@@ -85,13 +85,14 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
 
     return (
         <div className="App">
-            {loadingIndicatorVisible ? <UpdatingDBIndicator /> : <></>}
+            <KeyboardShortcursHandler />
+            {loadingIndicatorVisible ? <UpdatingDBIndicator /> : null}
             <Router>
                 <LocationChangeDetector appContext={appContext} />
                 {userLogged ? (
                     <>
                         <Navbar appContext={appContext} toggleShowMenu={toggleShowMenu} />
-                        {navigationSearchModalDisplayed ? <NavigationSearchModal appContext={appContext} /> : <></>}
+                        {navigationSearchModalVisible ? <NavigationSearchModal appContext={appContext} /> : null}
                     </>
                 ) : null}
                 <div className="AppContainer">

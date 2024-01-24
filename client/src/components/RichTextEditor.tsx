@@ -1,11 +1,12 @@
 import '../styles/RichTextEditor.css';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import SunEditor from 'suneditor-react';
 import SunEditorCore from 'suneditor/src/lib/core';
 import { SunEditorOptions } from 'suneditor/src/options';
 import { AddReferenceSearchModal } from './search/AddReferenceSearchModal';
 import { AppContext } from '../app-context';
 import { AddReferenceSearchModalResult } from '../types/add-reference-search-modal-result';
+import { useAddReferenceSearchModalVisibleStore } from '../hooks/stores/use-add-reference-search-modal-visible-store copy';
 
 export type RichTextEditorProps = {
     appContext: AppContext;
@@ -20,7 +21,22 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     setIsProcessing,
     initialValue,
 }) => {
-    const [addReferenceModalVisible, setAddReferenceModalVisible] = useState(false);
+    const { addReferenceSearchModalVisible, setAddReferenceSearchModalVisible } =
+        useAddReferenceSearchModalVisibleStore();
+    const editor = useRef<SunEditorCore>();
+
+    useEffect(() => {
+        const addReferenceModalUnsubscriber = useAddReferenceSearchModalVisibleStore.subscribe((state) => {
+            if (!state.addReferenceSearchModalVisible) {
+                // When the add reference search modal is closed, focus on the pointer again
+                editor?.current?.core.focus();
+            }
+        });
+
+        return () => {
+            addReferenceModalUnsubscriber();
+        };
+    }, []);
 
     const editorOptions = {
         buttonList: [
@@ -55,19 +71,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         ],
     } as SunEditorOptions;
 
-    useEffect(() => {
-        appContext.hideAddReferenceSearchModal = () => {
-            setAddReferenceModalVisible(false);
-            editor?.current?.core.focus();
-        };
-
-        return () => {
-            appContext.hideAddReferenceSearchModal = () => {};
-        };
-    });
-
-    const editor = useRef<SunEditorCore>();
-
     const getSunEditorInstance = (sunEditor: any) => {
         editor.current = sunEditor;
     };
@@ -75,7 +78,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     const handleInput = (event: any) => {
         setIsProcessing(true);
         if (editor && editor.current && event?.inputType === 'insertText' && event?.data === '@') {
-            setAddReferenceModalVisible(true);
+            setAddReferenceSearchModalVisible(true);
         }
     };
 
@@ -92,7 +95,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     };
 
     const onReferenceAdded = async (result: AddReferenceSearchModalResult) => {
-        setAddReferenceModalVisible(false);
+        setAddReferenceSearchModalVisible(false);
         if (!editor || !editor.current) return;
         const element = editor.current.util.createElement('a');
         element.setAttribute('href', result.link);
@@ -104,7 +107,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     };
 
     const onReferenceModalCancel = () => {
-        setAddReferenceModalVisible(false);
+        setAddReferenceSearchModalVisible(false);
+        editor?.current?.core.focus();
     };
 
     return (
@@ -118,7 +122,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
                 getSunEditorInstance={getSunEditorInstance}
                 setOptions={editorOptions}
             />
-            {addReferenceModalVisible ? (
+            {addReferenceSearchModalVisible ? (
                 <AddReferenceSearchModal
                     appContext={appContext}
                     onSubmit={onReferenceAdded}

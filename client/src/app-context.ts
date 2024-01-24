@@ -9,37 +9,6 @@ export class AppContext {
     protected _canOpenSearchBar: boolean = true;
     menuButtonRef: any | null;
 
-    // These callbacks are intended to be overriden
-    dynamicCallbacks = {
-        showSearchBar: () => {},
-        hideSearchBar: () => {},
-        hideAddReferenceSearchModal: () => {},
-    };
-
-    // To be overrided
-    showSearchBar() {}
-
-    // To be overrided
-    hideSearchBar() {}
-
-    // To be overrided
-    hideAddReferenceSearchModal() {}
-
-    triggerEvent(eventName: string) {
-        if (eventName === 'open_search') {
-            if (this._canOpenSearchBar) this.showSearchBar();
-            return;
-        }
-        if (eventName === 'close_search') {
-            this.hideSearchBar();
-            return;
-        }
-        if (eventName === 'close_add_reference') {
-            this.hideAddReferenceSearchModal();
-            return;
-        }
-    }
-
     // To be overrided
     navigateToPreviousElement() {}
     // To be overrided

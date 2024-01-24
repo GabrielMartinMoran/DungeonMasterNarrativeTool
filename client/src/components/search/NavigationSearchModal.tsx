@@ -8,6 +8,7 @@ import { SearchBar } from './SearchBar';
 import { useRepository } from '../../hooks/use-repository';
 import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
 import { useNarrativeContext } from '../../hooks/use-narrative-context';
+import { useNavigationSearchModalVisibleStore } from '../../hooks/stores/use-navigation-search-modal-visible-store';
 
 export type NavigationSearchModalProps = {
     appContext: AppContext;
@@ -18,6 +19,8 @@ export const NavigationSearchModal: React.FC<NavigationSearchModalProps> = ({ ap
     const [narrativeContext, setNarrativeContext] = useState<NarrativeContext | null>(null);
     const narrativeContextRepository = useRepository(NarrativeContextRepository);
     const { getNarrativeContextId } = useNarrativeContext();
+
+    const { setNavigationSearchModalVisible } = useNavigationSearchModalVisibleStore();
 
     useEffect(() => {
         const init = async () => {
@@ -34,16 +37,16 @@ export const NavigationSearchModal: React.FC<NavigationSearchModalProps> = ({ ap
 
     const navigateToElement = (element: BaseElement) => {
         navigate(generateElementLink(element));
-        appContext.hideSearchBar();
+        setNavigationSearchModalVisible(false);
     };
 
     const onCancel = () => {
-        appContext.hideSearchBar();
+        setNavigationSearchModalVisible(false);
     };
 
     const listItemRenderer = (element: BaseElement) => {
         return (
-            <Link to={generateElementLink(element)} onClick={() => appContext.hideSearchBar()}>
+            <Link to={generateElementLink(element)} onClick={() => setNavigationSearchModalVisible(false)}>
                 {element.name}
             </Link>
         );
