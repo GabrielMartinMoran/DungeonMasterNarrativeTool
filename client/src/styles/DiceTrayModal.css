@@ -1,7 +1,7 @@
 .DiceTrayModal {
     background-color: var(--bodyBackgroundColor);
     background-image: var(--backgroundImage);
-    border: 1px solid var(--titlesColor);
+    border: 2px solid var(--dividersColor);
     position: fixed;
     z-index: 5;
     top: 25%;
@@ -15,6 +15,7 @@
     flex-direction: column;
     padding: 1rem;
     text-align: center;
+    
 }
 
 .DiceTrayModalResult {

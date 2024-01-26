@@ -5,7 +5,8 @@ import React from 'react';
 import { faDiceD20, faXmark } from '@fortawesome/free-solid-svg-icons';
 
 export const DiceTrayModal: React.FC = () => {
-    const { setDiceTrayModalVisible, diceRollExpression, diceRollResult } = useDiceTrayModalVisibleStore();
+    const { setDiceTrayModalVisible, rerollExpression, diceRollExpression, diceRollResult } =
+        useDiceTrayModalVisibleStore();
 
     return (
         <div className="DiceTrayModal">
@@ -22,9 +23,13 @@ export const DiceTrayModal: React.FC = () => {
                     <p>
                         <u>Resultado</u>
                     </p>
-                    <p className="DiceTrayModalResult">{diceRollResult}</p>
+                    <p className="DiceTrayModalResult">{diceRollResult.value}</p>
                 </div>
             ) : null}
+
+            <button onClick={() => rerollExpression()}>
+                <FontAwesomeIcon icon={faDiceD20} /> Volver a tirar
+            </button>
             <button onClick={() => setDiceTrayModalVisible(false)}>
                 <FontAwesomeIcon icon={faXmark} /> Cerrar
             </button>

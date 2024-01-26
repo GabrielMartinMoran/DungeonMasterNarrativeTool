@@ -42,7 +42,7 @@ export const AddReferenceSearchModal: React.FC<AddReferenceSearchModalProps> = (
     };
 
     const listItemRenderer = (element: BaseElement) => {
-        return <>{element.name}</>;
+        return <span onClick={() => addElementReference(element)}>{element.name}</span>;
     };
 
     if (!narrativeContext) return null;
