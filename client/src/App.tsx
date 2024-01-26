@@ -49,6 +49,18 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
 
     configureLoadingIndicatorCallback(setLoadingIndicatorVisible);
 
+    const { rollExpression } = useDiceTrayModalVisibleStore();
+
+    useEffect(() => {
+        (document as any).rollDiceExpression = (expression: string) => {
+            rollExpression(expression);
+        };
+
+        return () => {
+            (document as any).rollDiceExpression = (expression: string) => {};
+        };
+    }, []);
+
     const applyTheme = (theme: any) => {
         for (const [prop, value] of Object.entries(theme)) {
             document.documentElement.style.setProperty(prop, value as string);

@@ -1,0 +1,49 @@
+.DND5eToolsStatblock {
+    display: block;
+    background-color: var(--bodyBackgroundColor);
+    background-image: var(--backgroundImage);
+    border: 2px solid var(--dividersColor);
+    padding: 0.5rem;
+    margin: 1rem;
+}
+
+.DND5eToolsStatblock p,
+span {
+    margin-block-start: 0.5rem;
+    margin-block-end: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.DND5eToolsStatblock tbody {
+    font-size: 0.9rem;
+    margin: 0rem;
+    padding: 0rem;
+    border: 0px;
+}
+
+.DND5eToolsStatblock td {
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+
+@media (max-width: 500px) {
+    .DND5eToolsStatblock tbody button {
+        font-size: 0.6rem;
+    }
+}
+
+.DND5eToolsStatblock tbody tr:nth-child(even) {
+    background-color: transparent;
+}
+
+.DND5eToolsStatblock tbody tr:nth-child(odd) {
+    background-color: transparent;
+}
+
+.DND5eToolsStatblock a {
+    color: var(--linksHoverColor);
+}
+
+.DND5eToolsStatblock a:hover {
+    text-decoration: underline;
+}

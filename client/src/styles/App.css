@@ -199,3 +199,18 @@
 .App tbody tr:nth-child(odd) {
     background-color: var(--tableBodyOddRow);
 }
+
+.App h1 span,
+.App h2 span,
+.App h3 span,
+.App h4 span {
+    font-size: unset;
+}
+
+.DiceExpressionButton {
+    font-size: 0.8rem;
+    width: max-content;
+    height: max-content;
+    padding-left: 0.1rem;
+    padding-right: 0.1rem;
+}
