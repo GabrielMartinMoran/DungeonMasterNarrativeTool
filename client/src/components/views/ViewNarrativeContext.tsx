@@ -15,6 +15,8 @@ import { useRepository } from '../../hooks/use-repository';
 import { NarrativeContextRepository } from '../../repositories/narrative-context-repository';
 import { useNarrativeContext } from '../../hooks/use-narrative-context';
 import { useNavigationButtonsURLStore } from '../../hooks/stores/use-navigation-buttons-url-store';
+import { useNavigationSearchModalVisibleStore } from '../../hooks/stores/use-navigation-search-modal-visible-store';
+import { SearchIcon } from '../icons/SearchIcon';
 
 export type ViewNarrativeContextProps = {
     appContext: AppContext;
@@ -30,6 +32,7 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
     const narrativeContextRepository = useRepository(NarrativeContextRepository);
     const { setNarrativeContextById } = useNarrativeContext();
     const { setBackButtonURL, setForwardButtonURL } = useNavigationButtonsURLStore();
+    const { setNavigationSearchModalVisible } = useNavigationSearchModalVisibleStore();
 
     useEffect(() => {
         const init = async () => {
@@ -44,6 +47,10 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
 
         init();
     }, [narrativeContext]);
+
+    const openSearchModal = () => {
+        setNavigationSearchModalVisible(true);
+    };
 
     const addNarrativeCategory = async () => {
         const categoryName = window.prompt('Ingresa nombre de la categoría');
@@ -134,6 +141,10 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
                         {narrativeContext?.name}
                     </h1>
                     <div className="textRight narrativeContextTitleButtons">
+                        <button onClick={openSearchModal}>
+                            <SearchIcon />
+                            <span className="tooltip">Buscar</span>
+                        </button>
                         {narrativeContext?.isEditable ? (
                             <>
                                 <button onClick={addNarrativeCategory}>

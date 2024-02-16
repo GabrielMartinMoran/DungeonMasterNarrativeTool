@@ -2330,6 +2330,11 @@
     flex-direction: row;
 }
 
+.se-image-container img {
+    max-width: 100% !important;
+    height: auto !important;
+}
+
 .sun-editor-editable .se-video-container figure {
     left: 0;
     width: 100%;

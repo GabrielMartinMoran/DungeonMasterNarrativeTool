@@ -250,7 +250,7 @@ export const DND5eToolsStatblock: React.FC<DND5eToolsStatblockProps> = ({ data }
             }">${condition}</a>`;
         }
         if (reference.includes('@recharge')) {
-            const regex = /\{@recharge (?<minValue>\d+)\}/gm;
+            const regex = /\{@recharge ?(?<minValue>\d+)?\}/gm;
             const match = regex.exec(reference);
             const minValue = parseInt(match?.groups?.minValue ?? '6');
             const rangeExpression = minValue < 6 ? `${minValue}-6` : `${minValue}`;
@@ -265,6 +265,7 @@ export const DND5eToolsStatblock: React.FC<DND5eToolsStatblockProps> = ({ data }
         if (reference === '{@atk rw}') return '<i>Ranged Weapon Attack:</i>';
         if (reference === '{@atk ms}') return '<i>Melee Spell Attack:</i>';
         if (reference === '{@atk rs}') return '<i>Ranged Spell Attack:</i>';
+        if (reference === '{@atk mw,rw}') return '<i>Melee or Ranged Weapon Attack:</i>';
         return reference;
     };
 

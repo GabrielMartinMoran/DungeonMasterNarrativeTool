@@ -21,8 +21,9 @@ button {
 }
 
 .RouterContainer {
-    margin: 1rem;
-    margin-top: 3rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-top: 3rem;
 }
 
 .flex {
@@ -73,7 +74,7 @@ button {
     color: white;
     padding: 0.25rem;
     border-radius: 20px 50px 50px 20px;
-    transform: translateX(calc(-100% - 1.7rem)) translateY(-4px);
+    transform: translateX(calc(-100% - 1.4rem)) translateY(-12px);
     font-size: 0.8rem;
     white-space: nowrap;
     pointer-events: none;
