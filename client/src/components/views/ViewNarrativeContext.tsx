@@ -127,8 +127,8 @@ export const ViewNarrativeContext: React.FC<ViewNarrativeContextProps> = ({ appC
                 <ShareModal appContext={appContext} narrativeContext={narrativeContext!} onClosed={closeShareModal} />
             ) : null}
             <div className="ViewNarrativeContext">
-                <div className="flex narrativeContextTitleBar">
-                    <h1 className="flex2">
+                <div className="narrativeContextTitleBar">
+                    <h1 className="flex1">
                         {narrativeContext?.type === 'world' ? (
                             <span role="img" aria-label="world">
                                 🌎
