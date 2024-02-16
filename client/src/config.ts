@@ -12,3 +12,5 @@ export const DND_5E_TOOLS_PATHS: any = {
     spells: '/spells.html#',
     items: '/items.html#',
 };
+
+export const MAX_MOBILE_WIDTH = 800;

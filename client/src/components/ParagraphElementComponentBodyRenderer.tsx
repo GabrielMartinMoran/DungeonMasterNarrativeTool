@@ -7,12 +7,10 @@ import { AppContext } from '../app-context';
 import { useRepository } from '../hooks/use-repository';
 import { DnD5eCharactersRepository } from '../repositories/dnd5e-characters-repository';
 import { DICE_PARSING_REGEX } from '../config';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDiceD20 } from '@fortawesome/free-solid-svg-icons';
-import { useDiceTrayModalVisibleStore } from '../hooks/stores/use-dice-tray-modal-visible-store';
 import { mapDiceExpression } from '../utils/dice-expression-mapper';
 import { DND5eToolsStatblock } from './DND5eToolsStatblock';
 import { IdGenerator } from '../utils/id-generator';
+import { useScreenResize } from '../hooks/use-screen-resize';
 
 export type ParagraphElementComponentBodyRendererProps = {
     appContext: AppContext;
@@ -28,12 +26,13 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
     const [docSections, setDocSections] = useState<any[]>([]);
     const dnd5eCharactersRepository = useRepository(DnD5eCharactersRepository);
     const renderedDivRef = useRef<HTMLDivElement | null>(null);
+    const { isMobile } = useScreenResize();
 
     useEffect(() => {
         const _renderedBody = renderBody();
         setRenderedBody(_renderedBody);
         setDocSections(getDocSections(_renderedBody ?? ''));
-    }, []);
+    }, [isMobile]);
 
     const replaceCharacters = (content: string) => {
         const regex = /\[C\]\{([a-zA-Z0-9\-]+)\}/gm;
@@ -164,29 +163,41 @@ export const ParagraphElementComponentBodyRenderer: React.FC<ParagraphElementCom
 
     return (
         <div className="ParagraphElementBodyRenderer">
-            <div className="ParagraphElementBodyRendererContainer">
-                <div className="ParagraphElementBodyRendererIndex">
-                    <a href="#title_section">
-                        <h3>Indice</h3>
-                    </a>
-                    <div className="ParagraphElementBodyRendererIndexBody">
-                        {docSections.map((x: any) => (
-                            <a
-                                key={`${x.id}_link`}
-                                href={`#${x.id}`}
-                                className={
-                                    {
-                                        h3: 'ParagraphElementBodyRendererH3',
-                                        h4: 'ParagraphElementBodyRendererH4',
-                                    }[x.tag as string]
-                                }
-                            >
-                                {x.text}
-                            </a>
-                        ))}
-                    </div>
-                </div>
-                <span />
+            <div
+                className={
+                    docSections.length == 0 && isMobile
+                        ? 'ParagraphElementBodyRendererMobileIndexContainer'
+                        : 'ParagraphElementBodyRendererContainer'
+                }
+            >
+                {docSections.length == 0 && isMobile ? null : (
+                    <>
+                        <div className="ParagraphElementBodyRendererIndex">
+                            <div>
+                                <a href="#title_section">
+                                    <h3>Indice</h3>
+                                </a>
+                            </div>
+                            <div className="ParagraphElementBodyRendererIndexBody">
+                                {docSections.map((x: any) => (
+                                    <a
+                                        key={`${x.id}_link`}
+                                        href={`#${x.id}`}
+                                        className={
+                                            {
+                                                h3: 'ParagraphElementBodyRendererH3',
+                                                h4: 'ParagraphElementBodyRendererH4',
+                                            }[x.tag as string]
+                                        }
+                                    >
+                                        {x.text}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                        <span />
+                    </>
+                )}
                 <div
                     ref={renderedDivRef}
                     className="ParagraphElementBodyRendererBody"
