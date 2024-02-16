@@ -1,6 +1,6 @@
 import '../styles/Navbar.css';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { AppContext } from '../app-context';
@@ -66,7 +66,7 @@ export const Navbar: React.FC<NavbarProps> = ({ appContext, toggleShowMenu }) =>
                         </Link>
                     )}
                 </div>
-                <div className="flex2 textRight" id="nabvarNavigationIcons">
+                <div className="textRight" id="nabvarNavigationIcons">
                     <span className={`iconButton ${backButtonURL ? 'iconButtonActive' : 'iconButtonInactive'}`}>
                         {backButtonURL ? (
                             <Link to={backButtonURL}>

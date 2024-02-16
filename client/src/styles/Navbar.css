@@ -53,14 +53,7 @@
     margin-top: 0.1rem;
 }
 
-@media (max-width: 600px) {
-    .NavbarNarrativeContextName {
-        font-size: 0.7rem;
-        max-width: 15rem;
-    }
-}
-
-@media (max-width: 400px) {
+@media (max-width: 425px) {
     .navbarContent {
         margin-top: 0.6rem;
     }
@@ -74,7 +67,7 @@
     }
 
     #narrativeContextTitleLink {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
 
     #nabvarNavigationIcons {
@@ -82,7 +75,7 @@
     }
 
     .NavbarNarrativeContextName {
-        max-width: 10rem;
+        margin-top: 0px !important;
     }
 }
 
@@ -107,4 +100,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.7rem;
+    flex: 1;
 }

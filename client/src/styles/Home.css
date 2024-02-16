@@ -8,16 +8,15 @@
     text-align: right;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 450px) {
     .homeTitleSection {
-        display: block;
-        margin-bottom: 2rem;
+        flex-direction: column;
+        margin-bottom: 1.5rem;
     }
 
     .homeTitleButtons {
         position: relative;
-        bottom: -1rem;
-        text-align: left;
+        text-align: right;
     }
 }
 

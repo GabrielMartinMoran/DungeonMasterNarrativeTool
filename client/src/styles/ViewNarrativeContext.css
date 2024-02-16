@@ -9,9 +9,22 @@
 
 .narrativeContextTitleBar {
     position: relative;
+    display: flex;
 }
 
 .EmptyNarrativeContextText {
     margin-top: 1rem;
     margin-left: 1rem;
+}
+
+@media (max-width: 450px) {
+    .narrativeContextTitleBar {
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+    }
+
+    .narrativeContextTitleButtons {
+        position: relative;
+        text-align: right;
+    }
 }

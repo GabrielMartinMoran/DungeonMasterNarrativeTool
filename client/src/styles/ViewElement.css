@@ -9,3 +9,15 @@
 .viewElementTitleBar {
     position: relative;
 }
+
+@media (max-width: 450px) {
+    .viewElementTitleBar {
+        flex-direction: column;
+        margin-bottom: 1.5rem;
+    }
+
+    .viewElementTitleButtons {
+        position: relative;
+        text-align: right;
+    }
+}

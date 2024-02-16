@@ -84,10 +84,10 @@ export const AdminView: React.FC<AdminViewProps> = ({ appContext }) => {
             </div>
             {users.map((user: User) => (
                 <div className="AdminViewUser" key={user.username}>
-                    <span>
+                    <span className="AdminViewUsername">
                         <UserIcon /> {user.name} ({user.username})
                     </span>
-                    <div>
+                    <div className="AdminViewUserButtons">
                         <button onClick={() => changeName(user)}>
                             <RenameIcon /> Cambiar nombre
                         </button>
