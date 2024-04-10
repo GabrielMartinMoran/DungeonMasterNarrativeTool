@@ -91,7 +91,7 @@ export const App: React.FC<AppProps> = ({ appContext }) => {
     }, []);
 
     const changeTheme = () => {
-        const themeName = currentThemeName === 'dnd' ? 'light' : 'dnd';
+        const themeName = currentThemeName === 'dark' ? 'light' : 'dark';
         localStorage.setItem('theme', themeName);
         setCurrentThemeName(themeName);
         applyTheme(THEMES[themeName]);

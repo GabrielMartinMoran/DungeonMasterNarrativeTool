@@ -1,7 +1,12 @@
 .App {
+    color: var(--fontColor);
 }
 
 .AppContainer {
+}
+
+.App div {
+    scrollbar-width: thin;
 }
 
 .App h1,
@@ -70,7 +75,7 @@
     }
 
     .App h5 {
-        font-size: 1.0rem;
+        font-size: 1rem;
     }
 }
 
@@ -91,7 +96,7 @@
     }
 
     .App h4 {
-        font-size: 1.0rem;
+        font-size: 1rem;
     }
 
     .App h5 {
@@ -186,7 +191,7 @@
 
 .App a {
     text-decoration: none;
-    color: #000000;
+    color: var(--fontColor);
 }
 
 .App a:hover {
@@ -242,4 +247,16 @@
     height: max-content;
     padding-left: 0.1rem;
     padding-right: 0.1rem;
+}
+
+.App button {
+    color: var(--fontColor);
+    background-color: var(--buttonsBgColor);
+    box-shadow: unset;
+    border: 1px solid var(--buttonsBorderColor);
+}
+
+.App input {
+    background-color: var(--buttonsBgColor);
+    color: var(--fontColor);
 }

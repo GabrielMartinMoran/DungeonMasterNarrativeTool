@@ -11,6 +11,7 @@ export const DND_5E_TOOLS_PATHS: any = {
     conditions: '/conditionsdiseases.html#',
     spells: '/spells.html#',
     items: '/items.html#',
+    bestiary: '/bestiary.html#'
 };
 
 export const MAX_MOBILE_WIDTH = 800;

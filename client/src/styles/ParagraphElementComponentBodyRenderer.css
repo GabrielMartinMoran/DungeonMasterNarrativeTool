@@ -48,6 +48,7 @@
     overflow: auto;
     scroll-behavior: smooth;
     padding-right: 0.5rem;
+    overflow-wrap: break-word;
 }
 
 @media (max-width: 800px) {
@@ -59,7 +60,7 @@
 .ParagraphElementBodyRendererIndex {
     padding: 0.5rem;
     border: 2px solid var(--dividersColor);
-    background-color: #f2f0e361;
+    background-color: var(--elementIndexBgColor);
     overflow: auto;
 }
 

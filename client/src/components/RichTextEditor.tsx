@@ -118,8 +118,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
     const editorOptions = {
         plugins: [
             SunEditorPlugins.formatBlock,
-            SunEditorPlugins.fontColor,
-            SunEditorPlugins.hiliteColor,
             SunEditorPlugins.align,
             SunEditorPlugins.horizontalRule,
             SunEditorPlugins.list,
@@ -132,7 +130,6 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         ],
         buttonList: [
             ['formatBlock', 'bold', 'underline', 'italic', 'strike'],
-            ['fontColor', 'hiliteColor'],
             ['removeFormat'],
             ['align', 'horizontalRule', 'list'],
             ['table', 'link', 'image', 'video', 'audio'],

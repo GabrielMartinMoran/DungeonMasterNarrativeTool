@@ -61,9 +61,8 @@ class ImgurRepository:
                 return {'link': ConfigProvider.DEFAULT_ERROR_IMAGE_URL}
 
     @classmethod
-    def _post_img(cls, img: str, config: dict = None, anon: bool = True) -> dict:
-        if config is None:
-            _config = dict()
+    def _post_img(cls, img: str, config: Optional[dict] = None, anon: bool = True) -> dict:
+        _config = config if config is not None else {}
         data = {
             'image': img.encode(),
             'type': 'base64',
