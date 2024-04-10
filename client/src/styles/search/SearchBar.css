@@ -19,6 +19,10 @@
     background-color: var(--dividersColor);
 }
 
+.SearchBar .searchResultSelected a {
+    color: var(--searchResultSelectedFontColor) !important;
+}
+
 .SearchBar .searchResultSelected a:hover {
     color: var(--bodyBackgroundColor);
 }

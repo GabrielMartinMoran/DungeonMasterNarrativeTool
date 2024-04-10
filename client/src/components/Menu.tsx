@@ -55,7 +55,7 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                     <FontAwesomeIcon icon={faPalette} color={'#d47902'} /> Cambiar tema
                 </span>
                 <Link className="marginBottom0_5Rem" to={`/changelog`} onClick={hideMenu}>
-                    <FontAwesomeIcon icon={faList} color={'#363636'} /> Historial de cambios
+                    <FontAwesomeIcon icon={faList} color={'var(--buttonsFontColorOverride, #363636)'} /> Historial de cambios
                 </Link>
                 <span className="marginTop1Rem" />
                 <h3 className="marginBottom1Rem">
@@ -66,7 +66,7 @@ export const Menu: React.FC<MenuProps> = ({ appContext, hideMenu, changeTheme })
                     <ChangePasswordIcon /> Cambiar contraseña
                 </Link>
                 <Link className="marginBottom0_5Rem" to={`/logout`} onClick={hideMenu}>
-                    <FontAwesomeIcon icon={faSignOutAlt} color={'#424242'} /> Cerrar sesión
+                    <FontAwesomeIcon icon={faSignOutAlt} color={'var(--buttonsFontColorOverride, #424242)'} /> Cerrar sesión
                 </Link>
             </div>{' '}
         </div>

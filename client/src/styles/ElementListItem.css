@@ -6,6 +6,8 @@
     text-align: left;
     margin-top: 0.2rem;
     font-size: 1rem;
+    border: unset !important;
+    background-color: unset !important;
 }
 
 .elementListItemLink {

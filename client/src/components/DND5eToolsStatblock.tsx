@@ -158,6 +158,10 @@ export const DND5eToolsStatblock: React.FC<DND5eToolsStatblockProps> = ({ data }
     };
 
     const mapAlignment = (alignment: string[]): string => {
+        const isUnaligned = alignment.includes('U');
+        if (isUnaligned) {
+            return 'Unaligned';
+        }
         const anyAligment = ['L', 'NX', 'C'];
         const isAny = anyAligment.every((x) => alignment.includes(x));
         if (isAny) {
@@ -211,13 +215,22 @@ export const DND5eToolsStatblock: React.FC<DND5eToolsStatblockProps> = ({ data }
             }">${spell}</a>`;
         }
         if (reference.includes('@item')) {
-            const regex = /\{@item (?<item>[\w' \(\)]+)(?:\|(?<source>[\w ]+))?\}/gm;
+            const regex = /\{@item (?<item>[\w' \(\)]+)(?:\| *(?<source>[\w ]+))?\}/gm;
             const match = regex.exec(reference);
             const item = match?.groups?.item;
             const source = match?.groups?.source;
             return /*html*/ `<a href="${DND_5E_TOOLS_URL}${DND_5E_TOOLS_PATHS.items}${item}_${
                 source ? source : DND_5E_TOOLS_URL_DEFAULT_SOURCE
             }">${item}</a>`;
+        }
+        if (reference.includes('@creature')) {
+            const regex = /\{@creature (?<creature>[\w' \(\)]+)(?:\| *(?<source>[\w ]+))?\}/gm;
+            const match = regex.exec(reference);
+            const creature = match?.groups?.creature;
+            const source = match?.groups?.source;
+            return /*html*/ `<a href="${DND_5E_TOOLS_URL}${DND_5E_TOOLS_PATHS.bestiary}${creature}_${
+                source ? source : DND_5E_TOOLS_URL_DEFAULT_SOURCE
+            }">${creature}</a>`;
         }
         if (reference.includes('@damage')) {
             const regex = /\{@damage ([\w\+\- ]+)}/gm;
@@ -304,9 +317,9 @@ export const DND5eToolsStatblock: React.FC<DND5eToolsStatblockProps> = ({ data }
 
     const mapSpeed = () => {
         const speeds = [];
-        if (data.speed.walk) speeds.push(`${data.speed.walk} ft.`);
+        if (data.speed.walk !== undefined) speeds.push(`${data.speed.walk} ft.`);
         for (const source of Object.keys(data.speed)) {
-            if (source === 'walk') continue;
+            if (typeof data.speed[source] !== 'object') continue;
             speeds.push(
                 `${source} ${data.speed[source].number} ft.${
                     data.speed[source].condition ? ' ' + map5eToolsReferences(data.speed[source].condition) : ''

@@ -3,5 +3,5 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function ExpandIcon() {
-    return <FontAwesomeIcon icon={faPlus} color={'#424242'} />
+    return <FontAwesomeIcon icon={faPlus} color={'var(--buttonsFontColorOverride, #424242)'} />
 }
